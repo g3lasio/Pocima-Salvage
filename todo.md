@@ -135,3 +135,27 @@
 - [ ] Implementar perfil de salud del usuario (alergias, condiciones)
 - [ ] Sistema de seguimiento post-consulta
 
+
+## Auditoría General y Mejoras Visuales
+
+### Auditoría de Datos
+- [x] Verificar que todas las enfermedades tengan síntomas completos (469/482 = 97%)
+- [x] Verificar que todas las enfermedades tengan causas completas (469/482 = 97%)
+- [x] Verificar que todas las enfermedades tengan descripción completa (100%)
+- [x] Verificar que todas las plantas tengan propiedades completas (693/710 = 97%)
+- [x] Verificar que todas las plantas tengan dosis y preparación (97%)
+- [x] Verificar que todas las plantas tengan contraindicaciones (97%)
+- [x] Verificar que todas las plantas tengan nombres alternativos (619/710 = 87%)
+
+### Estilos y Responsividad
+- [ ] Revisar estilos de pantalla de enfermedades
+- [ ] Revisar estilos de pantalla de plantas
+- [ ] Revisar estilos de MolDoctor
+- [ ] Verificar responsividad en diferentes tamaños
+- [ ] Mejorar espaciado y tipografía donde sea necesario
+
+### Funcionalidad
+- [ ] Verificar navegación entre pantallas
+- [ ] Verificar búsqueda funcional
+- [ ] Verificar modales de detalle
+- [ ] Verificar enlaces cruzados entre plantas y enfermedades

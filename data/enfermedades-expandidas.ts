@@ -1641,6 +1641,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Diabetes tipo 1",
         otrosNombres: ["Diabetes insulinodependiente"],
         descripcion: "Afección crónica en la que el páncreas produce poca o ninguna insulina.",
+        sintomas: ["Aumento de la sed", "Aumento de las ganas de orinar", "Pérdida de peso inexplicable", "Aumento del apetito", "Fatiga", "Visión borrosa"],
+        causas: ["Reacción autoinmune", "Predisposición genética", "Factores ambientales"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1648,6 +1650,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Enfermedad Inflamatoria Intestinal",
         otrosNombres: ["EII"],
         descripcion: "Término general que describe trastornos que involucran inflamación crónica de su tracto digestivo.",
+        sintomas: ["Dolor abdominal y cólicos", "Diarrea", "Sangrado rectal", "Cansancio extremo", "Pérdida de peso", "Fiebre"],
+        causas: ["Respuesta anormal del sistema inmunitario", "Genética y antecedentes familiares", "Factores ambientales", "Tabaquismo", "Estrés"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1655,6 +1659,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Hepatitis Autoinmune",
         otrosNombres: [],
         descripcion: "Inflamación del hígado que ocurre cuando el sistema inmunitario ataca las células del hígado.",
+        sintomas: ["Fatiga", "Malestar abdominal", "Ictericia", "Dolor en las articulaciones", "Náuseas", "Pérdida de apetito"],
+        causas: ["Reacción autoinmune contra las células hepáticas", "Predisposición genética", "Infecciones virales o bacterianas", "Exposición a ciertos medicamentos"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1662,6 +1668,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Anemia Perniciosa",
         otrosNombres: [],
         descripcion: "Disminución de los glóbulos rojos que ocurre cuando los intestinos no pueden absorber adecuadamente la vitamina B12.",
+        sintomas: ["Fatiga y debilidad", "Hormigueo o entumecimiento en manos y pies", "Piel pálida", "Dificultad para caminar y problemas de equilibrio", "Pérdida de apetito"],
+        causas: ["Reacción autoinmune contra las células parietales del estómago", "Falta de factor intrínseco para absorber la vitamina B12", "Antecedentes familiares de la enfermedad", "Tener un trastorno endocrino autoinmune"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1669,6 +1677,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Vasculitis Autoinmune",
         otrosNombres: [],
         descripcion: "Inflamación de los vasos sanguíneos que ocurre cuando el sistema inmunitario ataca los vasos sanguíneos por error.",
+        sintomas: ["Fiebre", "Dolor de cabeza", "Cansancio", "Pérdida de peso", "Dolores musculares y articulares"],
+        causas: ["Infecciones como la hepatitis B y C", "Cánceres de la sangre", "Enfermedades del sistema inmunitario como artritis reumatoide y lupus", "Reacciones a ciertos medicamentos"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1694,6 +1704,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome de Guillain-Barré",
         otrosNombres: [],
         descripcion: "Trastorno poco común en el que el sistema inmunitario ataca los nervios.",
+        sintomas: ["Sensación de hormigueo en los dedos de las manos, de los pies, los tobillos o las muñecas", "Debilidad en las piernas que se difunde a la parte superior del cuerpo", "Marcha inestable o incapacidad para caminar o subir escaleras", "Dificultad con los movimientos faciales, lo que incluye hablar, masticar o tragar", "Visión doble o incapacidad para mover los ojos", "Dolor fuerte, que puede ser un dolor sordo, fulgurante o similar a un calambre, y que puede empeorar en la noche"],
+        causas: ["Infección por campylobacter", "Virus de la influenza", "Citomegalovirus", "Virus de Epstein-Barr", "Virus del Zika"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1701,6 +1713,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Púrpura Trombocitopénica Idiopática",
         otrosNombres: ["PTI"],
         descripcion: "Trastorno que puede provocar hematomas y sangrado fáciles o excesivos.",
+        sintomas: ["Sangrado en la piel (púrpura y petequias)", "Sangrado de las encías o la nariz", "Orina o heces con sangre", "Aparición fácil de moretones", "Fatiga", "Períodos menstruales anormalmente abundantes"],
+        causas: ["El sistema inmunitario ataca y destruye las plaquetas por error", "Producción de anticuerpos contra las plaquetas", "Infecciones virales", "Otras enfermedades autoinmunes", "Ciertos medicamentos"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1726,6 +1740,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Espondilitis Anquilosante",
         otrosNombres: [],
         descripcion: "Enfermedad inflamatoria que, con el tiempo, puede hacer que algunas de las vértebras de la columna se fusionen.",
+        sintomas: ["Dolor y rigidez en la parte baja de la espalda y caderas", "Dolor de cuello", "Fatiga", "Dolor en la articulación sacroilíaca", "Uveítis (inflamación ocular)"],
+        causas: ["Causa desconocida", "Factores genéticos", "Presencia del gen HLA-B27"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1742,6 +1758,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Artritis Reactiva",
         otrosNombres: ["Síndrome de Reiter"],
         descripcion: "Dolor e hinchazón en las articulaciones desencadenado por una infección en otra parte del cuerpo.",
+        sintomas: ["Dolor y rigidez en rodillas, tobillos y pies", "Inflamación ocular (conjuntivitis)", "Problemas urinarios", "Hinchazón de los dedos de las manos o de los pies", "Lumbalgia"],
+        causas: ["Infección en los intestinos, los genitales o las vías urinarias", "Infección por bacterias (Campylobacter, Chlamydia, Salmonella, etc.)", "Factores hereditarios", "Edad entre 20 y 40 años"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1758,6 +1776,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Uveítis Autoinmune",
         otrosNombres: [],
         descripcion: "Inflamación de la úvea, la capa media del ojo, que puede ser causada por una enfermedad autoinmune.",
+        sintomas: ["Visión borrosa", "Dolor ocular", "Enrojecimiento del ojo", "Sensibilidad a la luz (fotofobia)", "Moscas volantes (miodesopsias)"],
+        causas: ["Reacción del sistema inmunitario contra el propio tejido ocular", "Asociación con enfermedades autoinmunes sistémicas (como artritis reumatoide o espondilitis anquilosante)", "Predisposición genética", "Infecciones previas que desencadenan la respuesta autoinmune"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1765,6 +1785,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Penfigoide",
         otrosNombres: [],
         descripcion: "Grupo de enfermedades autoinmunes raras de la piel que causan ampollas y erosiones en la piel y las membranas mucosas.",
+        sintomas: ["Picazón intensa que puede comenzar semanas o meses antes de que se formen las ampollas", "Ampollas grandes y tensas que no se rompen con facilidad", "Piel enrojecida o parches similares a la urticaria o eccema", "Lesiones o ampollas en la boca u otras membranas mucosas"],
+        causas: ["Es una enfermedad autoinmune en la que el sistema inmunitario ataca la piel", "Uso de ciertos medicamentos", "Exposición a la luz ultravioleta (fototerapia) o radioterapia", "Puede estar asociado a otras enfermedades como la esclerosis múltiple o la colitis ulcerosa"],
         sistemaId: "sistema-inmunologico",
       },
       {
@@ -1781,6 +1803,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Urticaria Crónica Idiopática",
         otrosNombres: ["UCI"],
         descripcion: "Ronchas que duran más de seis semanas y recurren con frecuencia durante meses o años.",
+        sintomas: ["Ronchas o habones que aparecen en cualquier parte del cuerpo", "Picazón intensa", "Hinchazón dolorosa alrededor de los ojos, mejillas o labios (angioedema)", "Brotes desencadenados por calor, ejercicio o estrés", "Ronchas que varían en tamaño y forma"],
+        causas: ["Causa a menudo desconocida (idiopática)", "Infecciones", "Enfermedad tiroidea", "Alergias", "Cáncer"],
         sistemaId: "sistema-inmunologico",
       },
     ],
@@ -1957,6 +1981,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Insulinoma",
         otrosNombres: [],
         descripcion: "Tumor raro del páncreas que produce un exceso de insulina.",
+        sintomas: ["Ansiedad", "cambios en el comportamiento o confusión", "visión borrosa", "pérdida del conocimiento o coma", "convulsiones o temblor", "mareo o dolor de cabeza", "hambre entre comidas", "sudoración"],
+        causas: ["Tumor en el páncreas que produce demasiada insulina", "Neoplasia endocrina múltiple tipo I"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -1964,6 +1990,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Glucagonoma",
         otrosNombres: [],
         descripcion: "Tumor raro del páncreas que produce un exceso de la hormona glucagón.",
+        sintomas: ["Hiperglucemia (nivel elevado de azúcar en la sangre)", "Pérdida de peso inexplicable", "Erupción cutánea característica (eritema necrolítico migratorio)", "Diarrea", "Aumento de la sed y la micción"],
+        causas: ["Desarrollo de un tumor en las células alfa del páncreas", "Síndrome de Neoplasia Endocrina Múltiple tipo 1 (MEN1)", "La mayoría de los casos son esporádicos y de causa desconocida"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -1998,6 +2026,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Ginecomastia",
         otrosNombres: ["Agrandamiento de las mamas en los hombres"],
         descripcion: "Agrandamiento del tejido mamario en hombres, causado por un desequilibrio hormonal.",
+        sintomas: ["Agrandamiento del tejido mamario", "Dolor y sensibilidad en los senos", "Hinchazón en el área del pezón", "Secreción del pezón", "Presencia de un bulto debajo del pezón"],
+        causas: ["Desequilibrios hormonales (disminución de testosterona y aumento de estrógeno)", "Obesidad", "Insuficiencia renal o hepática", "Efectos secundarios de medicamentos", "Condiciones médicas subyacentes (tumores, hipogonadismo)"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2005,6 +2035,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Galactorrea",
         otrosNombres: ["Secreción láctea del pezón"],
         descripcion: "Secreción de leche por los pezones que no está relacionada con la lactancia normal.",
+        sintomas: ["Secreción de leche por el pezón", "Períodos menstruales irregulares o ausentes", "Dolores de cabeza", "Sequedad vaginal", "Disminución del deseo sexual", "Acné"],
+        causas: ["Tumor benigno en la glándula pituitaria (prolactinoma)", "Efectos secundarios de ciertos medicamentos", "Insuficiencia renal crónica", "Hipotiroidismo", "Estimulación excesiva de los senos"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2021,6 +2053,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Retraso de la Pubertad",
         otrosNombres: [],
         descripcion: "Ausencia de los signos de la pubertad a una edad en la que normalmente se esperarían.",
+        sintomas: ["Falta de desarrollo de los senos en las niñas después de los 13 años", "Falta de aumento del tamaño de los testículos en los niños después de los 14 años", "Ausencia de vello púbico", "Baja estatura en comparación con sus compañeros", "Ausencia de la menstruación en las niñas después de los 15 años"],
+        causas: ["Antecedentes familiares de pubertad tardía", "Enfermedades crónicas (como diabetes o fibrosis quística)", "Desnutrición o trastornos de la alimentación", "Problemas hormonales (disfunción de la glándula pituitaria o tiroides)", "Afecciones genéticas"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2028,6 +2062,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome de Kallmann",
         otrosNombres: ["Hipogonadismo hipogonadotrópico con anosmia"],
         descripcion: "Afección genética que causa pubertad tardía o ausente y un sentido del olfato alterado.",
+        sintomas: ["Pubertad retrasada o ausente", "Sentido del olfato disminuido o ausente (anosmia o hiposmia)", "Micropene y criptorquidia en niños", "Amenorrea primaria en mujeres", "Desarrollo incompleto o ausente de las mamas"],
+        causas: ["Mutaciones genéticas hereditarias", "Deficiencia de la hormona liberadora de gonadotropina (GnRH)", "Migración neuronal alterada durante el desarrollo embrionario", "Desarrollo anormal del bulbo olfatorio"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2035,6 +2071,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome de Turner",
         otrosNombres: ["Monosomía X"],
         descripcion: "Afección cromosómica que afecta el desarrollo en las mujeres.",
+        sintomas: ["Baja estatura", "Falta de desarrollo de los ovarios", "Defectos cardíacos", "Cuello ancho o palmeado", "Orejas de implantación baja", "Pecho ancho con pezones de gran separación"],
+        causas: ["Monosomía del cromosoma X", "Mosaicismo del cromosoma X", "Anomalías del cromosoma X"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2042,6 +2080,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome de Klinefelter",
         otrosNombres: ["47,XXY"],
         descripcion: "Afección genética en la que un hombre nace con una copia extra del cromosoma X.",
+        sintomas: ["Testículos y pene pequeños", "Crecimiento de los senos (ginecomastia)", "Menos vello facial y corporal", "Tono muscular reducido", "Retraso en el habla", "Brazos y piernas largos", "Infertilidad", "Bajos niveles de testosterona"],
+        causas: ["Error aleatorio en la división celular (meiosis) durante la formación de las células reproductoras (óvulos o espermatozoides)", "Presencia de un cromosoma X adicional en cada célula (cariotipo 47,XXY)", "Error en la división celular en las primeras etapas del desarrollo fetal (mosaicismo)"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2049,6 +2089,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Hiperplasia Suprarrenal Congénita",
         otrosNombres: ["HSC"],
         descripcion: "Grupo de trastornos genéticos hereditarios que afectan las glándulas suprarrenales.",
+        sintomas: ["Crecimiento rápido", "Aparición temprana de vello púbico y axilar", "Voz grave", "Acné grave", "Genitales ambiguos en niñas", "Deshidratación"],
+        causas: ["Deficiencia de la enzima 21-hidroxilasa", "Mutaciones genéticas hereditarias", "Trastorno autosómico recesivo"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2056,6 +2098,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Neoplasia Endocrina Múltiple Tipo 1",
         otrosNombres: ["NEM1", "Síndrome de Wermer"],
         descripcion: "Trastorno hereditario raro que causa tumores en varias glándulas endocrinas.",
+        sintomas: ["Fatiga y debilidad", "Dolor óseo", "Fracturas óseas", "Cálculos renales", "Úlceras en el estómago o los intestinos", "Hiperparatiroidismo"],
+        causas: ["Mutaciones en el gen MEN1", "Ser un síndrome autosómico dominante", "Antecedentes familiares de la enfermedad"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2063,6 +2107,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Neoplasia Endocrina Múltiple Tipo 2",
         otrosNombres: ["NEM2", "Síndrome de Sipple"],
         descripcion: "Trastorno hereditario que causa tumores en varias glándulas endocrinas y un alto riesgo de cáncer medular de tiroides.",
+        sintomas: ["Bultos en la garganta o el cuello", "Dificultad para respirar o tragar", "Ronquera", "Diarrea", "Dolor en los músculos y en las articulaciones", "Estreñimiento", "Fatiga", "Problemas de memoria", "Cálculos renales", "Presión arterial alta", "Frecuencia cardíaca acelerada", "Ansiedad", "Dolores de cabeza"],
+        causas: ["Afección hereditaria", "Gen alterado"],
         sistemaId: "sistema-endocrino",
       },
       {
@@ -2079,6 +2125,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Resistencia a la Hormona Tiroidea",
         otrosNombres: ["RHT"],
         descripcion: "Trastorno genético raro en el que los tejidos del cuerpo son resistentes a los efectos de las hormonas tiroideas.",
+        sintomas: ["Bocio", "Taquicardia", "Trastornos del desarrollo (baja estatura, retraso en la dentición, sordera)", "Trastornos del sistema nervioso central (trastornos del aprendizaje, hiperactividad, déficit de atención)", "Síntomas de hipertiroidismo", "Fatiga y debilidad muscular"],
+        causas: ["Mutaciones genéticas en el receptor de la hormona tiroidea (TRβ)", "Alteraciones en el transporte celular de las hormonas tiroideas", "Defectos en la conversión de T4 a T3", "Enfermedad de Hashimoto", "Trastornos de la glándula pituitaria"],
         sistemaId: "sistema-endocrino",
       },
     ],
@@ -2201,6 +2249,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Miastenia grave",
         otrosNombres: ["Miastenia gravis", "Debilidad muscular autoinmune"],
         descripcion: "Enfermedad neuromuscular autoinmune que causa debilidad en los músculos esqueléticos.",
+        sintomas: ["Caída de uno o ambos párpados (ptosis)", "Visión doble (diplopía)", "Dificultad para hablar", "Problemas para tragar", "Dificultad para masticar", "Cambios en las expresiones faciales", "Debilidad en el cuello, brazos y piernas"],
+        causas: ["Producción de anticuerpos que bloquean o destruyen los receptores musculares de acetilcolina", "Problemas en la glándula del timo", "Anticuerpos contra las proteínas MuSK o LRP4", "Miastenia gravis seronegativa"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2217,6 +2267,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Sarcoma de tejido blando",
         otrosNombres: ["Tumor de partes blandas", "Cáncer de tejido conectivo"],
         descripcion: "Tipo de cáncer que se origina en los tejidos blandos del cuerpo, como músculos, grasa, vasos sanguíneos, nervios, tendones y revestimiento de las articulaciones.",
+        sintomas: ["Bulto o hinchazón notable", "Dolor, si el bulto presiona nervios o músculos", "Dolor abdominal", "Sangre en las heces o en el vómito", "Heces negras y alquitranadas", "Dificultad para respirar"],
+        causas: ["Síndromes genéticos hereditarios", "Exposición a la radiación", "Exposición a ciertos productos químicos", "Sistema inmunitario debilitado"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2224,6 +2276,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Enfermedad discal degenerativa",
         otrosNombres: ["Discopatía degenerativa", "Desgaste de disco intervertebral"],
         descripcion: "Afección en la que los discos intervertebrales de la columna se deterioran o rompen.",
+        sintomas: ["Dolor en la espalda, cuello, brazos o piernas", "Entumecimiento y hormigueo en brazos y piernas", "Debilidad en los músculos de las piernas", "Dolor que empeora al estar sentado, de pie o caminando por períodos prolongados", "Dolor agudo e intermitente"],
+        causas: ["Desgaste natural de los discos por envejecimiento", "Lesiones o traumatismos en la columna", "Artritis y Osteoartritis", "Sobrepeso u obesidad (IMC elevado)", "Tabaquismo"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2231,6 +2285,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Epicondilitis",
         otrosNombres: ["Codo de tenista", "Epicondilalgia"],
         descripcion: "Inflamación de los tendones que unen los músculos del antebrazo con la parte exterior del codo.",
+        sintomas: ["Dolor desde la parte exterior del codo hacia el antebrazo y la muñeca", "Debilidad para estrechar las manos o sujetar un objeto", "Dificultad para girar la perilla de una puerta", "Dificultad para sostener una taza de café"],
+        causas: ["Uso excesivo de la articulación y torsión muscular", "Tensión repetida de los músculos del antebrazo", "Movimientos repetitivos de la muñeca y el brazo", "Lesión o afección que afecta los tejidos conectivos"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2238,6 +2294,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Distensión muscular",
         otrosNombres: ["Tirón muscular", "Desgarro muscular leve"],
         descripcion: "Lesión en un músculo o tendón, las fibras que conectan los músculos con los huesos.",
+        sintomas: ["Dolor y dificultad de movimiento", "Hinchazón y hematomas", "Sensibilidad al tacto", "Espasmos musculares", "Debilidad muscular"],
+        causas: ["Actividad física o esfuerzo excesivo", "Calentamiento inadecuado antes de la actividad física", "Movimientos repetitivos", "Levantar objetos pesados de forma incorrecta", "Fatiga muscular"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2263,6 +2321,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Osteopenia",
         otrosNombres: ["Baja densidad ósea", "Pre-osteoporosis"],
         descripcion: "Condición en la que la densidad mineral ósea es más baja de lo normal, pero no lo suficiente como para ser considerada osteoporosis.",
+        sintomas: ["Generalmente asintomática", "Dolor de espalda", "Pérdida de estatura con el tiempo", "Postura encorvada", "Huesos que se rompen con mucha más facilidad de lo esperado"],
+        causas: ["Antecedentes familiares de osteopenia u osteoporosis", "Ser de talla pequeña y delgada", "Deficiencia de calcio y vitamina D", "Tabaquismo", "Consumo excesivo de alcohol", "Falta de ejercicio"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2270,6 +2330,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Lumbalgia",
         otrosNombres: ["Dolor de espalda baja", "Lumbago"],
         descripcion: "Dolor en la parte baja de la espalda, que puede ser agudo o crónico.",
+        sintomas: ["Dolor localizado en la parte baja de la espalda", "Rigidez en la espalda", "Espasmos musculares", "Dolor que se irradia hacia los glúteos o las piernas", "Dificultad para moverse, agacharse o levantarse", "Hormigueo o adormecimiento en las piernas o pies"],
+        causas: ["Distensión muscular o de ligamentos", "Hernia de disco o disco degenerado", "Artrosis", "Estenosis espinal", "Malas posturas"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2277,6 +2339,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Fracturas Óseas",
         otrosNombres: ["Hueso roto", "Ruptura ósea"],
         descripcion: "Rotura de un hueso, que puede ser completa o incompleta.",
+        sintomas: ["Dolor intenso", "Hinchazón y hematomas", "Deformidad visible de la extremidad", "Incapacidad para mover la extremidad afectada", "Chasquido o crujido en el momento de la lesión"],
+        causas: ["Traumatismos (caídas, accidentes automovilísticos, lesiones deportivas)", "Osteoporosis", "Uso excesivo o estrés repetitivo en el hueso", "Condiciones médicas que debilitan los huesos"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2320,6 +2384,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Ciática",
         otrosNombres: ["Dolor del nervio ciático", "Radiculopatía ciática"],
         descripcion: "Dolor que se irradia a lo largo del trayecto del nervio ciático, que se ramifica desde la parte baja de la espalda a través de las caderas y los glúteos y baja por cada pierna.",
+        sintomas: ["Dolor que se irradia desde la espalda baja hacia la pierna", "Entumecimiento u hormigueo en la pierna o el pie", "Debilidad en la pierna o el pie", "Dolor agudo o punzante", "Sensación de ardor o descarga eléctrica"],
+        causas: ["Hernia de disco", "Estenosis espinal", "Síndrome piriforme", "Edad", "Obesidad"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2327,6 +2393,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Quiste de Baker",
         otrosNombres: ["Quiste poplíteo", "Bolsa de líquido detrás de la rodilla"],
         descripcion: "Acumulación de líquido articular que forma un bulto detrás de la rodilla.",
+        sintomas: ["Hinchazón o bulto detrás de la rodilla", "Dolor en la rodilla", "Sensación de tirantez o rigidez detrás de la rodilla", "Dificultad para flexionar la rodilla", "Chasquido o bloqueo en la articulación de la rodilla"],
+        causas: ["Artritis (especialmente osteoartritis)", "Lesión de rodilla (como desgarros de meniscos)", "Inflamación de la articulación de la rodilla", "Producción excesiva de líquido sinovial"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2334,6 +2402,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Dedo en gatillo",
         otrosNombres: ["Tenosinovitis estenosante", "Dedo en resorte"],
         descripcion: "Afección en la que uno de los dedos queda atascado en una posición de flexión.",
+        sintomas: ["Rigidez en el dedo, especialmente por la mañana", "Sensación de chasquido o crujido al mover el dedo", "Sensibilidad o un bulto en la palma de la mano, en la base del dedo afectado", "El dedo se queda atascado o trabado en la posición de flexión y se estira con un chasquido de manera repentina", "El dedo se traba en la posición de flexión"],
+        causas: ["Agarre reiterado", "Diabetes", "Artritis reumatoide", "Ocupaciones y pasatiempos que implican el uso repetitivo de las manos", "Sexo femenino"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2341,6 +2411,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome del túnel tarsiano",
         otrosNombres: ["Atrapamiento del nervio tibial", "Neuralgia del nervio tibial posterior"],
         descripcion: "Compresión del nervio tibial en el túnel tarsiano, un pasaje estrecho dentro del tobillo.",
+        sintomas: ["Dolor en el tobillo, pie y dedos", "Hormigueo o ardor en la planta del pie", "Entumecimiento en el pie", "Debilidad en los músculos del pie", "Sensación de choque eléctrico"],
+        causas: ["Compresión del nervio tibial posterior", "Lesiones en el tobillo", "Pie plano", "Enfermedades sistémicas como diabetes o artritis", "Hinchazón crónica en los pies"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2348,6 +2420,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Enfermedad de De Quervain",
         otrosNombres: ["Tenosinovitis de De Quervain", "Pulgar de esquiador"],
         descripcion: "Afección dolorosa que afecta los tendones de la muñeca del lado del pulgar.",
+        sintomas: ["Dolor cerca de la base del pulgar", "Hinchazón cerca de la base del pulgar", "Dificultad para mover el pulgar y la muñeca", "Dolor en un costado de la muñeca bajo la base del pulgar", "Entumecimiento en los dedos pulgar e índice", "Sensación de crujido en la muñeca"],
+        causas: ["Movimientos repetitivos de la mano o la muñeca", "Lesión en la muñeca o el tendón", "Artritis reumatoide", "Embarazo", "Actividades que implican el uso repetitivo del pulgar y la muñeca"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2364,6 +2438,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome de Ehlers-Danlos",
         otrosNombres: ["SED", "Hiperlaxitud articular"],
         descripcion: "Grupo de trastornos hereditarios que afectan los tejidos conectivos, principalmente la piel, las articulaciones y las paredes de los vasos sanguíneos.",
+        sintomas: ["Articulaciones flexibles en exceso", "Piel elástica", "Piel frágil que se daña con facilidad", "Dolor en las articulaciones y dislocaciones frecuentes", "Cicatrización anormal"],
+        causas: ["Trastorno hereditario del tejido conectivo", "Mutaciones en diversos genes responsables de la síntesis de colágeno", "Herencia autosómica dominante en la mayoría de los tipos"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2371,6 +2447,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Displasia fibrosa",
         otrosNombres: ["Trastorno óseo fibroso", "Lesión fibro-ósea"],
         descripcion: "Trastorno óseo poco común en el que se forma tejido similar a una cicatriz (fibroso) en lugar de hueso normal.",
+        sintomas: ["Dolor óseo", "Lesiones óseas", "Problemas hormonales", "Fracturas o deformidades óseas", "Color inusual de la piel (pigmentación)"],
+        causas: ["Mutación genética espontánea que afecta a las células productoras de hueso", "Ocurre durante el desarrollo fetal", "No es hereditaria"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2378,6 +2456,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Lesiones de la placa de crecimiento",
         otrosNombres: ["Fractura de la fisis", "Lesión epifisaria"],
         descripcion: "Fracturas que afectan la placa de crecimiento o fisis, el área de tejido en crecimiento cerca de los extremos de los huesos largos en niños y adolescentes.",
+        sintomas: ["Dolor con o sin palpación", "Imposibilidad de mover el área afectada", "Calor e hinchazón en el extremo de un hueso", "Deformidad visible en brazos o piernas"],
+        causas: ["Caídas o golpes en la extremidad", "Accidentes automovilísticos", "Deportes competitivos", "Actividades recreativas", "Uso excesivo"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2403,6 +2483,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Artrosis",
         otrosNombres: ["Osteoartrosis", "Desgaste articular"],
         descripcion: "Enfermedad degenerativa de las articulaciones que se caracteriza por el desgaste del cartílago.",
+        sintomas: ["Dolor en las articulaciones", "Rigidez", "Hinchazón", "Crujidos en la articulación", "Pérdida de flexibilidad", "Debilidad muscular"],
+        causas: ["Envejecimiento", "Sobrepeso u obesidad", "Lesiones articulares previas", "Predisposición genética", "Ciertas profesiones u deportes con movimientos repetitivos"],
         sistemaId: "sistema-musculoesqueletico",
       },
       {
@@ -2410,6 +2492,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Contractura muscular",
         otrosNombres: ["Nudo muscular", "Punto gatillo miofascial"],
         descripcion: "Contracción persistente e involuntaria de un músculo o algunas de sus fibras.",
+        sintomas: ["Dolor y rigidez articular y muscular", "Movimientos reducidos", "Debilidad muscular", "Dolor localizado", "Espasmos o endurecimiento palpable en la zona afectada"],
+        causas: ["Sobreesfuerzo físico o sobreuso muscular", "Movimientos bruscos", "Posturas incorrectas o mantenidas", "Estrés, ansiedad o tensión emocional", "Deshidratación"],
         sistemaId: "sistema-musculoesqueletico",
       },
     ],
@@ -2577,6 +2661,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Enfermedad Poliquística Renal",
         otrosNombres: ["PKD"],
         descripcion: "Trastorno genético que se caracteriza por el crecimiento de numerosos quistes en los riñones.",
+        sintomas: ["Presión arterial alta", "Dolor de espalda o en los costados", "Sangre en la orina", "Sensación de plenitud en el abdomen", "Aumento del tamaño del abdomen", "Dolores de cabeza"],
+        causas: ["Trastorno genético hereditario", "Mutaciones en los genes PKD1 o PKD2", "Forma autosómica dominante (un solo padre afectado)", "Forma autosómica recesiva (ambos padres portadores)"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2602,6 +2688,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Estenosis de la Arteria Renal",
         otrosNombres: [],
         descripcion: "Estrechamiento de las arterias que transportan sangre a los riñones.",
+        sintomas: ["Presión arterial alta difícil de controlar", "Sonido sibilante en los vasos sanguíneos", "Aumento de proteínas en la orina", "Empeoramiento de la función renal", "Hinchazón por retención de líquidos", "Dolores de cabeza"],
+        causas: ["Aterosclerosis", "Displasia fibromuscular", "Diabetes", "Tabaquismo", "Presión arterial alta"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2627,6 +2715,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Extrofia Vesical",
         otrosNombres: [],
         descripcion: "Anomalía congénita rara en la que la vejiga se desarrolla fuera del feto.",
+        sintomas: ["Vejiga visible fuera del abdomen", "Huesos púbicos ensanchados", "Piernas y pies girados hacia afuera", "Músculos abdominales anormales", "Ombligo de implantación baja", "Incontinencia urinaria"],
+        causas: ["Defecto del desarrollo fetal", "Cierre inadecuado de la pared abdominal inferior", "Combinación de factores genéticos y ambientales"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2634,6 +2724,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Hipospadias",
         otrosNombres: [],
         descripcion: "Anomalía congénita en los varones en la que la abertura de la uretra no se encuentra en la punta del pene.",
+        sintomas: ["Abertura de la uretra en la parte inferior del pene", "Curvatura del pene hacia abajo", "Apariencia encapuchada del pene", "Salpicaduras anormales al orinar"],
+        causas: ["Antecedentes familiares", "Genética", "Edad materna avanzada (mayor de 35 años)", "Exposición a ciertas sustancias durante el embarazo"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2641,6 +2733,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Epispadias",
         otrosNombres: [],
         descripcion: "Anomalía congénita rara que afecta la abertura de la uretra.",
+        sintomas: ["Pene corto y ensanchado con una curvatura anormal", "Abertura de la uretra en la parte superior o lateral del pene", "Clítoris y labios vaginales anormales", "Incontinencia urinaria", "Infecciones urinarias recurrentes"],
+        causas: ["Causa desconocida", "Desarrollo inadecuado del hueso púbico", "Puede ocurrir junto con extrofia vesical", "Componente genético"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2648,6 +2742,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome Urémico Hemolítico",
         otrosNombres: ["SUH"],
         descripcion: "Afección que puede ocurrir después de una infección intestinal y que provoca insuficiencia renal.",
+        sintomas: ["Diarrea con sangre", "Dolor de estómago", "Fiebre", "Vómitos", "Palidez", "Cansancio extremo"],
+        causas: ["Infección por E. coli", "Infecciones bacterianas o virales", "Ciertos medicamentos", "Complicaciones de otras enfermedades", "Factores genéticos"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2664,6 +2760,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Vasculitis Renal",
         otrosNombres: [],
         descripcion: "Inflamación de los vasos sanguíneos de los riñones.",
+        sintomas: ["Sangre en la orina", "Orina espumosa", "Hinchazón de las piernas o los pies", "Sarpullido en las nalgas o la parte inferior de las piernas", "Fiebre", "Cansancio"],
+        causas: ["Reacción a un medicamento", "Infecciones como la hepatitis B y la hepatitis C", "Enfermedades autoinmunitarias como el lupus, la artritis reumatoide y la esclerodermia", "Cánceres de la sangre como la leucemia y el linfoma"],
         sistemaId: "sistema-urinario",
       },
       {
@@ -2867,6 +2965,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Infertilidad",
         otrosNombres: ["Esterilidad"],
         descripcion: "No poder quedar embarazada (concebir) a pesar de tener relaciones sexuales frecuentes y sin protección durante al menos un año.",
+        sintomas: ["Incapacidad para concebir", "Períodos menstruales irregulares o ausentes", "Dolor pélvico crónico", "Cambios en el deseo sexual", "Secreción lechosa de los pezones no relacionada con la lactancia"],
+        causas: ["Trastornos de la ovulación", "Anomalías en el útero o el cuello uterino", "Daño o obstrucción de las trompas de Falopio", "Endometriosis", "Azoospermia"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2919,6 +3019,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Tricomoniasis",
         otrosNombres: ["Trich"],
         descripcion: "Una infección de transmisión sexual (ITS) muy común causada por un parásito.",
+        sintomas: ["Secreción vaginal anormal (amarillenta-verdosa, espumosa y con mal olor)", "Picazón, ardor o enrojecimiento en la zona genital", "Dolor o molestias al orinar", "Dolor durante las relaciones sexuales", "Sangrado o manchado intermenstrual"],
+        causas: ["Infección por el parásito protozoario Trichomonas vaginalis", "Transmisión a través de relaciones sexuales sin protección", "Tener múltiples parejas sexuales", "Antecedentes de otras infecciones de transmisión sexual (ITS)"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2926,6 +3028,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Embarazo Ectópico",
         otrosNombres: ["Embarazo tubárico"],
         descripcion: "Un embarazo en el que el óvulo fertilizado se implanta fuera del útero.",
+        sintomas: ["Sangrado vaginal anormal", "Dolor agudo en el abdomen, la pelvis, el hombro o el cuello", "Mareos o desmayos", "Dolor en un lado de la pelvis", "Ausencia de periodos"],
+        causas: ["Daño en las trompas de Falopio", "Enfermedad inflamatoria pélvica (EIP)", "Endometriosis", "Edad mayor a 35 años", "Tabaquismo", "Cirugía previa en las trompas de Falopio"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2933,6 +3037,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Preeclampsia",
         otrosNombres: ["Toxemia del embarazo"],
         descripcion: "Una complicación del embarazo caracterizada por presión arterial alta y signos de daño en otro sistema de órganos, más a menudo el hígado y los riñones.",
+        sintomas: ["Presión arterial alta", "Proteína en la orina", "Hinchazón de manos, pies y cara", "Dolores de cabeza que no desaparecen", "Problemas de visión", "Dolor abdominal en el lado derecho"],
+        causas: ["Embarazo múltiple", "Obesidad", "Ser mayor de 35 años", "Ser afroamericana", "Tener un historial familiar de preeclampsia"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2940,6 +3046,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Placenta Previa",
         otrosNombres: ["Implantación baja de la placenta"],
         descripcion: "Un problema durante el embarazo en el que la placenta crece en la parte más baja del útero y cubre toda o parte de la abertura hacia el cuello uterino.",
+        sintomas: ["Sangrado vaginal de color rojo brillante sin dolor", "Manchas de sangre antes de una hemorragia mayor", "Contracciones uterinas prematuras y dolorosas", "Sangrado postcoital o durante un examen médico"],
+        causas: ["Cesárea previa", "Cicatrices uterinas por cirugías anteriores", "Placenta previa en embarazo anterior", "Embarazo por reproducción asistida", "Gestación múltiple", "Edad materna avanzada (más de 35 años)", "Tabaquismo", "Consumo de cocaína"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2947,6 +3055,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Aborto Espontáneo",
         otrosNombres: ["Pérdida del embarazo"],
         descripcion: "La pérdida espontánea de un embarazo antes de la semana 20.",
+        sintomas: ["Sangrado vaginal con o sin dolor", "Dolor o calambres en la zona pélvica o en la parte baja de la espalda", "Líquido o tejido que sale de la vagina", "Latidos rápidos del corazón"],
+        causas: ["Genes o cromosomas irregulares", "Afecciones de salud materna", "Edad mayor de 35 años", "Abortos espontáneos anteriores", "Fumar, consumir alcohol, cafeína y drogas ilícitas"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2954,6 +3064,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Dispareunia",
         otrosNombres: ["Coito doloroso"],
         descripcion: "Dolor genital persistente o recurrente que ocurre justo antes, durante o después de las relaciones sexuales.",
+        sintomas: ["Dolor durante la penetración sexual", "Dolor profundo en la pelvis durante el coito", "Ardor o picazón en la zona genital", "Disminución de la lubricación vaginal", "Sangrado leve después del coito"],
+        causas: ["Sequedad vaginal por falta de lubricación", "Infecciones vaginales o del tracto urinario", "Vaginismo (contracción involuntaria de los músculos vaginales)", "Endometriosis", "Factores psicológicos como ansiedad o estrés"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -2970,6 +3082,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Anorgasmia",
         otrosNombres: ["Disfunción orgásmica"],
         descripcion: "Dificultad o incapacidad para alcanzar el orgasmo.",
+        sintomas: ["Retraso del orgasmo", "Ausencia del orgasmo", "Menos orgasmos", "Orgasmos menos intensos"],
+        causas: ["Factores psicológicos como abuso o trauma", "Problemas en la relación de pareja", "Ciertas enfermedades y medicamentos", "Consumo de alcohol y tabaco", "Cambios corporales relacionados con la edad"],
         sistemaId: "sistema-reproductor",
       },
       {
@@ -3200,6 +3314,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Forúnculos",
         otrosNombres: ["Abscesos cutáneos"],
         descripcion: "Infección dolorosa y llena de pus que se forma debajo de la piel cuando las bacterias infectan y inflaman uno o más folículos pilosos.",
+        sintomas: ["Protuberancia roja, hinchada y dolorosa en la piel", "Pus visible en el centro de la protuberancia", "Sensibilidad y dolor en la zona afectada", "Aumento de tamaño del bulto con el tiempo", "Posible desarrollo de fiebre y malestar general", "Calor en la zona afectada"],
+        causas: ["Infección del folículo piloso por la bacteria Staphylococcus aureus", "Fricción o irritación de la piel", "Sistema inmunitario debilitado", "Condiciones de la piel como acné o eczema", "Mala higiene"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3207,6 +3323,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Hidradenitis supurativa",
         otrosNombres: ["Acné inverso"],
         descripcion: "Enfermedad crónica de la piel que se caracteriza por bultos pequeños y dolorosos debajo de la piel.",
+        sintomas: ["Espinillas negras", "Protuberancias dolorosas del tamaño de un guisante", "Bultos o llagas que supuran", "Túneles que conectan los bultos debajo de la piel"],
+        causas: ["Obstrucción de los folículos pilosos", "Hormonas", "Predisposición genética", "Fumar", "Sobrepeso"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3214,6 +3332,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Ictiosis vulgar",
         otrosNombres: ["Piel de pescado"],
         descripcion: "Afección hereditaria de la piel en la que las células cutáneas muertas se acumulan en escamas gruesas y secas en la superficie de la piel.",
+        sintomas: ["Piel seca y escamosa", "Engrosamiento de la piel", "Picazón leve", "Piel áspera y agrietada", "Aumento de las líneas en las palmas de las manos y plantas de los pies"],
+        causas: ["Mutación genética en el gen que codifica la proteína filagrina", "Herencia autosómica dominante", "Antecedentes familiares de la enfermedad"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3221,6 +3341,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Melasma",
         otrosNombres: ["Cloasma", "Máscara del embarazo"],
         descripcion: "Afección cutánea común que causa manchas oscuras y descoloridas en la piel.",
+        sintomas: ["Cambio de color de la piel a un café uniforme", "Manchas oscuras en las mejillas, frente, nariz y labio superior", "Parches oscuros simétricos", "Sufrimiento respecto a la apariencia"],
+        causas: ["Hormonas femeninas estrógeno y progesterona", "Embarazo", "Pastillas anticonceptivas", "Terapia de reemplazo hormonal", "Exposición al sol"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3228,6 +3350,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Nevos melanocíticos",
         otrosNombres: ["Lunares"],
         descripcion: "Crecimientos comunes en la piel, generalmente de color marrón o negro.",
+        sintomas: ["Manchas en la piel de color marrón o negruzco", "Lesiones planas o elevadas", "Superficie lisa, rugosa o velluda", "Generalmente asintomáticos", "En raras ocasiones pueden causar picazón, dolor o sangrado"],
+        causas: ["Proliferación benigna de melanocitos", "Mutaciones genéticas somáticas", "Predisposición genética", "Exposición a la radiación ultravioleta del sol"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3244,6 +3368,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Prurigo nodular",
         otrosNombres: ["Dermatitis nodular"],
         descripcion: "Enfermedad de la piel que se caracteriza por bultos que pican (nódulos) en la piel.",
+        sintomas: ["Nódulos firmes y pruriginosos en la piel", "Picor extremo y persistente", "Piel engrosada o con costras", "Heridas o escoriaciones por rascado", "Sensación de ardor o escozor en la piel", "Nódulos de color piel o marrón rojizo"],
+        causas: ["Función alterada del sistema inmunitario y de los nervios de la piel", "Eccema (dermatitis atópica)", "Enfermedad renal", "Enfermedad hepática", "Diabetes"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3260,6 +3386,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Tiña versicolor",
         otrosNombres: ["Pitiriasis versicolor"],
         descripcion: "Infección fúngica común de la piel que interfiere con la pigmentación normal de la piel, lo que resulta en pequeñas manchas descoloridas.",
+        sintomas: ["Manchas en la piel más claras o más oscuras que la piel circundante", "Manchas que no se broncean con el sol", "Manchas que pueden ser de color blanco, rosado, rojo o marrón", "Piel escamosa", "Picazón leve"],
+        causas: ["Crecimiento excesivo del hongo Malassezia en la piel", "Clima cálido y húmedo", "Piel grasa", "Sudoración excesiva", "Sistema inmunitario debilitado"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3267,6 +3395,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Xantelasma",
         otrosNombres: ["Depósitos de colesterol"],
         descripcion: "Depósito amarillento de grasa (lípidos) debajo de la piel, generalmente en o alrededor de los párpados.",
+        sintomas: ["Protuberancias bajo la piel con bordes definidos", "Placas amarillentas en los párpados", "Erupciones cutáneas de diferentes formas", "Nódulos amarillos en los párpados", "Lesiones amarillas o rojizas en los párpados"],
+        causas: ["Niveles altos de colesterol", "Mala alimentación", "Vida sedentaria", "Predisposición genética", "Diabetes"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3274,6 +3404,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Dermatofibroma",
         otrosNombres: ["Histiocitoma fibroso"],
         descripcion: "Bulto pequeño y no canceroso (benigno) que se desarrolla en la piel.",
+        sintomas: ["Pápulas o nódulos pequeños y firmes", "Color rojo amarronado o violáceo", "Prurito o picazón ocasional", "Dolor o sensibilidad al tacto", "Signo del hoyuelo (la lesión se hunde al presionarla)", "Irritación o sangrado por traumatismo menor"],
+        causas: ["Causa desconocida", "Predisposición genética", "Reacción a traumatismos menores (como picaduras de insecto)", "Formación de quistes en folículos pilosos", "Asociación con enfermedades sistémicas (casos raros)"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3281,6 +3413,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Granuloma anular",
         otrosNombres: ["Erupción en anillo"],
         descripcion: "Afección cutánea crónica que causa una erupción en forma de anillo, generalmente en las manos y los pies.",
+        sintomas: ["Erupción elevada o protuberancias en forma de anillo", "Bordes de la erupción circulares o semicirculares", "Malestar o picazón", "Pequeños bultos firmes debajo de la piel"],
+        causas: ["Mordeduras de animales o insectos", "Infecciones como la hepatitis", "Pruebas cutáneas de tuberculina", "Vacunas", "Exposición al sol", "Lesiones cutáneas menores", "Medicamentos", "Diabetes", "Enfermedad de la tiroides"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3297,6 +3431,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Lentigo solar",
         otrosNombres: ["Manchas de la edad", "Manchas hepáticas"],
         descripcion: "Manchas oscuras en la piel causadas por la exposición al sol.",
+        sintomas: ["Áreas planas y ovaladas de pigmentación intensificada", "Color marrón claro a marrón oscuro", "Aparición en zonas expuestas al sol como el dorso de las manos, los empeines, el rostro, los hombros y la parte alta de la espalda", "Tamaño que varía desde el de una peca hasta aproximadamente 13 mm de diámetro", "Tendencia a agruparse, lo que las hace más notorias"],
+        causas: ["Exposición a la luz ultravioleta (UV) del sol", "Uso de lámparas y camas de bronceado comerciales", "Tener piel clara", "Antecedentes de exposición solar frecuente o intensa o quemaduras de sol"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3304,6 +3440,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Poiquilodermia de Civatte",
         otrosNombres: ["Eritrosis coli"],
         descripcion: "Afección cutánea benigna que afecta principalmente la piel del cuello y el pecho.",
+        sintomas: ["Manchas rojas y marrones", "Piel fina y con aspecto envejecido", "Atrofia cutánea", "Telangiectasias", "Picor o quemazón"],
+        causas: ["Exposición crónica a la radiación ultravioleta (UV)", "Predisposición genética", "Uso de perfumes y cosméticos fotosensibilizantes", "Cambios hormonales relacionados con la edad", "Tabaquismo y contaminación ambiental"],
         sistemaId: "enfermedades-de-la-piel",
       },
       {
@@ -3311,6 +3449,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Telangiectasias",
         otrosNombres: ["Arañas vasculares"],
         descripcion: "Pequeños vasos sanguíneos dilatados cerca de la superficie de la piel o las membranas mucosas.",
+        sintomas: ["Vasos sanguíneos pequeños y dilatados en la piel", "Manchas rojas en labios, cara y yemas de los dedos", "Sangrados nasales", "Anemia por deficiencia de hierro", "Falta de aire", "Dolores de cabeza"],
+        causas: ["Envejecimiento", "Problemas genéticos", "Embarazo", "Exposición al sol", "Venas varicosas"],
         sistemaId: "enfermedades-de-la-piel",
       },
     ],
@@ -3451,6 +3591,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Higroma Quístico",
         otrosNombres: ["Linfangioma quístico"],
         descripcion: "Un saco lleno de líquido que resulta de una obstrucción en el sistema linfático, que generalmente se encuentra en el cuello.",
+        sintomas: ["Hinchazón o masa en el cuello o la axila", "Acumulación de líquido", "Edema nucal", "Dificultad para respirar o tragar"],
+        causas: ["Anomalías cromosómicas (Síndrome de Turner, Síndrome de Down)", "Factores genéticos", "Malformación del sistema linfático", "Infecciones virales durante el embarazo"],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3458,6 +3600,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Hiperplasia Linfofolicular",
         otrosNombres: ["Hiperplasia folicular reactiva"],
         descripcion: "Aumento del número y tamaño de los folículos linfoides, a menudo en respuesta a una infección.",
+        sintomas: ["Dolor", "Hinchazón", "Calor", "Sensibilidad", "Fiebre", "Escalofríos"],
+        causas: ["Infecciones bacterianas", "Infecciones virales", "Trastornos inmunitarios", "Estímulo de antígenos"],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3465,6 +3609,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Linfadenitis Mesentérica",
         otrosNombres: ["Adenitis mesentérica"],
         descripcion: "Inflamación de los ganglios linfáticos en el mesenterio, el tejido que une el intestino a la pared abdominal.",
+        sintomas: ["Dolor en la zona del estómago", "Sensibilidad general en la zona del estómago", "Fiebre", "Diarrea", "Náuseas y vómitos"],
+        causas: ["Infección viral (gastroenteritis)", "Infecciones bacterianas", "Enfermedad inflamatoria intestinal", "Linfoma"],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3499,6 +3645,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Esplenomegalia",
         otrosNombres: ["Bazo agrandado"],
         descripcion: "Agrandamiento del bazo, a menudo asociado con diversas enfermedades que afectan al sistema linfático.",
+        sintomas: ["Dolor o sensación de presión en la parte superior izquierda del abdomen", "Sensación de saciedad sin haber comido o después de comer una pequeña cantidad", "Anemia", "Infecciones frecuentes", "Sangrado fácil"],
+        causas: ["Infecciones virales, bacterianas o parasitarias", "Enfermedades hepáticas como la cirrosis", "Cánceres de la sangre como leucemia o linfoma", "Trastornos metabólicos", "Afecciones autoinmunitarias"],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3506,6 +3654,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Timoma",
         otrosNombres: ["Tumor del timo"],
         descripcion: "Un tumor originado en las células epiteliales del timo, una glándula linfática importante para el sistema inmune.",
+        sintomas: ["Tos persistente", "Dolor en el pecho", "Dificultad para respirar", "Debilidad muscular", "Voz ronca", "Dificultad para tragar"],
+        causas: ["Causa exacta desconocida", "Edad avanzada", "Enfermedades autoinmunes"],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3513,6 +3663,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Linfangioma Cavernoso",
         otrosNombres: ["Malformación linfática macroquística"],
         descripcion: "Un tipo de malformación linfática compuesta por grandes quistes llenos de líquido linfático.",
+        sintomas: ["Hinchazón o bulto debajo de la piel", "Decoloración de la piel o un tinte azulado sobre el área afectada", "Rango de movimiento limitado o rigidez en las articulaciones cercanas", "Infecciones recurrentes o celulitis en la zona afectada", "Dolor o malestar si el linfangioma presiona los tejidos o nervios circundantes."],
+        causas: ["Malformaciones congénitas durante el desarrollo fetal", "Mutaciones genéticas", "Traumatismo o lesión en los vasos linfáticos", "Cambios hormonales", "Infección o inflamación que afecta el sistema linfático."],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3520,6 +3672,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Linfohistiocitosis Hemofagocítica (LHH)",
         otrosNombres: ["Síndrome hemofagocítico"],
         descripcion: "Un trastorno inmunitario potencialmente mortal en el que el cuerpo produce demasiadas células inmunitarias activadas.",
+        sintomas: ["Fiebre", "Hepatomegalia", "Esplenomegalia", "Erupción cutánea", "Linfadenopatías", "Alteraciones neurológicas"],
+        causas: ["Factores genéticos (LHH familiar)", "Infecciones virales (como el virus de Epstein-Barr)", "Cánceres (como leucemias y linfomas)", "Trastornos autoinmunitarios (como el lupus y la artritis reumatoide)", "Trasplante de órganos"],
         sistemaId: "sistema-linfatico",
       },
       {
@@ -3527,6 +3681,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Síndrome de Evans",
         otrosNombres: [],
         descripcion: "Un trastorno autoinmune raro en el que el sistema inmunitario destruye los glóbulos rojos, las plaquetas y, a veces, ciertos tipos de glóbulos blancos.",
+        sintomas: ["Manchas de color púrpura en la piel", "Palidez", "Fatiga", "Aturdimiento"],
+        causas: ["Trastorno del sistema inmune", "Síndrome linfoproliferativo autoinmune", "Lupus", "Síndrome antifosfolípido", "Síndrome de Sjogren"],
         sistemaId: "sistema-linfatico",
       },
     ],
@@ -3622,6 +3778,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastornos de la Alimentación",
         otrosNombres: ["Anorexia", "Bulimia", "Atracón"],
         descripcion: "Afecciones graves que se relacionan con las conductas alimentarias que afectan negativamente la salud.",
+        sintomas: ["Preocupación excesiva por el peso y la figura corporal", "Restricción severa de la ingesta de alimentos", "Episodios recurrentes de atracones de comida", "Conductas purgativas como vómitos autoinducidos o uso de laxantes", "Aislamiento social y evitación de situaciones que involucren comida", "Cambios de humor, irritabilidad y depresión"],
+        causas: ["Predisposición genética y factores biológicos", "Antecedentes familiares de trastornos alimentarios", "Presión social y cultural por la delgadez", "Historial de trauma, abuso o acoso", "Presencia de otros trastornos de salud mental como ansiedad o depresión"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3647,6 +3805,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de Ansiedad por Separación",
         otrosNombres: [],
         descripcion: "Miedo excesivo a la separación de las personas a las que se está apegado.",
+        sintomas: ["Sufrimiento emocional intenso y repetido al pensar en la separación", "Preocupación intensa y constante por la pérdida de un ser querido", "Preocupación constante por que suceda algo malo que cause la separación", "Negativa a estar fuera del hogar por miedo a la separación", "Pesadillas repetidas sobre la separación", "Quejas repetidas de dolores de cabeza o estómago antes o durante la separación"],
+        causas: ["Estrés de la vida o pérdidas que causan la separación", "Antecedentes familiares", "Cuestiones situacionales"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3690,6 +3850,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno Dismórfico Corporal",
         otrosNombres: ["TDC"],
         descripcion: "Preocupación obsesiva por un defecto percibido en la apariencia física.",
+        sintomas: ["Estar extremadamente preocupado por un defecto percibido en la apariencia que los demás no pueden ver o que parece poco importante", "Estar convencido de que tienes un defecto en tu apariencia que te hace feo o deforme", "Creer que los demás ponen especial atención en tu apariencia de una manera negativa o se burlan de ti", "Tener comportamientos dirigidos a arreglar u ocultar el defecto percibido que son difíciles de resistir o controlar", "Intentar ocultar los defectos percibidos con el estilo, el maquillaje o la ropa", "Comparar constantemente tu apariencia con la de los demás"],
+        causas: ["Antecedentes familiares del trastorno", "Evaluación negativa o burlas sobre el cuerpo o la imagen propia durante la niñez", "Ciertos rasgos de la personalidad, como el perfeccionismo", "Presión social o expectativas de belleza", "Tener otra afección de salud mental, como ansiedad o depresión"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3706,6 +3868,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno Afectivo Estacional",
         otrosNombres: ["TAE", "Depresión Invernal"],
         descripcion: "Depresión que ocurre en la misma época cada año.",
+        sintomas: ["Sentirse apático, triste o decaído gran parte del día, casi todos los días", "Perder el interés en actividades que solías disfrutar", "Tener poca energía y sentirse aletargado", "Dormir demasiado", "Antojos de carbohidratos, comer en exceso y subir de peso", "Dificultad para concentrarse"],
+        causas: ["Alteración del reloj biológico (ritmos circadianos) por la reducción de la luz solar", "Disminución de los niveles de serotonina, un neurotransmisor que afecta el estado de ánimo", "Desequilibrio en los niveles de melatonina, que interviene en los patrones de sueño y el estado de ánimo"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3713,6 +3877,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Distimia",
         otrosNombres: ["Trastorno Depresivo Persistente"],
         descripcion: "Forma crónica de depresión menos severa pero de larga duración.",
+        sintomas: ["Tristeza, desánimo o sensación de vacío", "Pérdida de interés en las actividades cotidianas", "Cansancio y falta de energía", "Baja autoestima", "Dificultad para concentrarse y tomar decisiones", "Alteraciones del sueño"],
+        causas: ["Desequilibrios químicos en el cerebro", "Antecedentes familiares de depresión", "Eventos traumáticos o estrés crónico", "Abuso de sustancias"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3729,6 +3895,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno Disfórico Premenstrual",
         otrosNombres: ["TDPM"],
         descripcion: "Forma grave del síndrome premenstrual (SPM) con síntomas emocionales y físicos.",
+        sintomas: ["Falta de interés en las actividades diarias", "Fatiga o falta de energía", "Tristeza o desesperanza", "Ansiedad", "Altibajos en el estado de ánimo", "Irritabilidad o ira persistente"],
+        causas: ["Cambios hormonales durante el ciclo menstrual", "Abuso de alcohol o drogas ilícitas", "Trastornos de la tiroides", "Sobrepeso", "Falta de ejercicio"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3736,6 +3904,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de Desregulación Disruptiva del Estado de Ánimo",
         otrosNombres: ["TDDEA"],
         descripcion: "Irritabilidad crónica, grave y persistente en niños y adolescentes.",
+        sintomas: ["Arrebatos intensos de mal genio (verbales o conductuales)", "Arrebatos y berrinches recurrentes durante al menos 12 meses", "Estado de ánimo crónicamente irritable o enojo la mayor parte del día", "Problemas de funcionamiento en más de un lugar (hogar, escuela, compañeros)"],
+        causas: ["Trastorno del neurodesarrollo", "Componentes genéticos", "Componentes ambientales", "Coexistencia con otros trastornos como el TDAH o la ansiedad"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3770,6 +3940,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Paranoide",
         otrosNombres: [],
         descripcion: "Patrón de desconfianza y suspicacia hacia los demás.",
+        sintomas: ["Desconfianza y sospecha generalizadas hacia los demás", "Creencia de que los demás tienen intenciones maliciosas", "Preocupación injustificada por la lealtad o la fiabilidad de los amigos y socios", "Reticencia a confiar en los demás por miedo a que la información sea utilizada en su contra", "Interpretación de significados denigrantes o amenazantes en comentarios o acontecimientos benignos", "Reacción de ira u hostilidad ante lo que perciben como ataques a su persona."],
+        causas: ["Factores genéticos", "Antecedentes familiares de esquizofrenia y otros trastornos psicóticos", "Experiencias traumáticas en la infancia, como negligencia física o emocional."],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3777,6 +3949,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Esquizoide",
         otrosNombres: [],
         descripcion: "Patrón de distanciamiento de las relaciones sociales y una gama restringida de expresión emocional.",
+        sintomas: ["Querer estar solo y realizar actividades en soledad", "No interesarse ni disfrutar de las relaciones cercanas", "Sentir poco o ningún deseo de mantener relaciones sexuales", "Dificultad para expresar emociones y reaccionar", "Falta de motivación para alcanzar metas", "No reaccionar ante los elogios o las críticas de los demás"],
+        causas: ["Tener un familiar con trastorno de la personalidad esquizoide, trastorno esquizotípico de la personalidad o esquizofrenia", "Tener un padre que se mostraba frío, no cuidaba adecuadamente y no daba apoyo emocional", "Factores genéticos", "Factores ambientales"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3784,6 +3958,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Esquizotípica",
         otrosNombres: [],
         descripcion: "Patrón de malestar agudo en las relaciones cercanas, distorsiones cognitivas o perceptivas y excentricidades del comportamiento.",
+        sintomas: ["Ser solitario y carecer de amigos cercanos fuera de la familia inmediata", "Emociones planas o respuestas emocionales limitadas o socialmente inapropiadas", "Ansiedad social excesiva y persistente", "Pensamientos, creencias o gestos extraños o inusuales", "Pensamientos sospechosos o paranoicos y dudas constantes sobre la lealtad de los demás", "Creencia en poderes especiales, como telepatía mental o supersticiones."],
+        causas: ["Cambios en la forma en que funciona el cerebro", "Genética", "Influencias ambientales", "Comportamientos aprendidos", "Antecedentes familiares de esquizofrenia u otro trastorno psicótico."],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3791,6 +3967,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Antisocial",
         otrosNombres: ["Psicopatía", "Sociopatía"],
         descripcion: "Patrón de desprecio y violación de los derechos de los demás.",
+        sintomas: ["Ignorar qué está bien y qué está mal", "Decir mentiras para aprovecharse de los demás", "Ser insensible o no respetar a otras personas", "Quebrantar la ley constantemente", "No demostrar culpa ni remordimiento", "Comportamiento impulsivo"],
+        causas: ["Factores genéticos", "Maltrato infantil", "Antecedentes familiares de Trastorno de la Personalidad Antisocial u otros trastornos de la personalidad", "Abuso de sustancias"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3798,6 +3976,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Histriónica",
         otrosNombres: [],
         descripcion: "Patrón de emotividad excesiva y búsqueda de atención.",
+        sintomas: ["Necesidad de ser el centro de atención", "Comportamiento seductor o provocativo inapropiado", "Emociones superficiales y rápidamente cambiantes", "Preocupación excesiva por la apariencia física", "Ser fácilmente influenciable por los demás", "Discurso excesivamente vago y carente de detalles"],
+        causas: ["Factores genéticos", "Experiencias de la infancia", "Estilo de crianza", "Factores neurobiológicos"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3805,6 +3985,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Narcisista",
         otrosNombres: ["Narcisismo"],
         descripcion: "Patrón de grandiosidad, necesidad de admiración y falta de empatía.",
+        sintomas: ["Tener un aire de superioridad irrazonable y necesitar constantemente la admiración excesiva de los demás", "Sentir que merecen tener privilegios y recibir un trato especial", "Aprovecharse de los demás para lograr lo que quieren", "Tener incapacidad o falta de voluntad para reconocer las necesidades y los sentimientos de los demás", "Preocuparse por fantasías sobre el éxito, el poder, la brillantez, la belleza o la pareja perfecta", "Comportarse con arrogancia, alardear mucho y ser consideradas engreídas."],
+        causas: ["Entorno familiar en la infancia (relaciones con los padres de demasiada adoración o crítica)", "Genética (características heredadas)", "Neurobiología (conexión entre cerebro, conducta y pensamiento)."],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3812,6 +3994,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad por Evitación",
         otrosNombres: ["Trastorno de la Personalidad Evasiva"],
         descripcion: "Patrón de inhibición social, sentimientos de insuficiencia e hipersensibilidad a la evaluación negativa.",
+        sintomas: ["Hipersensibilidad a la crítica y al rechazo", "Aislamiento social autoimpuesto", "Timidez o ansiedad en situaciones sociales", "Sentimientos de ineptitud", "Baja autoestima", "Evitación de actividades laborales que implican contacto interpersonal"],
+        causas: ["Factores genéticos", "Factores ambientales", "Rechazo o acoso en la infancia"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3819,6 +4003,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Dependiente",
         otrosNombres: [],
         descripcion: "Patrón de comportamiento sumiso y pegajoso relacionado con una necesidad excesiva de ser cuidado.",
+        sintomas: ["Dificultad para tomar decisiones cotidianas sin un exceso de consejo y reafirmación por parte de los demás", "Necesidad de que otros asuman la responsabilidad en las áreas más importantes de su vida", "Dificultad para expresar el desacuerdo con los demás por miedo a la pérdida de apoyo o aprobación", "Dificultad para iniciar proyectos o hacer cosas por su cuenta debido a la falta de confianza en el propio juicio o capacidades", "Va demasiado lejos para obtener la aceptación y el apoyo de los demás, hasta el punto de hacer voluntariamente cosas que son desagradables", "Se siente incómodo o indefenso cuando está solo por temores exagerados de ser incapaz de cuidar de sí mismo"],
+        causas: ["Factores genéticos y hereditarios", "Experiencias traumáticas en la infancia, como el abuso o la negligencia", "Estilos de crianza sobreprotectores o autoritarios", "Antecedentes familiares de trastornos de ansiedad", "Una enfermedad física crónica durante la infancia"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3826,6 +4012,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de la Personalidad Obsesivo-Compulsiva",
         otrosNombres: ["TPOC"],
         descripcion: "Patrón de preocupación por el orden, el perfeccionismo y el control.",
+        sintomas: ["Preocupación excesiva por los detalles, el orden y las normas", "Perfeccionismo que interfiere con la finalización de las tareas", "Devoción excesiva al trabajo y la productividad, excluyendo actividades de ocio y amistades", "Rigidez y obstinación", "Incapacidad para delegar tareas o trabajar con otros", "Avaricia y un estilo de vida miserable"],
+        causas: ["Factores genéticos y hereditarios", "Experiencias traumáticas durante la infancia", "Estilo de crianza autoritario y sobreprotector"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3833,6 +4021,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de Conversión",
         otrosNombres: ["Trastorno de Síntomas Neurológicos Funcionales"],
         descripcion: "Síntomas neurológicos inexplicables que afectan el movimiento o los sentidos.",
+        sintomas: ["Debilidad o parálisis", "Movimiento anormal, como temblores o dificultad para caminar", "Convulsiones o crisis no epilépticas", "Problemas del habla, como incapacidad para hablar o habla arrastrada", "Problemas de visión, como visión doble o ceguera", "Entumecimiento o pérdida de sensibilidad al tacto"],
+        causas: ["Estrés considerable o trauma emocional o físico reciente", "Afección de salud mental preexistente (trastorno de ansiedad, del estado de ánimo, disociativo o de la personalidad)", "Antecedentes de abuso físico o sexual o descuido en la infancia", "Padecer una enfermedad o trastorno neurológico"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3840,6 +4030,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno de Síntomas Somáticos",
         otrosNombres: ["Hipocondría"],
         descripcion: "Enfoque extremo en los síntomas físicos que causa una gran angustia emocional.",
+        sintomas: ["Dolor", "Fatiga o debilidad", "Dificultad para respirar", "Entumecimiento", "Malestar gastrointestinal", "Ansiedad excesiva por los síntomas físicos"],
+        causas: ["Factores genéticos y biológicos", "Influencia familiar", "Rasgo de negatividad", "Historial de trauma o abuso", "Comportamiento aprendido"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3847,6 +4039,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Trastorno Facticio",
         otrosNombres: ["Síndrome de Munchausen"],
         descripcion: "Falsificación de signos o síntomas físicos o psicológicos.",
+        sintomas: ["Problemas médicos o de salud mental astutos y convincentes", "Amplios conocimientos de términos médicos y enfermedades", "Síntomas imprecisos o inconsistentes", "Afecciones que empeoran sin razón aparente", "Afecciones que no responden a los tratamientos habituales", "Búsqueda de tratamiento de muchos profesionales de atención médica u hospitales diferentes"],
+        causas: ["Traumas infantiles", "Enfermedad grave en la infancia", "Pérdida de un ser querido", "Trastornos de la personalidad", "Depresión"],
         sistemaId: "trastornos-mentales-emocionales",
       },
       {
@@ -3854,6 +4048,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Amnesia Disociativa",
         otrosNombres: [],
         descripcion: "Incapacidad para recordar información personal importante, generalmente de naturaleza traumática o estresante.",
+        sintomas: ["Pérdida de memoria de información personal importante", "Incapacidad para recordar eventos específicos, en especial traumáticos", "Sensación de desapego de uno mismo (despersonalización)", "Confusión o desorientación", "Problemas en las relaciones sociales y laborales"],
+        causas: ["Experimentar o presenciar un evento traumático", "Abuso físico o sexual grave en la infancia", "Estrés abrumador por guerra o combate", "Ser víctima de un desastre natural"],
         sistemaId: "trastornos-mentales-emocionales",
       },
     ],
@@ -4030,6 +4226,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Estrabismo",
         otrosNombres: ["Ojos bizcos"],
         descripcion: "Afección en la que los ojos no se alinean correctamente.",
+        sintomas: ["Ojos bizcos", "Visión doble", "Ojos que no se alinean en la misma dirección", "Movimientos oculares descoordinados", "Pérdida de la visión o de la percepción de profundidad"],
+        causas: ["Problemas con el control muscular de los ojos", "Antecedentes familiares", "Hipermetropía", "Ambliopía", "Lesión cerebral traumática"],
         sistemaId: "otorrinolaringologia-oftalmologia",
       },
       {
@@ -4073,6 +4271,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Anosmia",
         otrosNombres: ["Pérdida del olfato"],
         descripcion: "Pérdida total o parcial del sentido del olfato.",
+        sintomas: ["Pérdida total del olfato", "Cambio en el gusto de los alimentos", "Congestión nasal", "Secreción nasal"],
+        causas: ["Infecciones de los senos paranasales (sinusitis)", "Resfriado común", "Alergias", "Pólipos nasales", "Lesiones en la cabeza"],
         sistemaId: "otorrinolaringologia-oftalmologia",
       },
       {
@@ -4080,6 +4280,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Disfonía",
         otrosNombres: ["Ronquera"],
         descripcion: "Alteración de la calidad de la voz.",
+        sintomas: ["Ronquera", "Debilidad o pérdida de la voz", "Voz quebrada, temblorosa, tensa o forzada", "Sensación de cosquilleo y aspereza en la garganta", "Dolor de garganta", "Tos seca"],
+        causas: ["Laringitis", "Alergias", "Consumo de alcohol y tabaco", "Uso excesivo de la voz", "Reflujo gastroesofágico", "Estrés y ansiedad", "Enfermedades neurológicas"],
         sistemaId: "otorrinolaringologia-oftalmologia",
       },
       {
@@ -4096,6 +4298,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Cerumen impactado",
         otrosNombres: ["Tapón de cera"],
         descripcion: "Acumulación de cera en el oído que bloquea el canal auditivo.",
+        sintomas: ["Dolor de oído", "Sensación de inflamación en el oído", "Zumbido o ruidos en los oídos (tinnitus)", "Pérdida auditiva", "Mareos", "Picazón en el oído"],
+        causas: ["Acumulación de cera", "Endurecimiento de la cera", "Uso de hisopos de algodón", "Conducto auditivo externo muy estrecho", "Abundantes pelos en el conducto auditivo externo"],
         sistemaId: "otorrinolaringologia-oftalmologia",
       },
       {
@@ -4103,6 +4307,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Perforación del tímpano",
         otrosNombres: ["Tímpano roto"],
         descripcion: "Agujero o desgarro en el tímpano.",
+        sintomas: ["Dolor de oído que puede desaparecer rápidamente", "Secreción de líquido claro, purulento o con sangre", "Pérdida de audición", "Zumbido en los oídos (tinnitus)", "Vértigo o sensación de mareo"],
+        causas: ["Infección del oído medio", "Traumatismo directo en el oído", "Barotrauma por cambios de presión", "Trauma acústico por ruidos fuertes"],
         sistemaId: "otorrinolaringologia-oftalmologia",
       },
       {
@@ -4119,6 +4325,8 @@ export const sistemasCorporales: SistemaCorporal[] = [
         nombre: "Neuritis vestibular",
         otrosNombres: ["Inflamación del nervio vestibular"],
         descripcion: "Inflamación del nervio vestibular, que envía información sobre el equilibrio al cerebro.",
+        sintomas: ["Vértigo repentino y severo", "Mareo", "Náuseas y vómitos", "Problemas de equilibrio", "Dificultad para caminar"],
+        causas: ["Infección viral", "Inflamación del nervio vestibular"],
         sistemaId: "otorrinolaringologia-oftalmologia",
       },
     ],
