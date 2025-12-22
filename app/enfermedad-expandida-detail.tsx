@@ -16,43 +16,7 @@ import {
   getEnfermedadExpandidaById, 
   sistemasCorporales,
 } from "@/data/enfermedades-expandidas";
-import { plantas, getPlantaById } from "@/data/medicinal-data";
-
-// Mapeo simple de enfermedades a plantas recomendadas basado en propiedades
-const getPlantasRecomendadas = (enfermedadId: string, sistemaId: string) => {
-  // Mapeo de sistemas a propiedades de plantas relevantes
-  const sistemaToProperties: Record<string, string[]> = {
-    "sistema-respiratorio": ["Expectorante", "Descongestionante", "Antiséptico", "Antitusivo", "Antibacteriano"],
-    "sistema-digestivo": ["Digestiva", "Carminativa", "Hepatoprotector", "Antiespasmódica", "Colerético"],
-    "sistema-cardiovascular": ["Hipotensor", "Estimulante circulatorio", "Antioxidante"],
-    "sistema-nervioso": ["Sedante", "Ansiolítica", "Calmante", "Relajante", "Inductora del sueño"],
-    "sistema-inmunologico": ["Inmunoestimulante", "Antibacteriana", "Antiviral", "Antiinflamatoria"],
-    "sistema-endocrino": ["Antioxidante", "Antiinflamatorio"],
-    "sistema-musculoesqueletico": ["Antiinflamatoria", "Analgésica", "Relajante muscular"],
-    "sistema-urinario": ["Diurético", "Antiséptico", "Depurativo"],
-    "sistema-reproductor": ["Antiespasmódica", "Sedante suave", "Antiinflamatoria"],
-    "enfermedades-piel": ["Cicatrizante", "Antiséptica", "Antiinflamatoria", "Emoliente", "Hidratante"],
-    "sistema-linfatico": ["Depurativo", "Diurético", "Inmunoestimulante"],
-    "trastornos-mentales-emocionales": ["Ansiolítica", "Sedante", "Calmante", "Relajante"],
-    "enfermedades-ojos-oidos-nariz-garganta": ["Antiséptica", "Antiinflamatoria", "Astringente", "Descongestionante"],
-  };
-
-  const relevantProperties = sistemaToProperties[sistemaId] || [];
-  
-  // Encontrar plantas que tengan propiedades relevantes
-  const plantasRelevantes = plantas.filter(planta => 
-    planta.propiedades.some(prop => 
-      relevantProperties.some(relProp => 
-        prop.toLowerCase().includes(relProp.toLowerCase())
-      )
-    )
-  ).slice(0, 4); // Máximo 4 plantas
-
-  return plantasRelevantes.map(planta => ({
-    plantaId: planta.id,
-    razon: `Propiedades: ${planta.propiedades.slice(0, 3).join(", ")}`
-  }));
-};
+import { getPlantasParaEnfermedad, getMotivoRecomendacion } from "@/data/cruce-datos";
 
 export default function EnfermedadExpandidaDetailScreen() {
   const { id, sistemaId } = useLocalSearchParams<{ id: string; sistemaId: string }>();
@@ -66,14 +30,16 @@ export default function EnfermedadExpandidaDetailScreen() {
     sistemasCorporales.find(s => s.id === sistemaId), 
     [sistemaId]
   );
-  const plantasRecomendadas = useMemo(() => 
-    getPlantasRecomendadas(id || "", sistemaId || ""),
-    [id, sistemaId]
-  );
+  
+  // Usar el cruce de datos para obtener plantas recomendadas
+  const plantasRecomendadas = useMemo(() => {
+    if (!enfermedad) return [];
+    return getPlantasParaEnfermedad(enfermedad);
+  }, [enfermedad]);
 
   const handlePlantaPress = useCallback((plantaId: string) => {
     router.push({
-      pathname: "/planta-detail",
+      pathname: "/planta-expandida-detail",
       params: { id: plantaId },
     });
   }, [router]);
@@ -166,24 +132,23 @@ export default function EnfermedadExpandidaDetailScreen() {
           {enfermedad.descripcion}
         </ThemedText>
 
-        {/* Plantas Recomendadas */}
+        {/* Plantas Recomendadas con cruce de datos */}
         {plantasRecomendadas.length > 0 && (
           <View style={styles.section}>
             <ThemedText type="subtitle" style={styles.sectionTitle}>
-              🌿 Plantas Medicinales Sugeridas
+              🌿 Plantas Medicinales Recomendadas
             </ThemedText>
             <ThemedText style={[styles.sectionNote, { color: colors.textTertiary }]}>
-              Basado en las propiedades terapéuticas relacionadas con este sistema
+              {plantasRecomendadas.length} plantas con propiedades terapéuticas relacionadas
             </ThemedText>
 
-            {plantasRecomendadas.map((rec) => {
-              const planta = getPlantaById(rec.plantaId);
-              if (!planta) return null;
-
+            {plantasRecomendadas.map((planta) => {
+              const motivo = getMotivoRecomendacion(planta, enfermedad);
+              
               return (
                 <Pressable
-                  key={rec.plantaId}
-                  onPress={() => handlePlantaPress(rec.plantaId)}
+                  key={planta.id}
+                  onPress={() => handlePlantaPress(planta.id)}
                   style={({ pressed }) => [
                     styles.plantaCard,
                     {
@@ -209,8 +174,13 @@ export default function EnfermedadExpandidaDetailScreen() {
                     <ThemedText style={{ color: colors.textTertiary, fontSize: 20 }}>›</ThemedText>
                   </View>
                   <ThemedText style={[styles.plantaRazon, { color: colors.textSecondary }]}>
-                    {rec.razon}
+                    {motivo}
                   </ThemedText>
+                  <View style={styles.plantaCategoria}>
+                    <ThemedText style={[styles.plantaCategoriaText, { color: colors.tint }]}>
+                      {planta.categoria}
+                    </ThemedText>
+                  </View>
                 </Pressable>
               );
             })}
@@ -221,7 +191,7 @@ export default function EnfermedadExpandidaDetailScreen() {
         <View style={[styles.disclaimer, { backgroundColor: `${colors.warning}15`, borderColor: colors.warning }]}>
           <ThemedText style={styles.disclaimerIcon}>⚠️</ThemedText>
           <ThemedText style={[styles.disclaimerText, { color: colors.textSecondary }]}>
-            Esta información es solo orientativa y no sustituye el diagnóstico médico profesional. Consulta siempre con un profesional de la salud.
+            Esta información es solo orientativa y no sustituye el diagnóstico médico profesional. Consulta siempre con un profesional de la salud antes de usar cualquier planta medicinal.
           </ThemedText>
         </View>
       </ScrollView>
@@ -375,6 +345,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     marginTop: Spacing.xs,
+  },
+  plantaCategoria: {
+    marginTop: Spacing.sm,
+  },
+  plantaCategoriaText: {
+    fontSize: 12,
+    fontWeight: "500",
   },
   disclaimer: {
     flexDirection: "row",

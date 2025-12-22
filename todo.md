@@ -30,3 +30,29 @@
 - [x] Agregar enfermedades de Ojos, Oídos, Nariz y Garganta (30)
 - [x] Actualizar interfaz para filtrar por sistema corporal
 - [x] Probar la aplicación con el nuevo contenido
+
+## Expansión de Plantas Medicinales y Cruce de Datos
+
+- [x] Generar plantas medicinales - Hierbas aromáticas y culinarias (60)
+- [x] Generar plantas medicinales - Hierbas silvestres (60)
+- [x] Generar plantas medicinales - Árboles medicinales (49)
+- [x] Generar plantas medicinales - Arbustos medicinales (50)
+- [x] Generar plantas medicinales - Plantas tropicales (50)
+- [x] Generar plantas medicinales - Raíces y tubérculos (45)
+- [x] Generar plantas medicinales - Flores medicinales (48)
+- [x] Generar plantas medicinales - Hongos medicinales (31)
+- [x] Generar plantas medicinales - Algas y plantas acuáticas (25)
+- [x] Generar plantas medicinales - Frutas cítricas (25)
+- [x] Generar plantas medicinales - Frutas tropicales (40)
+- [x] Generar plantas medicinales - Frutas de clima templado (35)
+- [x] Generar plantas medicinales - Bayas y frutos del bosque (30)
+- [x] Generar plantas medicinales - Semillas y frutos secos (40)
+- [x] Generar plantas medicinales - Especias medicinales (45)
+- [x] Generar plantas medicinales - Plantas suculentas y cactus (25)
+- [x] Generar plantas medicinales - Plantas adaptógenas (35)
+- [x] Consolidar todas las plantas en archivo TypeScript (693 plantas)
+- [x] Crear mapeo cruzado enfermedades → plantas
+- [x] Crear mapeo cruzado plantas → enfermedades
+- [x] Actualizar pantalla de detalle de enfermedad con plantas relacionadas
+- [x] Actualizar pantalla de detalle de planta con enfermedades que trata
+- [x] Probar cruce de datos y funcionalidad

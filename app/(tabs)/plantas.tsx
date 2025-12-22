@@ -13,7 +13,36 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { plantas, buscarPlantas, Planta } from "@/data/medicinal-data";
+import { 
+  categoriasPlantas, 
+  buscarPlantasExpandidas, 
+  PlantaExpandida,
+  CategoriaPlanta,
+  totalPlantas
+} from "@/data/plantas-expandidas";
+
+type ViewMode = "categorias" | "busqueda";
+
+// Iconos para categorías
+const categoriaIconos: Record<string, string> = {
+  "hierbas-aromaticas-culinarias": "🌿",
+  "hierbas-silvestres-medicinales": "🍀",
+  "arboles-medicinales": "🌳",
+  "arbustos-medicinales": "🌲",
+  "plantas-tropicales-medicinales": "🌴",
+  "raices-tuberculos-medicinales": "🥕",
+  "flores-medicinales": "🌸",
+  "hongos-medicinales": "🍄",
+  "algas-plantas-acuaticas-medicinales": "🌊",
+  "frutas-citricas-medicinales": "🍋",
+  "frutas-tropicales-medicinales": "🥭",
+  "frutas-clima-templado-medicinales": "🍎",
+  "bayas-frutos-bosque-medicinales": "🫐",
+  "semillas-frutos-secos-medicinales": "🥜",
+  "especias-medicinales": "🌶️",
+  "plantas-suculentas-cactus-medicinales": "🌵",
+  "plantas-adaptogenas": "⚡",
+};
 
 export default function PlantasScreen() {
   const colorScheme = useColorScheme();
@@ -21,69 +50,128 @@ export default function PlantasScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedCategoria, setExpandedCategoria] = useState<string | null>(null);
 
-  const filteredPlantas = useMemo(() => {
-    if (!searchQuery.trim()) return plantas;
-    return buscarPlantas(searchQuery);
+  const viewMode: ViewMode = searchQuery.trim() ? "busqueda" : "categorias";
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return buscarPlantasExpandidas(searchQuery);
   }, [searchQuery]);
 
-  const handlePlantaPress = useCallback((planta: Planta) => {
+  const handlePlantaPress = useCallback((planta: PlantaExpandida) => {
     router.push({
-      pathname: "/planta-detail",
+      pathname: "/planta-expandida-detail",
       params: { id: planta.id },
     });
   }, [router]);
 
-  const renderPlanta = useCallback(({ item }: { item: Planta }) => (
+  const toggleCategoria = useCallback((categoriaId: string) => {
+    setExpandedCategoria(prev => prev === categoriaId ? null : categoriaId);
+  }, []);
+
+  const renderPlantaItem = useCallback(({ item }: { item: PlantaExpandida }) => (
     <Pressable
       onPress={() => handlePlantaPress(item)}
       style={({ pressed }) => [
-        styles.card,
+        styles.plantaCard,
         {
           backgroundColor: colors.surface,
           borderColor: colors.border,
           opacity: pressed ? 0.8 : 1,
-          transform: [{ scale: pressed ? 0.98 : 1 }],
         },
       ]}
     >
-      <View style={styles.cardContent}>
-        <View style={[styles.cardIcon, { backgroundColor: `${colors.tint}15` }]}>
-          <ThemedText style={styles.cardEmoji}>🌿</ThemedText>
+      <View style={styles.plantaContent}>
+        <View style={[styles.plantaIconSmall, { backgroundColor: `${colors.tint}15` }]}>
+          <ThemedText style={styles.plantaEmoji}>🌿</ThemedText>
         </View>
-        <View style={styles.cardTextContainer}>
-          <ThemedText type="defaultSemiBold" style={styles.cardTitle}>
+        <View style={styles.plantaTextContainer}>
+          <ThemedText type="defaultSemiBold" style={styles.plantaTitle} numberOfLines={1}>
             {item.nombre}
           </ThemedText>
-          <ThemedText style={[styles.cardCientifico, { color: colors.textTertiary }]}>
+          <ThemedText style={[styles.plantaCientifico, { color: colors.textTertiary }]} numberOfLines={1}>
             {item.nombreCientifico}
           </ThemedText>
-          <View style={styles.propiedadesContainer}>
-            {item.propiedades.slice(0, 3).map((prop, index) => (
-              <View
-                key={index}
-                style={[styles.propiedadBadge, { backgroundColor: `${colors.tint}10` }]}
-              >
-                <ThemedText style={[styles.propiedadText, { color: colors.tint }]}>
-                  {prop}
-                </ThemedText>
-              </View>
-            ))}
-            {item.propiedades.length > 3 && (
-              <View style={[styles.propiedadBadge, { backgroundColor: `${colors.textTertiary}20` }]}>
-                <ThemedText style={[styles.propiedadText, { color: colors.textTertiary }]}>
-                  +{item.propiedades.length - 3}
-                </ThemedText>
-              </View>
-            )}
-          </View>
+          <ThemedText style={[styles.plantaPropiedades, { color: colors.textSecondary }]} numberOfLines={1}>
+            {item.propiedades.slice(0, 3).join(" • ")}
+          </ThemedText>
         </View>
-        <View style={styles.cardArrow}>
-          <ThemedText style={{ color: colors.textTertiary, fontSize: 20 }}>›</ThemedText>
-        </View>
+        <ThemedText style={{ color: colors.textTertiary, fontSize: 18 }}>›</ThemedText>
       </View>
     </Pressable>
   ), [colors, handlePlantaPress]);
+
+  const renderCategoriaCard = useCallback(({ item }: { item: CategoriaPlanta }) => {
+    const isExpanded = expandedCategoria === item.id;
+    const plantasToShow = isExpanded ? item.plantas : item.plantas.slice(0, 3);
+    const icono = categoriaIconos[item.id] || "🌿";
+    
+    return (
+      <View style={[styles.categoriaCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Pressable
+          onPress={() => toggleCategoria(item.id)}
+          style={({ pressed }) => [
+            styles.categoriaHeader,
+            { opacity: pressed ? 0.8 : 1 },
+          ]}
+        >
+          <View style={[styles.categoriaIconContainer, { backgroundColor: `${colors.tint}15` }]}>
+            <ThemedText style={styles.categoriaIcon}>{icono}</ThemedText>
+          </View>
+          <View style={styles.categoriaInfo}>
+            <ThemedText type="defaultSemiBold" style={styles.categoriaNombre}>
+              {item.nombre}
+            </ThemedText>
+            <ThemedText style={[styles.categoriaCount, { color: colors.textSecondary }]}>
+              {item.plantas.length} plantas
+            </ThemedText>
+          </View>
+          <ThemedText style={[styles.expandIcon, { color: colors.tint }]}>
+            {isExpanded ? "▼" : "▶"}
+          </ThemedText>
+        </Pressable>
+
+        {plantasToShow.length > 0 && (
+          <View style={styles.plantasPreview}>
+            {plantasToShow.map((planta) => (
+              <Pressable
+                key={planta.id}
+                onPress={() => handlePlantaPress(planta)}
+                style={({ pressed }) => [
+                  styles.plantaPreviewItem,
+                  { 
+                    backgroundColor: pressed ? `${colors.tint}10` : 'transparent',
+                    borderBottomColor: colors.border,
+                  },
+                ]}
+              >
+                <View style={styles.plantaPreviewContent}>
+                  <ThemedText style={styles.plantaPreviewText} numberOfLines={1}>
+                    {planta.nombre}
+                  </ThemedText>
+                  <ThemedText style={[styles.plantaPreviewCientifico, { color: colors.textTertiary }]} numberOfLines={1}>
+                    {planta.nombreCientifico}
+                  </ThemedText>
+                </View>
+                <ThemedText style={{ color: colors.textTertiary, fontSize: 14 }}>›</ThemedText>
+              </Pressable>
+            ))}
+            {!isExpanded && item.plantas.length > 3 && (
+              <Pressable
+                onPress={() => toggleCategoria(item.id)}
+                style={styles.verMasButton}
+              >
+                <ThemedText style={[styles.verMasText, { color: colors.tint }]}>
+                  Ver {item.plantas.length - 3} más...
+                </ThemedText>
+              </Pressable>
+            )}
+          </View>
+        )}
+      </View>
+    );
+  }, [colors, expandedCategoria, toggleCategoria, handlePlantaPress]);
 
   return (
     <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -100,7 +188,7 @@ export default function PlantasScreen() {
           Plantas Medicinales
         </ThemedText>
         <ThemedText style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
-          Explora el poder de la naturaleza
+          {totalPlantas} plantas en {categoriasPlantas.length} categorías
         </ThemedText>
         
         <View
@@ -130,24 +218,44 @@ export default function PlantasScreen() {
         </View>
       </View>
 
-      <FlatList
-        data={filteredPlantas}
-        keyExtractor={(item) => item.id}
-        renderItem={renderPlanta}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingBottom: Math.max(insets.bottom, 20) + 60 },
-        ]}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <ThemedText style={styles.emptyEmoji}>🌱</ThemedText>
-            <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
-              No se encontraron plantas
-            </ThemedText>
-          </View>
-        }
-      />
+      {viewMode === "busqueda" ? (
+        <FlatList
+          data={searchResults}
+          keyExtractor={(item) => `${item.categoriaId}-${item.id}`}
+          renderItem={renderPlantaItem}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingBottom: Math.max(insets.bottom, 20) + 60 },
+          ]}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <ThemedText style={styles.emptyEmoji}>🔍</ThemedText>
+              <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
+                No se encontraron plantas
+              </ThemedText>
+            </View>
+          }
+          ListHeaderComponent={
+            searchResults.length > 0 ? (
+              <ThemedText style={[styles.resultCount, { color: colors.textSecondary }]}>
+                {searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}
+              </ThemedText>
+            ) : null
+          }
+        />
+      ) : (
+        <FlatList
+          data={categoriasPlantas}
+          keyExtractor={(item) => item.id}
+          renderItem={renderCategoriaCard}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingBottom: Math.max(insets.bottom, 20) + 60 },
+          ]}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </ThemedView>
   );
 }
@@ -194,18 +302,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.sm,
   },
-  card: {
+  resultCount: {
+    fontSize: 14,
+    marginBottom: Spacing.md,
+  },
+  // Categoria Card Styles
+  categoriaCard: {
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     marginBottom: Spacing.md,
     overflow: "hidden",
   },
-  cardContent: {
+  categoriaHeader: {
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     padding: Spacing.lg,
   },
-  cardIcon: {
+  categoriaIconContainer: {
     width: 48,
     height: 48,
     borderRadius: BorderRadius.sm,
@@ -213,40 +326,96 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: Spacing.md,
   },
-  cardEmoji: {
+  categoriaIcon: {
     fontSize: 24,
   },
-  cardTextContainer: {
+  categoriaInfo: {
     flex: 1,
   },
-  cardTitle: {
+  categoriaNombre: {
     fontSize: 16,
     lineHeight: 22,
     marginBottom: 2,
   },
-  cardCientifico: {
+  categoriaCount: {
     fontSize: 13,
     lineHeight: 16,
-    fontStyle: "italic",
-    marginBottom: Spacing.sm,
   },
-  propiedadesContainer: {
+  expandIcon: {
+    fontSize: 12,
+    marginLeft: Spacing.sm,
+  },
+  plantasPreview: {
+    borderTopWidth: 1,
+    borderTopColor: "rgba(0,0,0,0.05)",
+  },
+  plantaPreviewItem: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderBottomWidth: 1,
   },
-  propiedadBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
+  plantaPreviewContent: {
+    flex: 1,
   },
-  propiedadText: {
-    fontSize: 11,
+  plantaPreviewText: {
+    fontSize: 15,
+  },
+  plantaPreviewCientifico: {
+    fontSize: 12,
+    fontStyle: "italic",
+  },
+  verMasButton: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    alignItems: "center",
+  },
+  verMasText: {
+    fontSize: 14,
     fontWeight: "500",
   },
-  cardArrow: {
-    marginLeft: Spacing.sm,
-    marginTop: 12,
+  // Planta Card Styles (for search results)
+  plantaCard: {
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    marginBottom: Spacing.sm,
+    overflow: "hidden",
+  },
+  plantaContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.lg,
+  },
+  plantaIconSmall: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: Spacing.md,
+  },
+  plantaEmoji: {
+    fontSize: 20,
+  },
+  plantaTextContainer: {
+    flex: 1,
+  },
+  plantaTitle: {
+    fontSize: 15,
+    lineHeight: 20,
+    marginBottom: 2,
+  },
+  plantaCientifico: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontStyle: "italic",
+  },
+  plantaPropiedades: {
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 2,
   },
   emptyContainer: {
     alignItems: "center",
