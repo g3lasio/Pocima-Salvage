@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -47,6 +47,7 @@ export default function PlantaExpandidaDetailScreen() {
   const router = useRouter();
 
   const planta = useMemo(() => getPlantaExpandidaById(id || ""), [id]);
+  const [showNombresAlternativos, setShowNombresAlternativos] = useState(false);
   
   // Usar el cruce de datos para obtener enfermedades relacionadas
   const enfermedadesRelacionadas = useMemo(() => {
@@ -130,43 +131,57 @@ export default function PlantaExpandidaDetailScreen() {
           {planta.descripcion}
         </ThemedText>
 
-        {/* Nombres Alternativos por Región */}
+        {/* Nombres Alternativos por Región - Dropdown Colapsable */}
         {planta.nombresAlternativos && Object.keys(planta.nombresAlternativos).length > 0 && (
           <View style={styles.section}>
-            <ThemedText type="subtitle" style={styles.sectionTitle}>
-              🌍 Nombres por Región
-            </ThemedText>
-            <View style={[styles.nombresContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-              {Object.entries(planta.nombresAlternativos).map(([region, nombres], index) => {
-                const regionLabels: Record<string, string> = {
-                  'España': '🇪🇸 España',
-                  'Mexico': '🇲🇽 México',
-                  'Argentina': '🇦🇷 Argentina',
-                  'Colombia': '🇨🇴 Colombia',
-                  'Peru': '🇵🇪 Perú',
-                  'Chile': '🇨🇱 Chile',
-                  'Centroamerica': '🌎 Centroamérica',
-                  'Caribe': '🌴 Caribe',
-                  'USA_English': '🇺🇸 EE.UU.',
-                  'UK_English': '🇬🇧 Reino Unido',
-                  'Indigena': '🏺 Indígena',
-                  'Otros': '🌐 Otros',
-                };
-                return (
-                  <View key={region}>
-                    {index > 0 && <View style={[styles.nombresDivider, { backgroundColor: colors.border }]} />}
-                    <View style={styles.nombresRow}>
-                      <ThemedText style={[styles.nombresRegion, { color: colors.textTertiary }]}>
-                        {regionLabels[region] || region}
-                      </ThemedText>
-                      <ThemedText style={[styles.nombresValue, { color: colors.text }]}>
-                        {(nombres as string[]).join(', ')}
-                      </ThemedText>
+            <Pressable 
+              onPress={() => setShowNombresAlternativos(!showNombresAlternativos)}
+              style={[styles.dropdownHeader, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            >
+              <View style={styles.dropdownHeaderContent}>
+                <ThemedText style={styles.dropdownIcon}>🌍</ThemedText>
+                <ThemedText type="defaultSemiBold" style={{ color: colors.text }}>
+                  Ver más nombres ({Object.keys(planta.nombresAlternativos).length} regiones)
+                </ThemedText>
+              </View>
+              <ThemedText style={[styles.dropdownArrow, { color: colors.textTertiary }]}>
+                {showNombresAlternativos ? '▲' : '▼'}
+              </ThemedText>
+            </Pressable>
+            
+            {showNombresAlternativos && (
+              <View style={[styles.nombresContainer, { backgroundColor: colors.surface, borderColor: colors.border, marginTop: 0, borderTopWidth: 0, borderTopLeftRadius: 0, borderTopRightRadius: 0 }]}>
+                {Object.entries(planta.nombresAlternativos).map(([region, nombres], index) => {
+                  const regionLabels: Record<string, string> = {
+                    'España': '🇪🇸 España',
+                    'Mexico': '🇲🇽 México',
+                    'Argentina': '🇦🇷 Argentina',
+                    'Colombia': '🇨🇴 Colombia',
+                    'Peru': '🇵🇪 Perú',
+                    'Chile': '🇨🇱 Chile',
+                    'Centroamerica': '🌎 Centroamérica',
+                    'Caribe': '🌴 Caribe',
+                    'USA_English': '🇺🇸 EE.UU.',
+                    'UK_English': '🇬🇧 Reino Unido',
+                    'Indigena': '🏻 Indígena',
+                    'Otros': '🌐 Otros',
+                  };
+                  return (
+                    <View key={region}>
+                      {index > 0 && <View style={[styles.nombresDivider, { backgroundColor: colors.border }]} />}
+                      <View style={styles.nombresRow}>
+                        <ThemedText style={[styles.nombresRegion, { color: colors.textTertiary }]}>
+                          {regionLabels[region] || region}
+                        </ThemedText>
+                        <ThemedText style={[styles.nombresValue, { color: colors.text }]}>
+                          {(nombres as string[]).join(', ')}
+                        </ThemedText>
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </View>
+                  );
+                })}
+              </View>
+            )}
           </View>
         )}
 
@@ -575,6 +590,25 @@ const styles = StyleSheet.create({
   errorEmoji: {
     fontSize: 48,
     marginBottom: Spacing.md,
+  },
+  dropdownHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+  },
+  dropdownHeaderContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: Spacing.sm,
+  },
+  dropdownIcon: {
+    fontSize: 18,
+  },
+  dropdownArrow: {
+    fontSize: 12,
   },
   nombresContainer: {
     borderRadius: BorderRadius.md,

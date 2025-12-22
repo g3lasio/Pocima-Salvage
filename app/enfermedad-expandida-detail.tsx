@@ -132,6 +132,44 @@ export default function EnfermedadExpandidaDetailScreen() {
           {enfermedad.descripcion}
         </ThemedText>
 
+        {/* Síntomas */}
+        {enfermedad.sintomas && enfermedad.sintomas.length > 0 && (
+          <View style={styles.section}>
+            <ThemedText type="subtitle" style={styles.sectionTitle}>
+              🩺 Síntomas
+            </ThemedText>
+            <View style={[styles.sintomasContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+              {enfermedad.sintomas.map((sintoma, index) => (
+                <View key={index} style={styles.sintomaRow}>
+                  <ThemedText style={[styles.sintomaBullet, { color: colors.tint }]}>•</ThemedText>
+                  <ThemedText style={[styles.sintomaText, { color: colors.text }]}>
+                    {sintoma}
+                  </ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Causas */}
+        {enfermedad.causas && enfermedad.causas.length > 0 && (
+          <View style={styles.section}>
+            <ThemedText type="subtitle" style={styles.sectionTitle}>
+              🔍 Causas
+            </ThemedText>
+            <View style={[styles.causasContainer, { backgroundColor: `${colors.warning}10`, borderColor: colors.warning }]}>
+              {enfermedad.causas.map((causa, index) => (
+                <View key={index} style={styles.causaRow}>
+                  <ThemedText style={[styles.causaBullet, { color: colors.warning }]}>▸</ThemedText>
+                  <ThemedText style={[styles.causaText, { color: colors.text }]}>
+                    {causa}
+                  </ThemedText>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
         {/* Plantas Recomendadas con cruce de datos */}
         {plantasRecomendadas.length > 0 && (
           <View style={styles.section}>
@@ -377,5 +415,45 @@ const styles = StyleSheet.create({
   errorEmoji: {
     fontSize: 48,
     marginBottom: Spacing.md,
+  },
+  sintomasContainer: {
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    padding: Spacing.lg,
+  },
+  sintomaRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: Spacing.sm,
+  },
+  sintomaBullet: {
+    fontSize: 16,
+    marginRight: Spacing.sm,
+    lineHeight: 22,
+  },
+  sintomaText: {
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  causasContainer: {
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    padding: Spacing.lg,
+  },
+  causaRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: Spacing.sm,
+  },
+  causaBullet: {
+    fontSize: 14,
+    marginRight: Spacing.sm,
+    lineHeight: 22,
+  },
+  causaText: {
+    flex: 1,
+    fontSize: 15,
+    lineHeight: 22,
   },
 });

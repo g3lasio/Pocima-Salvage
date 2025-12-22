@@ -86,3 +86,13 @@
 - [x] Generar nombres alternativos para plantas restantes (270 plantas actualizadas)
 - [x] Procesar y actualizar archivo TypeScript (619 plantas con nombres alternativos)
 - [x] Probar funcionalidad completa (619 de 693 plantas con nombres alternativos)
+
+## Mejoras en Enfermedades y UI de Plantas
+
+- [x] Actualizar estructura de datos de enfermedades (agregar síntomas y causas)
+- [x] Generar síntomas para las 469 enfermedades
+- [x] Generar causas para las 469 enfermedades
+- [x] Procesar y actualizar archivo de enfermedades (365 enfermedades actualizadas)
+- [x] Implementar dropdown colapsable para nombres alternativos de plantas
+- [x] Actualizar pantalla de detalle de enfermedad para mostrar síntomas y causas
+- [x] Probar funcionalidad completa
