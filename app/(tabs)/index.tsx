@@ -3,6 +3,7 @@ import { useState, useMemo, useCallback } from "react";
 import {
   StyleSheet,
   FlatList,
+  SectionList,
   Pressable,
   TextInput,
   View,
@@ -13,7 +14,15 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
-import { enfermedades, buscarEnfermedades, Enfermedad } from "@/data/medicinal-data";
+import { 
+  sistemasCorporales, 
+  buscarEnfermedadesExpandidas, 
+  EnfermedadExpandida,
+  SistemaCorporal,
+  totalEnfermedades
+} from "@/data/enfermedades-expandidas";
+
+type ViewMode = "sistemas" | "busqueda";
 
 export default function EnfermedadesScreen() {
   const colorScheme = useColorScheme();
@@ -21,52 +30,118 @@ export default function EnfermedadesScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [expandedSistema, setExpandedSistema] = useState<string | null>(null);
 
-  const filteredEnfermedades = useMemo(() => {
-    if (!searchQuery.trim()) return enfermedades;
-    return buscarEnfermedades(searchQuery);
+  const viewMode: ViewMode = searchQuery.trim() ? "busqueda" : "sistemas";
+
+  const searchResults = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return buscarEnfermedadesExpandidas(searchQuery);
   }, [searchQuery]);
 
-  const handleEnfermedadPress = useCallback((enfermedad: Enfermedad) => {
+  const handleEnfermedadPress = useCallback((enfermedad: EnfermedadExpandida) => {
     router.push({
-      pathname: "/enfermedad-detail",
-      params: { id: enfermedad.id },
+      pathname: "/enfermedad-expandida-detail",
+      params: { id: enfermedad.id, sistemaId: enfermedad.sistemaId },
     });
   }, [router]);
 
-  const renderEnfermedad = useCallback(({ item }: { item: Enfermedad }) => (
+  const toggleSistema = useCallback((sistemaId: string) => {
+    setExpandedSistema(prev => prev === sistemaId ? null : sistemaId);
+  }, []);
+
+  const renderEnfermedadItem = useCallback(({ item }: { item: EnfermedadExpandida }) => (
     <Pressable
       onPress={() => handleEnfermedadPress(item)}
       style={({ pressed }) => [
-        styles.card,
+        styles.enfermedadCard,
         {
           backgroundColor: colors.surface,
           borderColor: colors.border,
           opacity: pressed ? 0.8 : 1,
-          transform: [{ scale: pressed ? 0.98 : 1 }],
         },
       ]}
     >
-      <View style={styles.cardContent}>
-        <View style={styles.cardIcon}>
-          <ThemedText style={styles.cardEmoji}>🩺</ThemedText>
-        </View>
-        <View style={styles.cardTextContainer}>
-          <ThemedText type="defaultSemiBold" style={styles.cardTitle}>
+      <View style={styles.enfermedadContent}>
+        <View style={styles.enfermedadTextContainer}>
+          <ThemedText type="defaultSemiBold" style={styles.enfermedadTitle} numberOfLines={1}>
             {item.nombre}
           </ThemedText>
-          <ThemedText
-            style={[styles.cardSubtitle, { color: colors.textSecondary }]}
-          >
-            {item.plantasRecomendadas.length} planta{item.plantasRecomendadas.length !== 1 ? "s" : ""} recomendada{item.plantasRecomendadas.length !== 1 ? "s" : ""}
-          </ThemedText>
+          {item.otrosNombres.length > 0 && (
+            <ThemedText style={[styles.otrosNombres, { color: colors.textTertiary }]} numberOfLines={1}>
+              {item.otrosNombres.join(" • ")}
+            </ThemedText>
+          )}
         </View>
-        <View style={styles.cardArrow}>
-          <ThemedText style={{ color: colors.textTertiary }}>›</ThemedText>
-        </View>
+        <ThemedText style={{ color: colors.textTertiary, fontSize: 18 }}>›</ThemedText>
       </View>
     </Pressable>
   ), [colors, handleEnfermedadPress]);
+
+  const renderSistemaCard = useCallback(({ item }: { item: SistemaCorporal }) => {
+    const isExpanded = expandedSistema === item.id;
+    const enfermedadesToShow = isExpanded ? item.enfermedades : item.enfermedades.slice(0, 3);
+    
+    return (
+      <View style={[styles.sistemaCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Pressable
+          onPress={() => toggleSistema(item.id)}
+          style={({ pressed }) => [
+            styles.sistemaHeader,
+            { opacity: pressed ? 0.8 : 1 },
+          ]}
+        >
+          <View style={[styles.sistemaIconContainer, { backgroundColor: `${colors.tint}15` }]}>
+            <ThemedText style={styles.sistemaIcon}>{item.icono}</ThemedText>
+          </View>
+          <View style={styles.sistemaInfo}>
+            <ThemedText type="defaultSemiBold" style={styles.sistemaNombre}>
+              {item.nombre}
+            </ThemedText>
+            <ThemedText style={[styles.sistemaCount, { color: colors.textSecondary }]}>
+              {item.enfermedades.length} enfermedades
+            </ThemedText>
+          </View>
+          <ThemedText style={[styles.expandIcon, { color: colors.tint }]}>
+            {isExpanded ? "▼" : "▶"}
+          </ThemedText>
+        </Pressable>
+
+        {enfermedadesToShow.length > 0 && (
+          <View style={styles.enfermedadesPreview}>
+            {enfermedadesToShow.map((enf) => (
+              <Pressable
+                key={enf.id}
+                onPress={() => handleEnfermedadPress(enf)}
+                style={({ pressed }) => [
+                  styles.enfermedadPreviewItem,
+                  { 
+                    backgroundColor: pressed ? `${colors.tint}10` : 'transparent',
+                    borderBottomColor: colors.border,
+                  },
+                ]}
+              >
+                <ThemedText style={styles.enfermedadPreviewText} numberOfLines={1}>
+                  {enf.nombre}
+                </ThemedText>
+                <ThemedText style={{ color: colors.textTertiary, fontSize: 14 }}>›</ThemedText>
+              </Pressable>
+            ))}
+            {!isExpanded && item.enfermedades.length > 3 && (
+              <Pressable
+                onPress={() => toggleSistema(item.id)}
+                style={styles.verMasButton}
+              >
+                <ThemedText style={[styles.verMasText, { color: colors.tint }]}>
+                  Ver {item.enfermedades.length - 3} más...
+                </ThemedText>
+              </Pressable>
+            )}
+          </View>
+        )}
+      </View>
+    );
+  }, [colors, expandedSistema, toggleSistema, handleEnfermedadPress]);
 
   return (
     <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -83,7 +158,7 @@ export default function EnfermedadesScreen() {
           Enfermedades
         </ThemedText>
         <ThemedText style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
-          Encuentra tratamientos naturales
+          {totalEnfermedades} enfermedades en {sistemasCorporales.length} sistemas
         </ThemedText>
         
         <View
@@ -113,24 +188,44 @@ export default function EnfermedadesScreen() {
         </View>
       </View>
 
-      <FlatList
-        data={filteredEnfermedades}
-        keyExtractor={(item) => item.id}
-        renderItem={renderEnfermedad}
-        contentContainerStyle={[
-          styles.listContent,
-          { paddingBottom: Math.max(insets.bottom, 20) + 60 },
-        ]}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <ThemedText style={styles.emptyEmoji}>🔍</ThemedText>
-            <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
-              No se encontraron enfermedades
-            </ThemedText>
-          </View>
-        }
-      />
+      {viewMode === "busqueda" ? (
+        <FlatList
+          data={searchResults}
+          keyExtractor={(item) => `${item.sistemaId}-${item.id}`}
+          renderItem={renderEnfermedadItem}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingBottom: Math.max(insets.bottom, 20) + 60 },
+          ]}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <ThemedText style={styles.emptyEmoji}>🔍</ThemedText>
+              <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
+                No se encontraron enfermedades
+              </ThemedText>
+            </View>
+          }
+          ListHeaderComponent={
+            searchResults.length > 0 ? (
+              <ThemedText style={[styles.resultCount, { color: colors.textSecondary }]}>
+                {searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}
+              </ThemedText>
+            ) : null
+          }
+        />
+      ) : (
+        <FlatList
+          data={sistemasCorporales}
+          keyExtractor={(item) => item.id}
+          renderItem={renderSistemaCard}
+          contentContainerStyle={[
+            styles.listContent,
+            { paddingBottom: Math.max(insets.bottom, 20) + 60 },
+          ]}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </ThemedView>
   );
 }
@@ -177,44 +272,97 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.sm,
   },
-  card: {
+  resultCount: {
+    fontSize: 14,
+    marginBottom: Spacing.md,
+  },
+  // Sistema Card Styles
+  sistemaCard: {
     borderRadius: BorderRadius.md,
     borderWidth: 1,
     marginBottom: Spacing.md,
     overflow: "hidden",
   },
-  cardContent: {
+  sistemaHeader: {
     flexDirection: "row",
     alignItems: "center",
     padding: Spacing.lg,
   },
-  cardIcon: {
-    width: 44,
-    height: 44,
+  sistemaIconContainer: {
+    width: 48,
+    height: 48,
     borderRadius: BorderRadius.sm,
-    backgroundColor: "rgba(46, 125, 50, 0.1)",
     justifyContent: "center",
     alignItems: "center",
     marginRight: Spacing.md,
   },
-  cardEmoji: {
-    fontSize: 22,
+  sistemaIcon: {
+    fontSize: 24,
   },
-  cardTextContainer: {
+  sistemaInfo: {
     flex: 1,
   },
-  cardTitle: {
+  sistemaNombre: {
     fontSize: 16,
     lineHeight: 22,
     marginBottom: 2,
   },
-  cardSubtitle: {
-    fontSize: 14,
-    lineHeight: 18,
+  sistemaCount: {
+    fontSize: 13,
+    lineHeight: 16,
   },
-  cardArrow: {
-    fontSize: 24,
+  expandIcon: {
+    fontSize: 12,
     marginLeft: Spacing.sm,
+  },
+  enfermedadesPreview: {
+    borderTopWidth: 1,
+    borderTopColor: "rgba(0,0,0,0.05)",
+  },
+  enfermedadPreviewItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    borderBottomWidth: 1,
+  },
+  enfermedadPreviewText: {
+    fontSize: 15,
+    flex: 1,
+  },
+  verMasButton: {
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    alignItems: "center",
+  },
+  verMasText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  // Enfermedad Card Styles (for search results)
+  enfermedadCard: {
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    marginBottom: Spacing.sm,
+    overflow: "hidden",
+  },
+  enfermedadContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: Spacing.lg,
+  },
+  enfermedadTextContainer: {
+    flex: 1,
+  },
+  enfermedadTitle: {
+    fontSize: 15,
+    lineHeight: 20,
+    marginBottom: 2,
+  },
+  otrosNombres: {
+    fontSize: 13,
+    lineHeight: 16,
   },
   emptyContainer: {
     alignItems: "center",

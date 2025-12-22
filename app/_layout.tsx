@@ -95,6 +95,14 @@ export default function RootLayout() {
                   animation: "slide_from_bottom",
                 }} 
               />
+              <Stack.Screen 
+                name="enfermedad-expandida-detail" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
               <Stack.Screen name="oauth/callback" options={{ headerShown: false }} />
             </Stack>
             <StatusBar style="auto" />

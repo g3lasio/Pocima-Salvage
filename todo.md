@@ -13,3 +13,20 @@
 - [x] Mostrar contraindicaciones destacadas en detalle de planta
 - [x] Generar logo personalizado de la app
 - [x] Actualizar configuración de branding en app.config.ts
+
+- [x] Actualizar estructura de datos para incluir sistemas corporales y nombres alternativos
+- [x] Agregar enfermedades del Sistema Respiratorio (40)
+- [x] Agregar enfermedades del Sistema Digestivo (40)
+- [x] Agregar enfermedades del Sistema Cardiovascular (40)
+- [x] Agregar enfermedades del Sistema Nervioso (40)
+- [x] Agregar enfermedades del Sistema Inmunológico (35)
+- [x] Agregar enfermedades del Sistema Endocrino (35)
+- [x] Agregar enfermedades del Sistema Musculoesquelético (40)
+- [x] Agregar enfermedades del Sistema Urinario (30)
+- [x] Agregar enfermedades del Sistema Reproductor (35)
+- [x] Agregar enfermedades de la Piel (39)
+- [x] Agregar enfermedades del Sistema Linfático (25)
+- [x] Agregar Trastornos Mentales y Emocionales (40)
+- [x] Agregar enfermedades de Ojos, Oídos, Nariz y Garganta (30)
+- [x] Actualizar interfaz para filtrar por sistema corporal
+- [x] Probar la aplicación con el nuevo contenido
