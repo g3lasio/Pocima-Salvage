@@ -56,3 +56,26 @@
 - [x] Actualizar pantalla de detalle de enfermedad con plantas relacionadas
 - [x] Actualizar pantalla de detalle de planta con enfermedades que trata
 - [x] Probar cruce de datos y funcionalidad
+
+## Nombres Alternativos Regionales para Plantas
+
+- [x] Generar nombres alternativos - Hierbas aromáticas y culinarias (60)
+- [x] Generar nombres alternativos - Hierbas silvestres (60)
+- [x] Generar nombres alternativos - Árboles medicinales (49)
+- [x] Generar nombres alternativos - Arbustos medicinales (97)
+- [x] Generar nombres alternativos - Plantas tropicales (50)
+- [x] Generar nombres alternativos - Raíces y tubérculos (45)
+- [x] Generar nombres alternativos - Flores medicinales (48)
+- [x] Generar nombres alternativos - Hongos medicinales (56)
+- [x] Generar nombres alternativos - Algas y plantas acuáticas (25)
+- [x] Generar nombres alternativos - Frutas cítricas (25)
+- [x] Generar nombres alternativos - Frutas tropicales (40)
+- [x] Generar nombres alternativos - Frutas de clima templado (35)
+- [x] Generar nombres alternativos - Bayas y frutos del bosque (30)
+- [x] Generar nombres alternativos - Semillas y frutos secos (40)
+- [x] Generar nombres alternativos - Especias medicinales (101)
+- [x] Generar nombres alternativos - Plantas suculentas y cactus (25)
+- [x] Generar nombres alternativos - Plantas adaptógenas (35)
+- [x] Procesar y actualizar archivo TypeScript con nombres regionales (349 plantas actualizadas)
+- [x] Actualizar interfaz de detalle de planta para mostrar nombres alternativos
+- [x] Probar funcionalidad de nombres alternativos

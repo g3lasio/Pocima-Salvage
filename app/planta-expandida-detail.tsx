@@ -130,6 +130,46 @@ export default function PlantaExpandidaDetailScreen() {
           {planta.descripcion}
         </ThemedText>
 
+        {/* Nombres Alternativos por Región */}
+        {planta.nombresAlternativos && Object.keys(planta.nombresAlternativos).length > 0 && (
+          <View style={styles.section}>
+            <ThemedText type="subtitle" style={styles.sectionTitle}>
+              🌍 Nombres por Región
+            </ThemedText>
+            <View style={[styles.nombresContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+              {Object.entries(planta.nombresAlternativos).map(([region, nombres], index) => {
+                const regionLabels: Record<string, string> = {
+                  'España': '🇪🇸 España',
+                  'Mexico': '🇲🇽 México',
+                  'Argentina': '🇦🇷 Argentina',
+                  'Colombia': '🇨🇴 Colombia',
+                  'Peru': '🇵🇪 Perú',
+                  'Chile': '🇨🇱 Chile',
+                  'Centroamerica': '🌎 Centroamérica',
+                  'Caribe': '🌴 Caribe',
+                  'USA_English': '🇺🇸 EE.UU.',
+                  'UK_English': '🇬🇧 Reino Unido',
+                  'Indigena': '🏺 Indígena',
+                  'Otros': '🌐 Otros',
+                };
+                return (
+                  <View key={region}>
+                    {index > 0 && <View style={[styles.nombresDivider, { backgroundColor: colors.border }]} />}
+                    <View style={styles.nombresRow}>
+                      <ThemedText style={[styles.nombresRegion, { color: colors.textTertiary }]}>
+                        {regionLabels[region] || region}
+                      </ThemedText>
+                      <ThemedText style={[styles.nombresValue, { color: colors.text }]}>
+                        {(nombres as string[]).join(', ')}
+                      </ThemedText>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
+
         {/* Propiedades */}
         <View style={styles.section}>
           <ThemedText type="subtitle" style={styles.sectionTitle}>
@@ -196,24 +236,31 @@ export default function PlantaExpandidaDetailScreen() {
               ⚠️ Contraindicaciones
             </ThemedText>
             
-            {planta.contraindicaciones.map((contra, index) => (
-              <View 
-                key={index}
-                style={[styles.contraCard, { backgroundColor: `${colors.danger}10`, borderColor: `${colors.danger}30` }]}
-              >
-                <View style={styles.contraHeader}>
-                  <ThemedText style={styles.contraIcon}>
-                    {contraindicacionIconos[contra.tipo] || "⚠️"}
-                  </ThemedText>
-                  <ThemedText style={[styles.contraLabel, { color: colors.danger }]}>
-                    {contraindicacionLabels[contra.tipo] || "Precaución"}
+            {planta.contraindicaciones.map((contra, index) => {
+              // Manejar tanto strings como objetos de contraindicación
+              const isString = typeof contra === 'string';
+              const tipo = isString ? 'otro' : contra.tipo;
+              const descripcion = isString ? contra : contra.descripcion;
+              
+              return (
+                <View 
+                  key={index}
+                  style={[styles.contraCard, { backgroundColor: `${colors.danger}10`, borderColor: `${colors.danger}30` }]}
+                >
+                  <View style={styles.contraHeader}>
+                    <ThemedText style={styles.contraIcon}>
+                      {contraindicacionIconos[tipo] || "⚠️"}
+                    </ThemedText>
+                    <ThemedText style={[styles.contraLabel, { color: colors.danger }]}>
+                      {contraindicacionLabels[tipo] || "Precaución"}
+                    </ThemedText>
+                  </View>
+                  <ThemedText style={[styles.contraDesc, { color: colors.textSecondary }]}>
+                    {descripcion}
                   </ThemedText>
                 </View>
-                <ThemedText style={[styles.contraDesc, { color: colors.textSecondary }]}>
-                  {contra.descripcion}
-                </ThemedText>
-              </View>
-            ))}
+              );
+            })}
           </View>
         )}
 
@@ -528,5 +575,26 @@ const styles = StyleSheet.create({
   errorEmoji: {
     fontSize: 48,
     marginBottom: Spacing.md,
+  },
+  nombresContainer: {
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    padding: Spacing.lg,
+  },
+  nombresRow: {
+    paddingVertical: Spacing.sm,
+  },
+  nombresRegion: {
+    fontSize: 13,
+    fontWeight: "600",
+    marginBottom: 4,
+  },
+  nombresValue: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  nombresDivider: {
+    height: 1,
+    marginVertical: Spacing.xs,
   },
 });
