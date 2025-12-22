@@ -10,7 +10,7 @@ describe("Nombres Alternativos Regionales", () => {
     const plantas = getAllPlantas();
     const plantasConNombres = plantas.filter(p => p.nombresAlternativos && Object.keys(p.nombresAlternativos).length > 0);
     
-    expect(plantasConNombres.length).toBeGreaterThan(300);
+    expect(plantasConNombres.length).toBeGreaterThan(600);
     console.log(`Plantas con nombres alternativos: ${plantasConNombres.length} de ${plantas.length}`);
   });
 
