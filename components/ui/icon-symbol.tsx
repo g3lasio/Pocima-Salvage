@@ -16,6 +16,8 @@ const MAPPING = {
   "house.fill": "home",
   "cross.case.fill": "medical-services",
   "leaf.fill": "eco",
+  "stethoscope": "healing",
+  "bubble.left.and.bubble.right.fill": "chat",
   // Navigation
   "chevron.left.forwardslash.chevron.right": "code",
   "chevron.right": "chevron-right",

@@ -96,3 +96,42 @@
 - [x] Implementar dropdown colapsable para nombres alternativos de plantas
 - [x] Actualizar pantalla de detalle de enfermedad para mostrar síntomas y causas
 - [x] Probar funcionalidad completa
+
+## MolDoctor - Asistente Médico IA
+
+### Navegación y UI Base
+- [x] Reorganizar tabs: Enfermedades | MolDoctor | Plantas
+- [x] Crear icono y pantalla base de MolDoctor
+- [x] Implementar interfaz de chat con burbujas (estilo iMessage)
+- [x] Agregar campo de entrada de texto con botón enviar
+
+### Conversación IA
+- [x] Configurar API de Anthropic (Claude) para conversación médica
+- [x] Crear prompt de sistema con personalidad humorística
+- [x] Implementar anamnesis guiada (preguntas de seguimiento)
+- [x] Agregar sistema de triaje (🟢 Leve | 🟡 Moderado | 🔴 Urgente)
+- [x] Incluir disclaimers médicos automáticos
+
+### Voz Bidireccional
+- [x] Implementar entrada por voz (speech-to-text) - pendiente integración nativa
+- [x] Implementar salida por voz masculina (text-to-speech)
+- [x] Agregar botón de micrófono en la interfaz
+- [x] Agregar botón de reproducir voz en respuestas
+
+### Análisis de Imágenes
+- [x] Implementar captura de fotos desde cámara
+- [x] Implementar selección de imágenes de galería
+- [x] Integrar análisis de imágenes con IA (OCR y visual)
+- [x] Soportar análisis de documentos de laboratorio
+
+### Integración con Base de Datos
+- [x] Vincular recomendaciones con plantas medicinales de la app
+- [x] Vincular diagnósticos con enfermedades de la app
+- [x] Generar enlaces navegables a detalles de plantas/enfermedades
+- [x] Personalizar recomendaciones según contraindicaciones
+
+### Perfil y Seguimiento
+- [x] Guardar historial de conversaciones con AsyncStorage
+- [ ] Implementar perfil de salud del usuario (alergias, condiciones)
+- [ ] Sistema de seguimiento post-consulta
+
