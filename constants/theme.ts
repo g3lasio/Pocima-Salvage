@@ -1,41 +1,67 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Pócima Salvage - Theme Configuration
+ * Natural green palette for medicinal plants app
  */
 
 import { Platform } from "react-native";
 
-const tintColorLight = "#0a7ea4";
-const tintColorDark = "#fff";
-
 export const Colors = {
   light: {
-    text: "#11181C",
-    background: "#fff",
-    tint: tintColorLight,
-    icon: "#687076",
-    tabIconDefault: "#687076",
-    tabIconSelected: tintColorLight,
+    text: "#1B1B1B",
+    textSecondary: "#5C5C5C",
+    textTertiary: "#9E9E9E",
+    background: "#FAFDF7",
+    surface: "#FFFFFF",
+    tint: "#2E7D32",
+    tintLight: "#81C784",
+    icon: "#5C5C5C",
+    tabIconDefault: "#9E9E9E",
+    tabIconSelected: "#2E7D32",
+    border: "#E8E8E8",
+    danger: "#D32F2F",
+    warning: "#F57C00",
+    cardShadow: "rgba(0, 0, 0, 0.08)",
   },
   dark: {
     text: "#ECEDEE",
-    background: "#151718",
-    tint: tintColorDark,
-    icon: "#9BA1A6",
-    tabIconDefault: "#9BA1A6",
-    tabIconSelected: tintColorDark,
+    textSecondary: "#A0A0A0",
+    textTertiary: "#6B6B6B",
+    background: "#121212",
+    surface: "#1E1E1E",
+    tint: "#66BB6A",
+    tintLight: "#388E3C",
+    icon: "#A0A0A0",
+    tabIconDefault: "#6B6B6B",
+    tabIconSelected: "#66BB6A",
+    border: "#2C2C2C",
+    danger: "#EF5350",
+    warning: "#FFB74D",
+    cardShadow: "rgba(0, 0, 0, 0.3)",
   },
+};
+
+export const Spacing = {
+  xs: 4,
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  xxl: 32,
+};
+
+export const BorderRadius = {
+  sm: 8,
+  md: 12,
+  lg: 16,
+  xl: 24,
+  full: 9999,
 };
 
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
     sans: "system-ui",
-    /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
-    /** iOS `UIFontDescriptorSystemDesignRounded` */
     rounded: "ui-rounded",
-    /** iOS `UIFontDescriptorSystemDesignMonospaced` */
     mono: "ui-monospace",
   },
   default: {

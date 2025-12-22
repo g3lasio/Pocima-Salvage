@@ -15,20 +15,39 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+        tabBarInactiveTintColor: Colors[colorScheme ?? "light"].tabIconDefault,
         headerShown: false,
         tabBarButton: HapticTab,
-        // Ensure tab bar respects bottom safe area for devices with home indicators
         tabBarStyle: {
           paddingBottom: insets.bottom,
-          height: 49 + insets.bottom, // Default tab bar height (49) + safe area
+          height: 60 + insets.bottom,
+          backgroundColor: Colors[colorScheme ?? "light"].surface,
+          borderTopColor: Colors[colorScheme ?? "light"].border,
+          borderTopWidth: 1,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: "500",
+          marginTop: -4,
         },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Enfermedades",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={26} name="cross.case.fill" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="plantas"
+        options={{
+          title: "Plantas",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={26} name="leaf.fill" color={color} />
+          ),
         }}
       />
     </Tabs>
