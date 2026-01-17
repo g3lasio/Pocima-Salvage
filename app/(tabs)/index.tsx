@@ -6,13 +6,15 @@ import {
   Pressable,
   TextInput,
   View,
-
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius, Shadows, IronManColors } from "@/constants/theme";
+
+import { GlassBackground } from "@/components/ui/glass-background";
+import { HolographicCard } from "@/components/ui/holographic-card";
+import { HolographicIcon } from "@/components/ui/holographic-icons";
+import { Colors, Spacing, IronManColors, Fonts, HolographicStyles } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { 
   sistemasCorporales, 
@@ -51,17 +53,10 @@ export default function EnfermedadesScreen() {
   }, []);
 
   const renderEnfermedadItem = useCallback(({ item }: { item: EnfermedadExpandida }) => (
-    <Pressable
+    <HolographicCard
       onPress={() => handleEnfermedadPress(item)}
-      style={({ pressed }) => [
-        styles.enfermedadCard,
-        {
-          backgroundColor: colors.glass,
-          borderColor: pressed ? IronManColors.arcReactorBlue : colors.border,
-          opacity: pressed ? 0.9 : 1,
-          ...Shadows.small,
-        },
-      ]}
+      variant="subtle"
+      style={styles.enfermedadCard}
     >
       <View style={styles.enfermedadContent}>
         <View style={styles.enfermedadTextContainer}>
@@ -74,9 +69,9 @@ export default function EnfermedadesScreen() {
             </ThemedText>
           )}
         </View>
-        <ThemedText style={{ color: IronManColors.arcReactorBlue, fontSize: 18 }}>›</ThemedText>
+        <ThemedText style={styles.arrowIcon}>›</ThemedText>
       </View>
-    </Pressable>
+    </HolographicCard>
   ), [colors, handleEnfermedadPress]);
 
   const renderSistemaCard = useCallback(({ item }: { item: SistemaCorporal }) => {
@@ -84,14 +79,10 @@ export default function EnfermedadesScreen() {
     const enfermedadesToShow = isExpanded ? item.enfermedades : item.enfermedades.slice(0, 3);
     
     return (
-      <View style={[
-        styles.sistemaCard, 
-        { 
-          backgroundColor: colors.glass, 
-          borderColor: isExpanded ? IronManColors.arcReactorBlue : colors.border,
-          ...Shadows.medium,
-        }
-      ]}>
+      <HolographicCard
+        variant={isExpanded ? "elevated" : "default"}
+        style={styles.sistemaCard}
+      >
         <Pressable
           onPress={() => toggleSistema(item.id)}
           style={({ pressed }) => [
@@ -99,25 +90,20 @@ export default function EnfermedadesScreen() {
             { opacity: pressed ? 0.8 : 1 },
           ]}
         >
-          <View style={[
-            styles.sistemaIconContainer, 
-            { 
-              backgroundColor: IronManColors.glassBlue,
-              borderWidth: 1,
-              borderColor: IronManColors.borderHoloSubtle,
-            }
-          ]}>
-            <ThemedText style={styles.sistemaIcon}>{item.icono}</ThemedText>
-          </View>
+          <HolographicIcon 
+            icon={item.icono} 
+            size="medium" 
+            variant={isExpanded ? "glow" : "default"}
+          />
           <View style={styles.sistemaInfo}>
-            <ThemedText type="defaultSemiBold" style={[styles.sistemaNombre, { color: colors.text }]}>
+            <ThemedText type="defaultSemiBold" style={styles.sistemaNombre}>
               {item.nombre}
             </ThemedText>
-            <ThemedText style={[styles.sistemaCount, { color: IronManColors.holographicCyan }]}>
+            <ThemedText style={styles.sistemaCount}>
               {item.enfermedades.length} enfermedades
             </ThemedText>
           </View>
-          <ThemedText style={[styles.expandIcon, { color: IronManColors.arcReactorBlue }]}>
+          <ThemedText style={styles.expandIcon}>
             {isExpanded ? "▼" : "▶"}
           </ThemedText>
         </Pressable>
@@ -136,10 +122,10 @@ export default function EnfermedadesScreen() {
                   },
                 ]}
               >
-                <ThemedText style={[styles.enfermedadPreviewText, { color: colors.text }]} numberOfLines={1}>
+                <ThemedText style={styles.enfermedadPreviewText} numberOfLines={1}>
                   {enf.nombre}
                 </ThemedText>
-                <ThemedText style={{ color: IronManColors.holographicCyan, fontSize: 14 }}>›</ThemedText>
+                <ThemedText style={styles.previewArrow}>›</ThemedText>
               </Pressable>
             ))}
             {!isExpanded && item.enfermedades.length > 3 && (
@@ -147,48 +133,38 @@ export default function EnfermedadesScreen() {
                 onPress={() => toggleSistema(item.id)}
                 style={styles.verMasButton}
               >
-                <ThemedText style={[styles.verMasText, { color: IronManColors.arcReactorBlue }]}>
+                <ThemedText style={styles.verMasText}>
                   Ver {item.enfermedades.length - 3} más...
                 </ThemedText>
               </Pressable>
             )}
           </View>
         )}
-      </View>
+      </HolographicCard>
     );
   }, [colors, expandedSistema, toggleSistema, handleEnfermedadPress]);
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
+    <GlassBackground showGrid={true} showScanLine={true} showCorners={true}>
       <View
         style={[
           styles.header,
           {
-            paddingTop: Math.max(insets.top, 20),
-            backgroundColor: colors.background,
+            paddingTop: Math.max(insets.top, 20) + 10,
           },
         ]}
       >
         <ThemedText type="title" style={styles.headerTitle}>
           Enfermedades
         </ThemedText>
-        <ThemedText style={[styles.headerSubtitle, { color: IronManColors.holographicCyan }]}>
+        <ThemedText style={styles.headerSubtitle}>
           {totalEnfermedades} enfermedades en {sistemasCorporales.length} sistemas
         </ThemedText>
         
-        <View
-          style={[
-            styles.searchContainer,
-            {
-              backgroundColor: colors.glass,
-              borderColor: colors.border,
-              ...Shadows.small,
-            },
-          ]}
-        >
-          <ThemedText style={[styles.searchIcon, { color: IronManColors.arcReactorBlue }]}>🔍</ThemedText>
+        <View style={[styles.searchContainer, HolographicStyles.inputField]}>
+          <ThemedText style={styles.searchIcon}>🔍</ThemedText>
           <TextInput
-            style={[styles.searchInput, { color: colors.text }]}
+            style={[styles.searchInput, { color: colors.text, fontFamily: Fonts.regular }]}
             placeholder="Buscar enfermedad..."
             placeholderTextColor={colors.textTertiary}
             value={searchQuery}
@@ -198,7 +174,7 @@ export default function EnfermedadesScreen() {
           />
           {searchQuery.length > 0 && (
             <Pressable onPress={() => setSearchQuery("")} style={styles.clearButton}>
-              <ThemedText style={{ color: IronManColors.holographicCyan }}>✕</ThemedText>
+              <ThemedText style={styles.clearIcon}>✕</ThemedText>
             </Pressable>
           )}
         </View>
@@ -216,15 +192,15 @@ export default function EnfermedadesScreen() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <ThemedText style={[styles.emptyEmoji, { textShadowColor: IronManColors.arcReactorBlue, textShadowRadius: 10 }]}>🔍</ThemedText>
-              <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
+              <HolographicIcon icon="🔍" size="xlarge" variant="glow" animated />
+              <ThemedText style={styles.emptyText}>
                 No se encontraron enfermedades
               </ThemedText>
             </View>
           }
           ListHeaderComponent={
             searchResults.length > 0 ? (
-              <ThemedText style={[styles.resultCount, { color: IronManColors.holographicCyan }]}>
+              <ThemedText style={styles.resultCount}>
                 {searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}
               </ThemedText>
             ) : null
@@ -242,39 +218,33 @@ export default function EnfermedadesScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </ThemedView>
+    </GlassBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     paddingHorizontal: Spacing.lg,
     paddingBottom: Spacing.md,
   },
   headerTitle: {
-    fontSize: 28,
-    lineHeight: 34,
     marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 15,
-    lineHeight: 20,
+    fontSize: 14,
+    color: IronManColors.holographicCyan,
     marginBottom: Spacing.lg,
     letterSpacing: 0.5,
+    fontFamily: Fonts.regular,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: BorderRadius.md,
-    borderWidth: 1.5,
     paddingHorizontal: Spacing.md,
-    height: 50,
+    height: 52,
   },
   searchIcon: {
-    fontSize: 16,
+    fontSize: 18,
     marginRight: Spacing.sm,
   },
   searchInput: {
@@ -286,40 +256,34 @@ const styles = StyleSheet.create({
   clearButton: {
     padding: Spacing.xs,
   },
+  clearIcon: {
+    color: IronManColors.holographicCyan,
+    fontSize: 16,
+  },
   listContent: {
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.sm,
   },
   resultCount: {
     fontSize: 14,
+    color: IronManColors.holographicCyan,
     marginBottom: Spacing.md,
     letterSpacing: 0.5,
+    fontFamily: Fonts.regular,
   },
   // Sistema Card Styles
   sistemaCard: {
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1.5,
     marginBottom: Spacing.md,
-    overflow: "hidden",
+    padding: 0,
   },
   sistemaHeader: {
     flexDirection: "row",
     alignItems: "center",
     padding: Spacing.lg,
   },
-  sistemaIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: BorderRadius.md,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: Spacing.md,
-  },
-  sistemaIcon: {
-    fontSize: 24,
-  },
   sistemaInfo: {
     flex: 1,
+    marginLeft: Spacing.md,
   },
   sistemaNombre: {
     fontSize: 16,
@@ -328,11 +292,13 @@ const styles = StyleSheet.create({
   },
   sistemaCount: {
     fontSize: 13,
-    lineHeight: 16,
+    color: IronManColors.holographicCyan,
     letterSpacing: 0.3,
+    fontFamily: Fonts.regular,
   },
   expandIcon: {
     fontSize: 12,
+    color: IronManColors.arcReactorBlue,
     marginLeft: Spacing.sm,
   },
   enfermedadesPreview: {
@@ -349,6 +315,11 @@ const styles = StyleSheet.create({
   enfermedadPreviewText: {
     fontSize: 15,
     flex: 1,
+    fontFamily: Fonts.regular,
+  },
+  previewArrow: {
+    color: IronManColors.holographicCyan,
+    fontSize: 16,
   },
   verMasButton: {
     paddingVertical: Spacing.md,
@@ -357,20 +328,18 @@ const styles = StyleSheet.create({
   },
   verMasText: {
     fontSize: 14,
-    fontWeight: "600",
+    color: IronManColors.arcReactorBlue,
+    fontFamily: Fonts.bold,
     letterSpacing: 0.3,
   },
   // Enfermedad Card Styles (for search results)
   enfermedadCard: {
-    borderRadius: BorderRadius.md,
-    borderWidth: 1.5,
     marginBottom: Spacing.sm,
-    overflow: "hidden",
+    padding: Spacing.lg,
   },
   enfermedadContent: {
     flexDirection: "row",
     alignItems: "center",
-    padding: Spacing.lg,
   },
   enfermedadTextContainer: {
     flex: 1,
@@ -383,17 +352,21 @@ const styles = StyleSheet.create({
   otrosNombres: {
     fontSize: 13,
     lineHeight: 16,
+    fontFamily: Fonts.regular,
+  },
+  arrowIcon: {
+    color: IronManColors.arcReactorBlue,
+    fontSize: 20,
   },
   emptyContainer: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 60,
   },
-  emptyEmoji: {
-    fontSize: 48,
-    marginBottom: Spacing.md,
-  },
   emptyText: {
     fontSize: 16,
+    color: IronManColors.textSecondary,
+    marginTop: Spacing.lg,
+    fontFamily: Fonts.regular,
   },
 });

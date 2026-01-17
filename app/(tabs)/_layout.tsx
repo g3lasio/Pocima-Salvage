@@ -1,61 +1,110 @@
 import { Tabs } from "expo-router";
-import React from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { StyleSheet, Animated, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Colors, IronManColors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { IronManColors, Shadows, Fonts } from "@/constants/theme";
+
+/**
+ * HolographicTabIcon - Tab icon with animated glass effect and glow
+ */
+function HolographicTabIcon({ 
+  name,
+  color,
+  focused 
+}: { 
+  name: string;
+  color: string;
+  focused: boolean;
+}) {
+  const glowAnim = useRef(new Animated.Value(focused ? 1 : 0.6)).current;
+  const scaleAnim = useRef(new Animated.Value(focused ? 1.1 : 1)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(glowAnim, {
+        toValue: focused ? 1 : 0.6,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.spring(scaleAnim, {
+        toValue: focused ? 1.15 : 1,
+        useNativeDriver: true,
+        friction: 8,
+      }),
+    ]).start();
+  }, [focused, glowAnim, scaleAnim]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.iconContainer,
+        {
+          backgroundColor: focused 
+            ? IronManColors.glassBlueMedium 
+            : IronManColors.glassBlue,
+          borderColor: focused 
+            ? IronManColors.arcReactorBlue 
+            : IronManColors.borderHoloSubtle,
+          transform: [{ scale: scaleAnim }],
+          ...(focused ? Shadows.glow : {}),
+        },
+      ]}
+    >
+      <Animated.View style={{ opacity: glowAnim }}>
+        <IconSymbol size={24} name={name as any} color={color} />
+      </Animated.View>
+    </Animated.View>
+  );
+}
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const colors = Colors[colorScheme ?? "light"];
+  
   const insets = useSafeAreaInsets();
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: IronManColors.arcReactorBlue,
-        tabBarInactiveTintColor: colors.tabIconDefault,
+        tabBarInactiveTintColor: IronManColors.textTertiary,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
           paddingBottom: insets.bottom,
-          height: 70 + insets.bottom,
-          backgroundColor: colors.surface,
+          height: 75 + insets.bottom,
+          backgroundColor: IronManColors.glassDarkMedium,
           borderTopColor: IronManColors.borderHolo,
-          borderTopWidth: 1.5,
-          // Holographic glow effect
+          borderTopWidth: 2,
           ...Platform.select({
             ios: {
               shadowColor: IronManColors.arcReactorBlue,
               shadowOffset: { width: 0, height: -4 },
-              shadowOpacity: 0.3,
-              shadowRadius: 8,
+              shadowOpacity: 0.5,
+              shadowRadius: 12,
             },
             android: {
-              elevation: 8,
+              elevation: 10,
             },
             web: {
-              boxShadow: `0 -4px 20px ${IronManColors.glowBlue}`,
+              boxShadow: `0 -4px 24px ${IronManColors.glowBlue}`,
             },
           }),
         },
         tabBarLabelStyle: {
-          fontSize: 11,
-          fontWeight: "600",
-          marginTop: -2,
-          letterSpacing: 0.5,
+          fontFamily: Fonts.bold,
+          fontSize: 10,
+          letterSpacing: 0.8,
           textTransform: "uppercase",
+          marginTop: 4,
         },
         tabBarIconStyle: {
-          marginTop: 4,
+          marginTop: 6,
         },
         tabBarItemStyle: {
           paddingVertical: 4,
         },
-        // Active tab indicator glow
         tabBarActiveBackgroundColor: "transparent",
       }}
     >
@@ -64,9 +113,7 @@ export default function TabLayout() {
         options={{
           title: "Enfermedades",
           tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.iconGlow : undefined}>
-              <IconSymbol size={26} name="cross.case.fill" color={color} />
-            </View>
+            <HolographicTabIcon name="cross.case.fill" color={color} focused={focused} />
           ),
         }}
       />
@@ -75,9 +122,7 @@ export default function TabLayout() {
         options={{
           title: "MolDoctor",
           tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.iconGlow : undefined}>
-              <IconSymbol size={26} name="stethoscope" color={color} />
-            </View>
+            <HolographicTabIcon name="stethoscope" color={color} focused={focused} />
           ),
         }}
       />
@@ -86,9 +131,7 @@ export default function TabLayout() {
         options={{
           title: "Plantas",
           tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.iconGlow : undefined}>
-              <IconSymbol size={26} name="leaf.fill" color={color} />
-            </View>
+            <HolographicTabIcon name="leaf.fill" color={color} focused={focused} />
           ),
         }}
       />
@@ -97,21 +140,12 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  iconGlow: {
-    ...Platform.select({
-      ios: {
-        shadowColor: IronManColors.arcReactorBlue,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.8,
-        shadowRadius: 8,
-      },
-      android: {
-        elevation: 4,
-      },
-      web: {
-        // @ts-ignore
-        filter: `drop-shadow(0 0 8px ${IronManColors.arcReactorBlue})`,
-      },
-    }),
+  iconContainer: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1.5,
   },
 });

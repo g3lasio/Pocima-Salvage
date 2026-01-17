@@ -353,8 +353,11 @@ async function invokeAnthropic(params: InvokeParams): Promise<InvokeResult> {
   const { messages } = params;
   const { systemPrompt, messages: anthropicMessages } = convertToAnthropicFormat(messages);
 
+  // Use claude-3-5-sonnet as it's widely available and stable
+  const model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
+
   const payload: Record<string, unknown> = {
-    model: "claude-sonnet-4-20250514",
+    model,
     max_tokens: 8192,
     messages: anthropicMessages,
   };
@@ -362,6 +365,13 @@ async function invokeAnthropic(params: InvokeParams): Promise<InvokeResult> {
   if (systemPrompt) {
     payload.system = systemPrompt;
   }
+
+  // Validate API key before making request
+  if (!ENV.anthropicApiKey || ENV.anthropicApiKey.trim() === "") {
+    throw new Error("ANTHROPIC_API_KEY is not configured. Please add it to your Replit Secrets.");
+  }
+
+  console.log(`[LLM] Invoking Anthropic API with model: ${model}`);
 
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -375,6 +385,21 @@ async function invokeAnthropic(params: InvokeParams): Promise<InvokeResult> {
 
   if (!response.ok) {
     const errorText = await response.text();
+    console.error(`[LLM] Anthropic API error: ${response.status} - ${errorText}`);
+    
+    // Parse error for better messaging
+    try {
+      const errorJson = JSON.parse(errorText);
+      if (errorJson.error?.type === "authentication_error") {
+        throw new Error("Invalid ANTHROPIC_API_KEY. Please check your API key in Replit Secrets.");
+      }
+      if (errorJson.error?.type === "invalid_request_error") {
+        throw new Error(`Anthropic request error: ${errorJson.error.message}`);
+      }
+    } catch (parseError) {
+      // If parsing fails, use original error
+    }
+    
     throw new Error(`Anthropic API invoke failed: ${response.status} ${response.statusText} – ${errorText}`);
   }
 
@@ -491,10 +516,16 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
 }
 
 // Export provider info for debugging
-export function getLLMProviderInfo(): { provider: string; model: string } {
+export function getLLMProviderInfo(): { provider: string; model: string; configured: boolean } {
   const provider = getLLMProvider();
+  const anthropicConfigured = !!(ENV.anthropicApiKey && ENV.anthropicApiKey.trim());
+  const forgeConfigured = !!(ENV.forgeApiKey && ENV.forgeApiKey.trim());
+  
   return {
     provider,
-    model: provider === "anthropic" ? "claude-sonnet-4-20250514" : "gemini-2.5-flash",
+    model: provider === "anthropic" 
+      ? (process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022") 
+      : "gemini-2.5-flash",
+    configured: provider === "anthropic" ? anthropicConfigured : forgeConfigured,
   };
 }

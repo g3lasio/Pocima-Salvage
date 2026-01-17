@@ -6,13 +6,14 @@ import {
   Pressable,
   TextInput,
   View,
-
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius, Shadows, IronManColors } from "@/constants/theme";
+import { GlassBackground } from "@/components/ui/glass-background";
+import { HolographicCard } from "@/components/ui/holographic-card";
+import { HolographicIcon, HolographicBadge } from "@/components/ui/holographic-icons";
+import { Colors, Spacing, IronManColors, Fonts, HolographicStyles } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { 
   categoriasPlantas, 
@@ -72,44 +73,43 @@ export default function PlantasScreen() {
   }, []);
 
   const renderPlantaItem = useCallback(({ item }: { item: PlantaExpandida }) => (
-    <Pressable
+    <HolographicCard
       onPress={() => handlePlantaPress(item)}
-      style={({ pressed }) => [
-        styles.plantaCard,
-        {
-          backgroundColor: colors.glass,
-          borderColor: pressed ? IronManColors.arcReactorBlue : colors.border,
-          opacity: pressed ? 0.9 : 1,
-          ...Shadows.small,
-        },
-      ]}
+      variant="subtle"
+      style={styles.plantaCard}
     >
       <View style={styles.plantaContent}>
-        <View style={[
-          styles.plantaIconSmall, 
-          { 
-            backgroundColor: IronManColors.glassBlue,
-            borderWidth: 1,
-            borderColor: IronManColors.borderHoloSubtle,
-          }
-        ]}>
-          <ThemedText style={styles.plantaEmoji}>🌿</ThemedText>
-        </View>
+        <HolographicIcon icon="🌿" size="medium" variant="subtle" />
         <View style={styles.plantaTextContainer}>
-          <ThemedText type="defaultSemiBold" style={[styles.plantaTitle, { color: colors.text }]} numberOfLines={1}>
+          <ThemedText type="defaultSemiBold" style={styles.plantaTitle} numberOfLines={1}>
             {item.nombre}
           </ThemedText>
-          <ThemedText style={[styles.plantaCientifico, { color: IronManColors.holographicCyan }]} numberOfLines={1}>
+          <ThemedText style={styles.nombreCientifico} numberOfLines={1}>
             {item.nombreCientifico}
           </ThemedText>
-          <ThemedText style={[styles.plantaPropiedades, { color: colors.textSecondary }]} numberOfLines={1}>
-            {item.propiedades.slice(0, 3).join(" • ")}
-          </ThemedText>
+          {item.propiedades.length > 0 && (
+            <View style={styles.propiedadesRow}>
+              {item.propiedades.slice(0, 2).map((prop, idx) => (
+                <HolographicBadge 
+                  key={idx} 
+                  text={prop} 
+                  size="small" 
+                  variant="info"
+                  style={styles.propiedadBadge}
+                />
+              ))}
+              {item.propiedades.length > 2 && (
+                <ThemedText style={styles.moreBadge}>
+                  +{item.propiedades.length - 2}
+                </ThemedText>
+              )}
+            </View>
+          )}
         </View>
-        <ThemedText style={{ color: IronManColors.arcReactorBlue, fontSize: 18 }}>›</ThemedText>
+        <ThemedText style={styles.arrowIcon}>›</ThemedText>
       </View>
-    </Pressable>
-  ), [colors, handlePlantaPress]);
+    </HolographicCard>
+  ), [handlePlantaPress]);
 
   const renderCategoriaCard = useCallback(({ item }: { item: CategoriaPlanta }) => {
     const isExpanded = expandedCategoria === item.id;
@@ -117,14 +117,10 @@ export default function PlantasScreen() {
     const icono = categoriaIconos[item.id] || "🌿";
     
     return (
-      <View style={[
-        styles.categoriaCard, 
-        { 
-          backgroundColor: colors.glass, 
-          borderColor: isExpanded ? IronManColors.arcReactorBlue : colors.border,
-          ...Shadows.medium,
-        }
-      ]}>
+      <HolographicCard
+        variant={isExpanded ? "elevated" : "default"}
+        style={styles.categoriaCard}
+      >
         <Pressable
           onPress={() => toggleCategoria(item.id)}
           style={({ pressed }) => [
@@ -132,25 +128,20 @@ export default function PlantasScreen() {
             { opacity: pressed ? 0.8 : 1 },
           ]}
         >
-          <View style={[
-            styles.categoriaIconContainer, 
-            { 
-              backgroundColor: IronManColors.glassBlue,
-              borderWidth: 1,
-              borderColor: IronManColors.borderHoloSubtle,
-            }
-          ]}>
-            <ThemedText style={styles.categoriaIcon}>{icono}</ThemedText>
-          </View>
+          <HolographicIcon 
+            icon={icono} 
+            size="medium" 
+            variant={isExpanded ? "glow" : "default"}
+          />
           <View style={styles.categoriaInfo}>
-            <ThemedText type="defaultSemiBold" style={[styles.categoriaNombre, { color: colors.text }]}>
+            <ThemedText type="defaultSemiBold" style={styles.categoriaNombre}>
               {item.nombre}
             </ThemedText>
-            <ThemedText style={[styles.categoriaCount, { color: IronManColors.holographicCyan }]}>
-              {item.plantas.length} plantas
+            <ThemedText style={styles.categoriaCount}>
+              {item.plantas.length} plantas medicinales
             </ThemedText>
           </View>
-          <ThemedText style={[styles.expandIcon, { color: IronManColors.arcReactorBlue }]}>
+          <ThemedText style={styles.expandIcon}>
             {isExpanded ? "▼" : "▶"}
           </ThemedText>
         </Pressable>
@@ -170,14 +161,17 @@ export default function PlantasScreen() {
                 ]}
               >
                 <View style={styles.plantaPreviewContent}>
-                  <ThemedText style={[styles.plantaPreviewText, { color: colors.text }]} numberOfLines={1}>
-                    {planta.nombre}
-                  </ThemedText>
-                  <ThemedText style={[styles.plantaPreviewCientifico, { color: IronManColors.holographicTeal }]} numberOfLines={1}>
-                    {planta.nombreCientifico}
-                  </ThemedText>
+                  <ThemedText style={styles.plantaPreviewIcon}>🌿</ThemedText>
+                  <View style={styles.plantaPreviewTextContainer}>
+                    <ThemedText style={styles.plantaPreviewText} numberOfLines={1}>
+                      {planta.nombre}
+                    </ThemedText>
+                    <ThemedText style={styles.plantaPreviewCientifico} numberOfLines={1}>
+                      {planta.nombreCientifico}
+                    </ThemedText>
+                  </View>
                 </View>
-                <ThemedText style={{ color: IronManColors.holographicCyan, fontSize: 14 }}>›</ThemedText>
+                <ThemedText style={styles.previewArrow}>›</ThemedText>
               </Pressable>
             ))}
             {!isExpanded && item.plantas.length > 3 && (
@@ -185,48 +179,38 @@ export default function PlantasScreen() {
                 onPress={() => toggleCategoria(item.id)}
                 style={styles.verMasButton}
               >
-                <ThemedText style={[styles.verMasText, { color: IronManColors.arcReactorBlue }]}>
+                <ThemedText style={styles.verMasText}>
                   Ver {item.plantas.length - 3} más...
                 </ThemedText>
               </Pressable>
             )}
           </View>
         )}
-      </View>
+      </HolographicCard>
     );
   }, [colors, expandedCategoria, toggleCategoria, handlePlantaPress]);
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
+    <GlassBackground showGrid={true} showScanLine={true} showCorners={true}>
       <View
         style={[
           styles.header,
           {
-            paddingTop: Math.max(insets.top, 20),
-            backgroundColor: colors.background,
+            paddingTop: Math.max(insets.top, 20) + 10,
           },
         ]}
       >
         <ThemedText type="title" style={styles.headerTitle}>
           Plantas Medicinales
         </ThemedText>
-        <ThemedText style={[styles.headerSubtitle, { color: IronManColors.holographicCyan }]}>
+        <ThemedText style={styles.headerSubtitle}>
           {totalPlantas} plantas en {categoriasPlantas.length} categorías
         </ThemedText>
         
-        <View
-          style={[
-            styles.searchContainer,
-            {
-              backgroundColor: colors.glass,
-              borderColor: colors.border,
-              ...Shadows.small,
-            },
-          ]}
-        >
-          <ThemedText style={[styles.searchIcon, { color: IronManColors.arcReactorBlue }]}>🔍</ThemedText>
+        <View style={[styles.searchContainer, HolographicStyles.inputField]}>
+          <ThemedText style={styles.searchIcon}>🔍</ThemedText>
           <TextInput
-            style={[styles.searchInput, { color: colors.text }]}
+            style={[styles.searchInput, { color: colors.text, fontFamily: Fonts.regular }]}
             placeholder="Buscar planta o propiedad..."
             placeholderTextColor={colors.textTertiary}
             value={searchQuery}
@@ -236,7 +220,7 @@ export default function PlantasScreen() {
           />
           {searchQuery.length > 0 && (
             <Pressable onPress={() => setSearchQuery("")} style={styles.clearButton}>
-              <ThemedText style={{ color: IronManColors.holographicCyan }}>✕</ThemedText>
+              <ThemedText style={styles.clearIcon}>✕</ThemedText>
             </Pressable>
           )}
         </View>
@@ -254,15 +238,15 @@ export default function PlantasScreen() {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <ThemedText style={[styles.emptyEmoji, { textShadowColor: IronManColors.arcReactorBlue, textShadowRadius: 10 }]}>🔍</ThemedText>
-              <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
+              <HolographicIcon icon="🌿" size="xlarge" variant="glow" animated />
+              <ThemedText style={styles.emptyText}>
                 No se encontraron plantas
               </ThemedText>
             </View>
           }
           ListHeaderComponent={
             searchResults.length > 0 ? (
-              <ThemedText style={[styles.resultCount, { color: IronManColors.holographicCyan }]}>
+              <ThemedText style={styles.resultCount}>
                 {searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}
               </ThemedText>
             ) : null
@@ -280,39 +264,33 @@ export default function PlantasScreen() {
           showsVerticalScrollIndicator={false}
         />
       )}
-    </ThemedView>
+    </GlassBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   header: {
     paddingHorizontal: Spacing.lg,
     paddingBottom: Spacing.md,
   },
   headerTitle: {
-    fontSize: 28,
-    lineHeight: 34,
     marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 15,
-    lineHeight: 20,
+    fontSize: 14,
+    color: IronManColors.holographicCyan,
     marginBottom: Spacing.lg,
     letterSpacing: 0.5,
+    fontFamily: Fonts.regular,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: BorderRadius.md,
-    borderWidth: 1.5,
     paddingHorizontal: Spacing.md,
-    height: 50,
+    height: 52,
   },
   searchIcon: {
-    fontSize: 16,
+    fontSize: 18,
     marginRight: Spacing.sm,
   },
   searchInput: {
@@ -324,40 +302,34 @@ const styles = StyleSheet.create({
   clearButton: {
     padding: Spacing.xs,
   },
+  clearIcon: {
+    color: IronManColors.holographicCyan,
+    fontSize: 16,
+  },
   listContent: {
     paddingHorizontal: Spacing.lg,
     paddingTop: Spacing.sm,
   },
   resultCount: {
     fontSize: 14,
+    color: IronManColors.holographicCyan,
     marginBottom: Spacing.md,
     letterSpacing: 0.5,
+    fontFamily: Fonts.regular,
   },
   // Categoria Card Styles
   categoriaCard: {
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1.5,
     marginBottom: Spacing.md,
-    overflow: "hidden",
+    padding: 0,
   },
   categoriaHeader: {
     flexDirection: "row",
     alignItems: "center",
     padding: Spacing.lg,
   },
-  categoriaIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: BorderRadius.md,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: Spacing.md,
-  },
-  categoriaIcon: {
-    fontSize: 24,
-  },
   categoriaInfo: {
     flex: 1,
+    marginLeft: Spacing.md,
   },
   categoriaNombre: {
     fontSize: 16,
@@ -366,11 +338,13 @@ const styles = StyleSheet.create({
   },
   categoriaCount: {
     fontSize: 13,
-    lineHeight: 16,
+    color: IronManColors.holographicCyan,
     letterSpacing: 0.3,
+    fontFamily: Fonts.regular,
   },
   expandIcon: {
     fontSize: 12,
+    color: IronManColors.arcReactorBlue,
     marginLeft: Spacing.sm,
   },
   plantasPreview: {
@@ -385,14 +359,30 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   plantaPreviewContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  plantaPreviewIcon: {
+    fontSize: 18,
+    marginRight: Spacing.sm,
+  },
+  plantaPreviewTextContainer: {
     flex: 1,
   },
   plantaPreviewText: {
     fontSize: 15,
+    fontFamily: Fonts.regular,
   },
   plantaPreviewCientifico: {
     fontSize: 12,
+    color: IronManColors.textTertiary,
     fontStyle: "italic",
+    fontFamily: Fonts.italic,
+  },
+  previewArrow: {
+    color: IronManColors.holographicCyan,
+    fontSize: 16,
   },
   verMasButton: {
     paddingVertical: Spacing.md,
@@ -401,60 +391,63 @@ const styles = StyleSheet.create({
   },
   verMasText: {
     fontSize: 14,
-    fontWeight: "600",
+    color: IronManColors.arcReactorBlue,
+    fontFamily: Fonts.bold,
     letterSpacing: 0.3,
   },
   // Planta Card Styles (for search results)
   plantaCard: {
-    borderRadius: BorderRadius.md,
-    borderWidth: 1.5,
     marginBottom: Spacing.sm,
-    overflow: "hidden",
+    padding: Spacing.lg,
   },
   plantaContent: {
     flexDirection: "row",
     alignItems: "center",
-    padding: Spacing.lg,
-  },
-  plantaIconSmall: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: Spacing.md,
-  },
-  plantaEmoji: {
-    fontSize: 20,
   },
   plantaTextContainer: {
     flex: 1,
+    marginLeft: Spacing.md,
   },
   plantaTitle: {
     fontSize: 15,
     lineHeight: 20,
     marginBottom: 2,
   },
-  plantaCientifico: {
-    fontSize: 12,
-    lineHeight: 16,
+  nombreCientifico: {
+    fontSize: 13,
+    color: IronManColors.textTertiary,
     fontStyle: "italic",
+    marginBottom: 4,
+    fontFamily: Fonts.italic,
   },
-  plantaPropiedades: {
-    fontSize: 12,
-    lineHeight: 16,
-    marginTop: 2,
+  propiedadesRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    marginTop: 4,
+  },
+  propiedadBadge: {
+    marginRight: 4,
+    marginBottom: 2,
+  },
+  moreBadge: {
+    fontSize: 11,
+    color: IronManColors.holographicCyan,
+    fontFamily: Fonts.regular,
+  },
+  arrowIcon: {
+    color: IronManColors.arcReactorBlue,
+    fontSize: 20,
   },
   emptyContainer: {
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 60,
   },
-  emptyEmoji: {
-    fontSize: 48,
-    marginBottom: Spacing.md,
-  },
   emptyText: {
     fontSize: 16,
+    color: IronManColors.textSecondary,
+    marginTop: Spacing.lg,
+    fontFamily: Fonts.regular,
   },
 });

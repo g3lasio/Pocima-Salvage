@@ -81,6 +81,17 @@ const config: ExpoConfig = {
         },
       },
     ],
+    [
+      "expo-font",
+      {
+        fonts: [
+          "./assets/fonts/Quantico-Regular.ttf",
+          "./assets/fonts/Quantico-Bold.ttf",
+          "./assets/fonts/Quantico-Italic.ttf",
+          "./assets/fonts/Quantico-BoldItalic.ttf"
+        ]
+      }
+    ],
   ],
   experiments: {
     typedRoutes: true,

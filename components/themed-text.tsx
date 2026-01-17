@@ -1,13 +1,13 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { Colors, IronManColors, HolographicStyles } from "@/constants/theme";
+import { Colors, IronManColors, HolographicStyles, Fonts } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link" | "glow" | "holographic";
+  type?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link" | "glow" | "holographic" | "label";
 };
 
 export function ThemedText({
@@ -38,7 +38,7 @@ export function ThemedText({
             color: colors.tint,
             textShadowColor: IronManColors.arcReactorBlue,
             textShadowOffset: { width: 0, height: 0 },
-            textShadowRadius: 4,
+            textShadowRadius: 6,
           },
         ];
       case "glow":
@@ -54,9 +54,15 @@ export function ThemedText({
           styles.defaultSemiBold,
           {
             color: IronManColors.arcReactorBlue,
-            textShadowColor: IronManColors.holographicCyan,
-            textShadowOffset: { width: 0, height: 0 },
-            textShadowRadius: 10,
+            ...HolographicStyles.textGlowIntense,
+          },
+        ];
+      case "label":
+        return [
+          styles.label,
+          {
+            color: IronManColors.arcReactorBlue,
+            ...HolographicStyles.textGlow,
           },
         ];
       case "link":
@@ -81,28 +87,38 @@ export function ThemedText({
 
 const styles = StyleSheet.create({
   default: {
+    fontFamily: Fonts.regular,
     fontSize: 16,
     lineHeight: 24,
     letterSpacing: 0.3,
   },
   defaultSemiBold: {
+    fontFamily: Fonts.bold,
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: "600",
     letterSpacing: 0.3,
   },
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 40,
-    letterSpacing: 1,
+    fontFamily: Fonts.bold,
+    fontSize: 28,
+    lineHeight: 36,
+    letterSpacing: 1.5,
   },
   subtitle: {
+    fontFamily: Fonts.bold,
     fontSize: 20,
-    fontWeight: "bold",
-    letterSpacing: 0.5,
+    lineHeight: 28,
+    letterSpacing: 0.8,
+  },
+  label: {
+    fontFamily: Fonts.bold,
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 1.5,
+    textTransform: "uppercase",
   },
   link: {
+    fontFamily: Fonts.regular,
     lineHeight: 30,
     fontSize: 16,
     textDecorationLine: "underline",

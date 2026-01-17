@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { Platform } from "react-native";
+import { Platform, View, ActivityIndicator, StyleSheet } from "react-native";
 import {
   SafeAreaFrameContext,
   SafeAreaInsetsContext,
@@ -13,14 +13,46 @@ import {
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
+import { IronManColors } from "@/constants/theme";
+
+// Keep splash screen visible while loading fonts
+SplashScreen.preventAutoHideAsync();
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
-// Web iframe previewer cannot infer safe-area; default to zero until container sends metrics.
+
+// Custom Iron Man theme for navigation
+const IronManDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: IronManColors.arcReactorBlue,
+    background: IronManColors.darkBackground,
+    card: IronManColors.darkSurface,
+    text: "#E8F4FF",
+    border: IronManColors.borderHolo,
+    notification: IronManColors.arcReactorBlue,
+  },
+};
+
+const IronManLightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: IronManColors.arcReactorBlue,
+    background: "#0A1929",
+    card: "rgba(10, 25, 41, 0.95)",
+    text: "#E8F4FF",
+    border: IronManColors.borderHolo,
+    notification: IronManColors.arcReactorBlue,
+  },
+};
 
 export const unstable_settings = {
   anchor: "(tabs)",
@@ -33,6 +65,21 @@ export default function RootLayout() {
 
   const [insets, setInsets] = useState<EdgeInsets>(initialInsets);
   const [frame, setFrame] = useState<Rect>(initialFrame);
+
+  // Load Quantico fonts
+  const [fontsLoaded, fontError] = useFonts({
+    "Quantico-Regular": require("../assets/fonts/Quantico-Regular.ttf"),
+    "Quantico-Bold": require("../assets/fonts/Quantico-Bold.ttf"),
+    "Quantico-Italic": require("../assets/fonts/Quantico-Italic.ttf"),
+    "Quantico-BoldItalic": require("../assets/fonts/Quantico-BoldItalic.ttf"),
+  });
+
+  // Hide splash screen when fonts are loaded
+  useEffect(() => {
+    if (fontsLoaded || fontError) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError]);
 
   // Initialize Manus runtime for cookie injection from parent container
   useEffect(() => {
@@ -56,9 +103,7 @@ export default function RootLayout() {
       new QueryClient({
         defaultOptions: {
           queries: {
-            // Disable automatic refetching on window focus for mobile
             refetchOnWindowFocus: false,
-            // Retry failed requests once
             retry: 1,
           },
         },
@@ -71,11 +116,20 @@ export default function RootLayout() {
     [initialFrame, initialInsets],
   );
 
+  // Show loading screen while fonts are loading
+  if (!fontsLoaded && !fontError) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={IronManColors.arcReactorBlue} />
+      </View>
+    );
+  }
+
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+          <ThemeProvider value={colorScheme === "dark" ? IronManDarkTheme : IronManLightTheme}>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
@@ -113,7 +167,7 @@ export default function RootLayout() {
               />
               <Stack.Screen name="oauth/callback" options={{ headerShown: false }} />
             </Stack>
-            <StatusBar style="auto" />
+            <StatusBar style="light" />
           </ThemeProvider>
         </QueryClientProvider>
       </trpc.Provider>
@@ -134,3 +188,12 @@ export default function RootLayout() {
 
   return <SafeAreaProvider initialMetrics={providerInitialMetrics}>{content}</SafeAreaProvider>;
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: IronManColors.darkBackground,
+  },
+});

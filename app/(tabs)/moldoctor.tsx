@@ -19,8 +19,9 @@ import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius, Shadows, IronManColors } from "@/constants/theme";
+
+import { GlassBackground } from "@/components/ui/glass-background";
+import { Colors, Spacing, BorderRadius, Shadows, IronManColors, Fonts } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { trpc } from "@/lib/trpc";
 
@@ -412,7 +413,7 @@ export default function MolDoctorScreen() {
   };
 
   return (
-    <ThemedView style={[styles.container, { backgroundColor: colors.background }]}>
+    <GlassBackground showGrid={true} showScanLine={false} showCorners={true}>
       {/* Header */}
       <View
         style={[
@@ -517,7 +518,7 @@ export default function MolDoctorScreen() {
             ]}
           >
             <TextInput
-              style={[styles.textInput, { color: colors.text }]}
+              style={[styles.textInput, { color: colors.text, fontFamily: Fonts.regular }]}
               placeholder="Cuéntame tus síntomas..."
               placeholderTextColor={colors.textTertiary}
               value={inputText}
@@ -545,7 +546,7 @@ export default function MolDoctorScreen() {
           </Pressable>
         </View>
       </KeyboardAvoidingView>
-    </ThemedView>
+    </GlassBackground>
   );
 }
 
@@ -649,6 +650,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 22,
     letterSpacing: 0.2,
+    fontFamily: Fonts.regular,
   },
   linksContainer: {
     marginTop: Spacing.sm,
