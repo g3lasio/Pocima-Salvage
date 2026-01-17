@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, Animated, Platform, View, Pressable, Modal, TouchableWithoutFeedback, ScrollView, Linking, Switch } from "react-native";
+import { StyleSheet, Animated, Platform, View, Pressable, Modal, TouchableWithoutFeedback, ScrollView, Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
@@ -8,7 +8,6 @@ import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { ThemedText } from "@/components/themed-text";
 import { IronManColors, Shadows, Fonts, Spacing, BorderRadius } from "@/constants/theme";
-import { useApp } from "@/contexts/app-context";
 
 /**
  * HolographicTabIcon - Tab icon with animated glass effect and glow
@@ -108,7 +107,6 @@ function SidebarModal({
 }) {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const { settings, updateSetting, t } = useApp();
 
   const navigateTo = (path: string) => {
     onClose();
@@ -119,16 +117,16 @@ function SidebarModal({
 
   const menuItems = [
     { icon: "🩺", label: "MolDoctor", route: "/(tabs)/moldoctor" },
-    { icon: "🌿", label: t("Plantas", "Plants"), route: "/(tabs)/plantas" },
-    { icon: "🏥", label: t("Enfermedades", "Diseases"), route: "/(tabs)" },
+    { icon: "🌿", label: "Plantas", route: "/(tabs)/plantas" },
+    { icon: "🏥", label: "Enfermedades", route: "/(tabs)" },
     { divider: true },
-    { icon: "⭐", label: t("Favoritos", "Favorites"), route: "/favorites" },
-    { icon: "🕐", label: t("Historial", "History"), route: "/history" },
+    { icon: "⭐", label: "Favoritos", route: "/favorites" },
+    { icon: "🕐", label: "Historial", route: "/history" },
     { divider: true },
-    { icon: "ℹ️", label: t("Acerca de", "About Us"), route: "/about" },
-    { icon: "⚙️", label: t("Configuración", "Settings"), route: "/settings" },
-    { icon: "❓", label: t("Ayuda", "Help"), route: "/help" },
-    { icon: "📧", label: t("Contacto", "Contact"), action: () => Linking.openURL("mailto:info@chyrris.com") },
+    { icon: "ℹ️", label: "Acerca de", route: "/about" },
+    { icon: "⚙️", label: "Configuración", route: "/settings" },
+    { icon: "❓", label: "Ayuda", route: "/help" },
+    { icon: "📧", label: "Contacto", action: () => Linking.openURL("mailto:info@chyrris.com") },
   ];
 
   return (
@@ -154,9 +152,7 @@ function SidebarModal({
                   <ThemedText style={styles.logoEmoji}>🌿</ThemedText>
                   <View>
                     <ThemedText style={styles.appName}>Pócima Salvaje</ThemedText>
-                    <ThemedText style={styles.appTagline}>
-                      {t("Medicina Natural", "Natural Medicine")}
-                    </ThemedText>
+                    <ThemedText style={styles.appTagline}>Medicina Natural</ThemedText>
                   </View>
                 </View>
                 <Pressable onPress={onClose} style={styles.closeButton}>
@@ -186,30 +182,6 @@ function SidebarModal({
                 })}
               </ScrollView>
 
-              {/* Language Toggle */}
-              <View style={styles.languageContainer}>
-                <ThemedText style={styles.languageLabel}>
-                  {t("Idioma", "Language")}
-                </ThemedText>
-                <View style={styles.languageToggle}>
-                  <ThemedText style={[
-                    styles.languageOption,
-                    settings.language === "es" && styles.languageOptionActive
-                  ]}>🇪🇸 ES</ThemedText>
-                  <Switch
-                    value={settings.language === "en"}
-                    onValueChange={(value) => updateSetting("language", value ? "en" : "es")}
-                    trackColor={{ false: IronManColors.glassBlue, true: IronManColors.arcReactorBlue }}
-                    thumbColor={IronManColors.textPrimary}
-                    style={styles.languageSwitch}
-                  />
-                  <ThemedText style={[
-                    styles.languageOption,
-                    settings.language === "en" && styles.languageOptionActive
-                  ]}>🇺🇸 EN</ThemedText>
-                </View>
-              </View>
-
               {/* Footer */}
               <View style={styles.sidebarFooter}>
                 <ThemedText style={styles.version}>v1.0.0</ThemedText>
@@ -226,15 +198,6 @@ function SidebarModal({
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const [sidebarVisible, setSidebarVisible] = useState(false);
-  
-  // Try to use app context, but provide fallback if not available
-  let t = (es: string, en: string) => es;
-  try {
-    const appContext = useApp();
-    t = appContext.t;
-  } catch (e) {
-    // Context not available yet, use Spanish as default
-  }
 
   return (
     <>
@@ -281,7 +244,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: t("Enfermedades", "Diseases"),
+            title: "Enfermedades",
             tabBarIcon: ({ color, focused }) => (
               <HolographicTabIcon name="cross.case.fill" color={color} focused={focused} />
             ),
@@ -299,7 +262,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="plantas"
           options={{
-            title: t("Plantas", "Plants"),
+            title: "Plantas",
             tabBarIcon: ({ color, focused }) => (
               <HolographicTabIcon name="leaf.fill" color={color} focused={focused} />
             ),
@@ -308,7 +271,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="menu"
           options={{
-            title: t("Menú", "Menu"),
+            title: "Menú",
             tabBarIcon: ({ color, focused }) => (
               <MenuTabIcon color={color} focused={focused} onPress={() => setSidebarVisible(true)} />
             ),
@@ -418,36 +381,6 @@ const styles = StyleSheet.create({
     backgroundColor: IronManColors.borderHoloSubtle,
     marginVertical: Spacing.md,
     marginHorizontal: Spacing.lg,
-  },
-  languageContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: IronManColors.borderHoloSubtle,
-  },
-  languageLabel: {
-    fontSize: 14,
-    fontFamily: Fonts.semiBold,
-    color: IronManColors.textSecondary,
-  },
-  languageToggle: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.sm,
-  },
-  languageOption: {
-    fontSize: 12,
-    fontFamily: Fonts.bold,
-    color: IronManColors.textTertiary,
-  },
-  languageOptionActive: {
-    color: IronManColors.arcReactorBlue,
-  },
-  languageSwitch: {
-    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }],
   },
   sidebarFooter: {
     paddingVertical: Spacing.md,

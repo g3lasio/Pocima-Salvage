@@ -23,10 +23,7 @@ export interface HistoryItem {
 }
 
 export interface AppSettings {
-  notifications: boolean;
-  darkMode: boolean;
   saveHistory: boolean;
-  language: "es" | "en";
 }
 
 interface AppContextType {
@@ -44,16 +41,10 @@ interface AppContextType {
   // Settings
   settings: AppSettings;
   updateSetting: <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => Promise<void>;
-  
-  // Language helpers
-  t: (es: string, en: string) => string;
 }
 
 const defaultSettings: AppSettings = {
-  notifications: true,
-  darkMode: true,
   saveHistory: true,
-  language: "es",
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -136,7 +127,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const clearHistory = async () => {
     try {
       await AsyncStorage.removeItem(HISTORY_KEY);
+      await AsyncStorage.removeItem(FAVORITES_KEY);
       setHistory([]);
+      setFavorites([]);
     } catch (error) {
       console.error("Error clearing history:", error);
     }
@@ -153,11 +146,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Translation helper
-  const t = (es: string, en: string) => {
-    return settings.language === "es" ? es : en;
-  };
-
   const value: AppContextType = {
     favorites,
     addFavorite,
@@ -168,7 +156,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
     clearHistory,
     settings,
     updateSetting,
-    t,
   };
 
   if (!isLoaded) {

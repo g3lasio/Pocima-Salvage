@@ -1,58 +1,16 @@
 import { StyleSheet, View, ScrollView, Pressable, Switch, Linking, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import { useState, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ThemedText } from "@/components/themed-text";
 import { GlassBackground } from "@/components/ui/glass-background";
 import { IronManColors, Spacing, Fonts, BorderRadius } from "@/constants/theme";
-
-const SETTINGS_KEY = "@pocima_settings";
-
-interface Settings {
-  notifications: boolean;
-  darkMode: boolean;
-  saveHistory: boolean;
-  language: "es" | "en";
-}
-
-const defaultSettings: Settings = {
-  notifications: true,
-  darkMode: true,
-  saveHistory: true,
-  language: "es",
-};
+import { useApp } from "@/contexts/app-context";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [settings, setSettings] = useState<Settings>(defaultSettings);
-
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const stored = await AsyncStorage.getItem(SETTINGS_KEY);
-      if (stored) {
-        setSettings({ ...defaultSettings, ...JSON.parse(stored) });
-      }
-    } catch (error) {
-      console.error("Error loading settings:", error);
-    }
-  };
-
-  const updateSetting = async (key: keyof Settings, value: any) => {
-    try {
-      const newSettings = { ...settings, [key]: value };
-      await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings));
-      setSettings(newSettings);
-    } catch (error) {
-      console.error("Error saving settings:", error);
-    }
-  };
+  const { settings, updateSetting, clearHistory } = useApp();
 
   const clearAllData = () => {
     Alert.alert(
@@ -65,8 +23,7 @@ export default function SettingsScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              await AsyncStorage.clear();
-              setSettings(defaultSettings);
+              await clearHistory();
               Alert.alert("Listo", "Todos los datos han sido borrados");
             } catch (error) {
               console.error("Error clearing data:", error);
@@ -91,42 +48,10 @@ export default function SettingsScreen() {
         contentContainerStyle={[styles.scrollContent, { paddingBottom: insets.bottom + Spacing.xl }]}
         showsVerticalScrollIndicator={false}
       >
-        {/* Preferencias */}
+        {/* Historial */}
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Preferencias</ThemedText>
+          <ThemedText style={styles.sectionTitle}>HISTORIAL</ThemedText>
           
-          <View style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <ThemedText style={styles.settingIcon}>🔔</ThemedText>
-              <View>
-                <ThemedText style={styles.settingLabel}>Notificaciones</ThemedText>
-                <ThemedText style={styles.settingDesc}>Recibir consejos de salud</ThemedText>
-              </View>
-            </View>
-            <Switch
-              value={settings.notifications}
-              onValueChange={(value) => updateSetting("notifications", value)}
-              trackColor={{ false: IronManColors.glassBlue, true: IronManColors.arcReactorBlue }}
-              thumbColor={IronManColors.textPrimary}
-            />
-          </View>
-
-          <View style={styles.settingItem}>
-            <View style={styles.settingInfo}>
-              <ThemedText style={styles.settingIcon}>🌙</ThemedText>
-              <View>
-                <ThemedText style={styles.settingLabel}>Modo oscuro</ThemedText>
-                <ThemedText style={styles.settingDesc}>Tema de la aplicación</ThemedText>
-              </View>
-            </View>
-            <Switch
-              value={settings.darkMode}
-              onValueChange={(value) => updateSetting("darkMode", value)}
-              trackColor={{ false: IronManColors.glassBlue, true: IronManColors.arcReactorBlue }}
-              thumbColor={IronManColors.textPrimary}
-            />
-          </View>
-
           <View style={styles.settingItem}>
             <View style={styles.settingInfo}>
               <ThemedText style={styles.settingIcon}>🕐</ThemedText>
@@ -144,42 +69,9 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* Idioma */}
-        <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Idioma</ThemedText>
-          
-          <Pressable
-            onPress={() => updateSetting("language", "es")}
-            style={[
-              styles.languageOption,
-              settings.language === "es" && styles.languageOptionSelected,
-            ]}
-          >
-            <ThemedText style={styles.languageFlag}>🇪🇸</ThemedText>
-            <ThemedText style={styles.languageText}>Español</ThemedText>
-            {settings.language === "es" && (
-              <ThemedText style={styles.checkmark}>✓</ThemedText>
-            )}
-          </Pressable>
-
-          <Pressable
-            onPress={() => updateSetting("language", "en")}
-            style={[
-              styles.languageOption,
-              settings.language === "en" && styles.languageOptionSelected,
-            ]}
-          >
-            <ThemedText style={styles.languageFlag}>🇺🇸</ThemedText>
-            <ThemedText style={styles.languageText}>English</ThemedText>
-            {settings.language === "en" && (
-              <ThemedText style={styles.checkmark}>✓</ThemedText>
-            )}
-          </Pressable>
-        </View>
-
         {/* Soporte */}
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Soporte</ThemedText>
+          <ThemedText style={styles.sectionTitle}>SOPORTE</ThemedText>
           
           <Pressable
             onPress={() => router.push("/help")}
@@ -220,7 +112,7 @@ export default function SettingsScreen() {
 
         {/* Datos */}
         <View style={styles.section}>
-          <ThemedText style={styles.sectionTitle}>Datos</ThemedText>
+          <ThemedText style={styles.sectionTitle}>DATOS</ThemedText>
           
           <Pressable
             onPress={clearAllData}
@@ -273,10 +165,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: Fonts.bold,
     color: IronManColors.textTertiary,
-    textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: Spacing.md,
   },
@@ -307,32 +198,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: Fonts.regular,
     color: IronManColors.textTertiary,
-  },
-  languageOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: IronManColors.glassBlue,
-    borderRadius: BorderRadius.md,
-    padding: Spacing.md,
-    marginBottom: Spacing.sm,
-    gap: Spacing.md,
-  },
-  languageOptionSelected: {
-    borderWidth: 1,
-    borderColor: IronManColors.arcReactorBlue,
-  },
-  languageFlag: {
-    fontSize: 24,
-  },
-  languageText: {
-    fontSize: 15,
-    fontFamily: Fonts.semiBold,
-    color: IronManColors.textPrimary,
-    flex: 1,
-  },
-  checkmark: {
-    fontSize: 18,
-    color: IronManColors.arcReactorBlue,
   },
   linkItem: {
     flexDirection: "row",

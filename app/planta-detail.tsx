@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -13,6 +13,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { getPlantaById, contraindicacionIconos, contraindicacionLabels } from "@/data/medicinal-data";
+import { useApp } from "@/contexts/app-context";
 
 export default function PlantaDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -22,6 +23,33 @@ export default function PlantaDetailScreen() {
   const router = useRouter();
 
   const planta = useMemo(() => getPlantaById(id || ""), [id]);
+  const { addToHistory, addFavorite, removeFavorite, isFavorite } = useApp();
+  const isFav = planta ? isFavorite(planta.id) : false;
+
+  // Add to history when viewing
+  useEffect(() => {
+    if (planta) {
+      addToHistory({
+        id: planta.id,
+        type: "planta",
+        nombre: planta.nombre,
+      });
+    }
+  }, [planta?.id]);
+
+  const toggleFavorite = () => {
+    if (!planta) return;
+    if (isFav) {
+      removeFavorite(planta.id);
+    } else {
+      addFavorite({
+        id: planta.id,
+        type: "planta",
+        nombre: planta.nombre,
+        descripcion: planta.descripcion,
+      });
+    }
+  };
 
   if (!planta) {
     return (
@@ -57,7 +85,9 @@ export default function PlantaDetailScreen() {
         <ThemedText type="subtitle" style={styles.headerTitle} numberOfLines={1}>
           {planta.nombre}
         </ThemedText>
-        <View style={styles.headerSpacer} />
+        <Pressable onPress={toggleFavorite} style={styles.favoriteButton}>
+          <ThemedText style={styles.favoriteIcon}>{isFav ? "⭐" : "☆"}</ThemedText>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -210,8 +240,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
   },
-  headerSpacer: {
+  favoriteButton: {
     width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  favoriteIcon: {
+    fontSize: 22,
   },
   scrollView: {
     flex: 1,

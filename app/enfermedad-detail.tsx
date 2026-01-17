@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useEffect } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -13,6 +13,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Colors, Spacing, BorderRadius } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { getEnfermedadById, getPlantaById } from "@/data/medicinal-data";
+import { useApp } from "@/contexts/app-context";
 
 export default function EnfermedadDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -22,6 +23,33 @@ export default function EnfermedadDetailScreen() {
   const router = useRouter();
 
   const enfermedad = useMemo(() => getEnfermedadById(id || ""), [id]);
+  const { addToHistory, addFavorite, removeFavorite, isFavorite } = useApp();
+  const isFav = enfermedad ? isFavorite(enfermedad.id) : false;
+
+  // Add to history when viewing
+  useEffect(() => {
+    if (enfermedad) {
+      addToHistory({
+        id: enfermedad.id,
+        type: "enfermedad",
+        nombre: enfermedad.nombre,
+      });
+    }
+  }, [enfermedad?.id]);
+
+  const toggleFavorite = () => {
+    if (!enfermedad) return;
+    if (isFav) {
+      removeFavorite(enfermedad.id);
+    } else {
+      addFavorite({
+        id: enfermedad.id,
+        type: "enfermedad",
+        nombre: enfermedad.nombre,
+        descripcion: enfermedad.descripcion,
+      });
+    }
+  };
 
   const handlePlantaPress = useCallback((plantaId: string) => {
     router.push({
@@ -64,7 +92,9 @@ export default function EnfermedadDetailScreen() {
         <ThemedText type="subtitle" style={styles.headerTitle} numberOfLines={1}>
           {enfermedad.nombre}
         </ThemedText>
-        <View style={styles.headerSpacer} />
+        <Pressable onPress={toggleFavorite} style={styles.favoriteButton}>
+          <ThemedText style={styles.favoriteIcon}>{isFav ? "⭐" : "☆"}</ThemedText>
+        </Pressable>
       </View>
 
       <ScrollView
@@ -172,8 +202,15 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 17,
   },
-  headerSpacer: {
+  favoriteButton: {
     width: 36,
+    height: 36,
+    borderRadius: 18,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  favoriteIcon: {
+    fontSize: 22,
   },
   scrollView: {
     flex: 1,
