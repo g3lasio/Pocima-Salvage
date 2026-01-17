@@ -64,7 +64,7 @@ const config: ExpoConfig = {
     ],
   },
   web: {
-    output: "single",
+    output: "static",
     favicon: "./assets/images/favicon.png",
   },
   plugins: [
