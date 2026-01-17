@@ -30,8 +30,8 @@ outputType = "console"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pnpm dev"
-waitForPort = 3000
+args = "npm run dev"
+waitForPort = 5000
 
 [[workflows.workflow]]
 name = "Build Android"
@@ -70,12 +70,12 @@ localPort = 3000
 externalPort = 3000
 
 [[ports]]
-localPort = 8081
+localPort = 5000
 externalPort = 80
 
 [[ports]]
-localPort = 5000
-externalPort = 5000
+localPort = 8081
+externalPort = 8081
 
 [[ports]]
 localPort = 8082
@@ -84,7 +84,7 @@ externalPort = 3001
 [deployment]
 deploymentTarget = "autoscale"
 run = ["node", "dist/index.js"]
-build = ["pnpm", "build"]
+build = ["npm", "run", "build"]
 
 [languages]
 
@@ -149,9 +149,3 @@ requiredFiles = [".replit", "replit.nix", "package.json"]
 [auth]
 pageEnabled = false
 buttonEnabled = false
-
-[userenv]
-
-[userenv.shared]
-OAUTH_SERVER_URL = "https://a91d15b5-8927-499f-9175-cbb9c1e57cd1-00-yp3syr9yi09a.kirk.replit.dev"
-EXPO_PUBLIC_OAUTH_SERVER_URL = "https://a91d15b5-8927-499f-9175-cbb9c1e57cd1-00-yp3syr9yi09a.kirk.replit.dev"

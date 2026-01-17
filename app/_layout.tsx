@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { Platform, View, ActivityIndicator, StyleSheet, Text } from "react-native";
+import { Platform } from "react-native";
 import {
   SafeAreaFrameContext,
   SafeAreaInsetsContext,
@@ -13,16 +13,11 @@ import {
   initialWindowMetrics,
 } from "react-native-safe-area-context";
 import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
 
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
 import { IronManColors } from "@/constants/theme";
-
-// Keep splash screen visible while loading fonts
-SplashScreen.preventAutoHideAsync();
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
@@ -65,27 +60,6 @@ export default function RootLayout() {
 
   const [insets, setInsets] = useState<EdgeInsets>(initialInsets);
   const [frame, setFrame] = useState<Rect>(initialFrame);
-  const [fontError, setFontError] = useState<Error | null>(null);
-
-  // Load Quantico fonts with error handling
-  const [fontsLoaded, fontLoadError] = useFonts({
-    "Quantico-Regular": require("../assets/fonts/Quantico-Regular.ttf"),
-    "Quantico-Bold": require("../assets/fonts/Quantico-Bold.ttf"),
-    "Quantico-Italic": require("../assets/fonts/Quantico-Italic.ttf"),
-    "Quantico-BoldItalic": require("../assets/fonts/Quantico-BoldItalic.ttf"),
-  });
-
-  // Handle font loading errors
-  useEffect(() => {
-    if (fontLoadError) {
-      console.error("Error loading fonts:", fontLoadError);
-      setFontError(fontLoadError);
-      // Hide splash screen even on error to prevent infinite loading
-      SplashScreen.hideAsync();
-    } else if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontLoadError]);
 
   // Initialize Manus runtime for cookie injection from parent container
   useEffect(() => {
@@ -129,26 +103,6 @@ export default function RootLayout() {
     () => initialWindowMetrics ?? { insets: initialInsets, frame: initialFrame },
     [initialFrame, initialInsets],
   );
-
-  // Show loading screen while fonts are loading
-  if (!fontsLoaded && !fontError) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={IronManColors.arcReactorBlue} />
-        <Text style={styles.loadingText}>Cargando Pócima Salvage...</Text>
-      </View>
-    );
-  }
-
-  // Show error message if fonts failed to load
-  if (fontError) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.errorText}>⚠️ Error al cargar fuentes</Text>
-        <Text style={styles.errorSubtext}>La aplicación continuará con fuentes del sistema</Text>
-      </View>
-    );
-  }
 
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -213,30 +167,3 @@ export default function RootLayout() {
 
   return <SafeAreaProvider initialMetrics={providerInitialMetrics}>{content}</SafeAreaProvider>;
 }
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: IronManColors.darkBackground,
-  },
-  loadingText: {
-    marginTop: 20,
-    fontSize: 16,
-    color: IronManColors.arcReactorBlue,
-    fontWeight: "600",
-  },
-  errorText: {
-    fontSize: 18,
-    color: "#FF4444",
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  errorSubtext: {
-    fontSize: 14,
-    color: "#E8F4FF",
-    textAlign: "center",
-    paddingHorizontal: 40,
-  },
-});
