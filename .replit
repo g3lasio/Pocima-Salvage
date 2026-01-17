@@ -7,7 +7,6 @@ expertMode = true
 channel = "stable-25_05"
 
 [env]
-EXPO_USE_METRO_WORKSPACE_ROOT = "1"
 EXPO_NO_DOTENV = "1"
 
 [workflows]
