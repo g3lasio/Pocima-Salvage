@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "main": "expo-router/entry",
+  "main": "./index.js",
   "scripts": {
     "dev": "concurrently -k \"pnpm dev:server\" \"pnpm dev:metro\"",
     "dev:server": "cross-env NODE_ENV=development tsx watch server/_core/index.ts",
-    "dev:metro": "cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --host lan --port 5000",
+    "dev:metro": "npx expo start --web --host lan --port 5000",
     "dev:mobile": "concurrently -k \"pnpm dev:server\" \"npx expo start --tunnel\"",
     "build": "esbuild server/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js",
