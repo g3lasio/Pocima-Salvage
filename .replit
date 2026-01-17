@@ -1,9 +1,14 @@
-modules = ["nodejs-20", "python-3.12"]
+modules = ["nodejs-20", "python-3.12", "nix"]
+
 [agent]
 expertMode = true
 
 [nix]
 channel = "stable-25_05"
+
+[env]
+EXPO_USE_METRO_WORKSPACE_ROOT = "1"
+EXPO_NO_DOTENV = "1"
 
 [workflows]
 runButton = "Project"
@@ -29,6 +34,38 @@ waitForPort = 5000
 [workflows.workflow.metadata]
 outputType = "webview"
 
+[[workflows.workflow]]
+name = "Build Android"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "eas build --platform android --profile production"
+
+[[workflows.workflow]]
+name = "Build iOS"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "eas build --platform ios --profile production"
+
+[[workflows.workflow]]
+name = "Build Preview APK"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "eas build --platform android --profile preview"
+
+[[workflows.workflow]]
+name = "Submit to Stores"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "eas submit --platform all --profile production"
+
 [[ports]]
 localPort = 3000
 externalPort = 3000
@@ -37,7 +74,75 @@ externalPort = 3000
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 8081
+externalPort = 8081
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["node", "dist/index.js"]
 build = ["pnpm", "build"]
+
+[languages]
+
+[languages.typescript]
+pattern = "**/*.{ts,tsx}"
+
+[languages.typescript.languageServer]
+start = "typescript-language-server --stdio"
+
+[packager]
+language = "nodejs"
+
+[packager.features]
+packageSearch = true
+guessImports = true
+enabledForHosting = true
+
+[unitTest]
+language = "nodejs"
+
+[debugger]
+support = true
+
+[debugger.interactive]
+transport = "localhost:0"
+startCommand = ["dap-js"]
+
+[debugger.interactive.initializeMessage]
+command = "initialize"
+type = "request"
+
+[debugger.interactive.initializeMessage.arguments]
+clientID = "replit"
+clientName = "replit.com"
+columnsStartAt1 = true
+linesStartAt1 = true
+locale = "en-us"
+pathFormat = "path"
+supportsInvalidatedEvent = true
+supportsProgressReporting = true
+supportsRunInTerminalRequest = true
+supportsVariablePaging = true
+supportsVariableType = true
+
+[debugger.interactive.launchMessage]
+command = "launch"
+type = "request"
+
+[debugger.interactive.launchMessage.arguments]
+console = "externalTerminal"
+cwd = "."
+pauseForSourceMap = false
+program = "./index.js"
+request = "launch"
+sourceMaps = true
+stopOnEntry = false
+type = "pwa-node"
+
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", "package.json"]
+
+[auth]
+pageEnabled = false
+buttonEnabled = false

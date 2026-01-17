@@ -20,7 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Shadows, IronManColors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { trpc } from "@/lib/trpc";
 
@@ -286,15 +286,18 @@ export default function MolDoctorScreen() {
           styles.messageBubble,
           isUser ? styles.userBubble : styles.assistantBubble,
           {
-            backgroundColor: isUser ? colors.tint : colors.surface,
-            borderColor: isUser ? colors.tint : colors.border,
+            backgroundColor: isUser ? IronManColors.glassBlueMedium : colors.glass,
+            borderColor: isUser ? IronManColors.arcReactorBlue : colors.border,
+            ...(isUser ? {} : Shadows.small),
           },
         ]}
       >
         {!isUser && (
           <View style={styles.doctorHeader}>
-            <ThemedText style={styles.doctorEmoji}>🩺</ThemedText>
-            <ThemedText style={[styles.doctorName, { color: colors.tint }]}>
+            <View style={[styles.doctorAvatarSmall, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}>
+              <ThemedText style={styles.doctorEmoji}>🩺</ThemedText>
+            </View>
+            <ThemedText style={[styles.doctorName, { color: IronManColors.arcReactorBlue }]}>
               MolDoctor
             </ThemedText>
             {item.triageLevel && (
@@ -304,10 +307,19 @@ export default function MolDoctorScreen() {
                   {
                     backgroundColor:
                       item.triageLevel === "green"
-                        ? "#4CAF50"
+                        ? "#00E676"
                         : item.triageLevel === "yellow"
-                        ? "#FFC107"
-                        : "#F44336",
+                        ? IronManColors.jarvisAmber
+                        : IronManColors.warningRed,
+                    shadowColor:
+                      item.triageLevel === "green"
+                        ? "#00E676"
+                        : item.triageLevel === "yellow"
+                        ? IronManColors.jarvisAmber
+                        : IronManColors.warningRed,
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0.8,
+                    shadowRadius: 4,
                   },
                 ]}
               />
@@ -316,7 +328,7 @@ export default function MolDoctorScreen() {
         )}
         
         {item.imageUri && (
-          <View style={styles.imageContainer}>
+          <View style={[styles.imageContainer, { borderColor: IronManColors.borderHoloSubtle }]}>
             <Image 
               source={{ uri: item.imageUri }} 
               style={styles.messageImage}
@@ -324,7 +336,7 @@ export default function MolDoctorScreen() {
             />
           </View>
         )}
-        
+
         <ThemedText
           style={[
             styles.messageText,
@@ -334,64 +346,66 @@ export default function MolDoctorScreen() {
           {item.content}
         </ThemedText>
 
-        {/* Enlaces a plantas */}
-        {item.plantLinks && item.plantLinks.length > 0 && (
-          <View style={styles.linksContainer}>
-            <ThemedText style={[styles.linksTitle, { color: colors.textSecondary }]}>
-              🌿 Plantas mencionadas:
-            </ThemedText>
-            {item.plantLinks.map((planta, index) => (
-              <Pressable
-                key={index}
-                onPress={() => navigateToPlanta(planta.id)}
-                style={[styles.linkButton, { backgroundColor: `${colors.tint}20` }]}
-              >
-                <ThemedText style={[styles.linkText, { color: colors.tint }]}>
-                  {planta.nombre}
+        {/* Links a plantas y enfermedades */}
+        {!isUser && (item.plantLinks?.length || item.enfermedadLinks?.length) ? (
+          <View style={[styles.linksContainer, { borderTopColor: colors.borderSubtle }]}>
+            {item.plantLinks && item.plantLinks.length > 0 && (
+              <>
+                <ThemedText style={[styles.linksTitle, { color: IronManColors.holographicCyan }]}>
+                  🌿 Plantas mencionadas:
                 </ThemedText>
-              </Pressable>
-            ))}
+                <View style={styles.linksRow}>
+                  {item.plantLinks.map((link, idx) => (
+                    <Pressable
+                      key={idx}
+                      onPress={() => navigateToPlanta(link.id)}
+                      style={[styles.linkButton, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}
+                    >
+                      <ThemedText style={[styles.linkText, { color: IronManColors.arcReactorBlue }]}>
+                        {link.nombre}
+                      </ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
+              </>
+            )}
+            {item.enfermedadLinks && item.enfermedadLinks.length > 0 && (
+              <>
+                <ThemedText style={[styles.linksTitle, { color: IronManColors.holographicCyan }]}>
+                  🏥 Condiciones mencionadas:
+                </ThemedText>
+                <View style={styles.linksRow}>
+                  {item.enfermedadLinks.map((link, idx) => (
+                    <Pressable
+                      key={idx}
+                      onPress={() => navigateToEnfermedad(link.id)}
+                      style={[styles.linkButton, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}
+                    >
+                      <ThemedText style={[styles.linkText, { color: IronManColors.arcReactorBlue }]}>
+                        {link.nombre}
+                      </ThemedText>
+                    </Pressable>
+                  ))}
+                </View>
+              </>
+            )}
           </View>
-        )}
+        ) : null}
 
-        {/* Enlaces a enfermedades */}
-        {item.enfermedadLinks && item.enfermedadLinks.length > 0 && (
-          <View style={styles.linksContainer}>
-            <ThemedText style={[styles.linksTitle, { color: colors.textSecondary }]}>
-              🏥 Condiciones mencionadas:
-            </ThemedText>
-            {item.enfermedadLinks.map((enfermedad, index) => (
-              <Pressable
-                key={index}
-                onPress={() => navigateToEnfermedad(enfermedad.id)}
-                style={[styles.linkButton, { backgroundColor: `${colors.warning}20` }]}
-              >
-                <ThemedText style={[styles.linkText, { color: colors.warning }]}>
-                  {enfermedad.nombre}
-                </ThemedText>
-              </Pressable>
-            ))}
-          </View>
-        )}
-        
+        {/* Botón de escuchar */}
         {!isUser && (
           <Pressable
             onPress={() => speakMessage(item.content)}
-            style={[styles.speakButton, { borderColor: colors.border }]}
+            style={[styles.speakButton, { borderColor: IronManColors.borderHoloSubtle, backgroundColor: IronManColors.glassBlue }]}
           >
-            <ThemedText style={{ fontSize: 16 }}>
-              {isSpeaking ? "🔇 Detener" : "🔊 Escuchar"}
+            <ThemedText style={{ fontSize: 14, color: IronManColors.arcReactorBlue }}>
+              {isSpeaking ? "⏹️ Detener" : "🔊 Escuchar"}
             </ThemedText>
           </Pressable>
         )}
-        
-        <ThemedText
-          style={[
-            styles.timestamp,
-            { color: isUser ? "rgba(255,255,255,0.7)" : colors.textTertiary },
-          ]}
-        >
-          {item.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+
+        <ThemedText style={[styles.timestamp, { color: colors.textTertiary }]}>
+          {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </ThemedText>
       </View>
     );
@@ -411,65 +425,61 @@ export default function MolDoctorScreen() {
         ]}
       >
         <View style={styles.headerContent}>
-          <View style={[styles.doctorAvatar, { backgroundColor: `${colors.tint}15` }]}>
-            <ThemedText style={styles.avatarEmoji}>🩺🌿</ThemedText>
+          <View style={[styles.doctorAvatar, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHolo }]}>
+            <ThemedText style={styles.avatarEmoji}>🩺</ThemedText>
           </View>
           <View style={styles.headerText}>
-            <ThemedText type="subtitle" style={{ color: colors.text }}>
-              MolDoctor
-            </ThemedText>
-            <ThemedText style={[styles.headerSubtitle, { color: colors.textTertiary }]}>
-              Tu médico digital con humor
+            <ThemedText type="subtitle" style={{ color: IronManColors.arcReactorBlue }}>MolDoctor</ThemedText>
+            <ThemedText style={[styles.headerSubtitle, { color: IronManColors.holographicCyan }]}>
+              Tu médico digital experto en plantas
             </ThemedText>
           </View>
         </View>
         <Pressable onPress={clearChatHistory} style={styles.clearButton}>
-          <ThemedText style={{ fontSize: 20 }}>🗑️</ThemedText>
+          <ThemedText style={{ color: IronManColors.holographicCyan, fontSize: 20 }}>🗑️</ThemedText>
         </Pressable>
       </View>
 
       {/* Chat Messages */}
-      <FlatList
-        ref={flatListRef}
-        data={messages}
-        renderItem={renderMessage}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={[
-          styles.chatContainer,
-          { paddingBottom: 20 },
-        ]}
-        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-        showsVerticalScrollIndicator={false}
-      />
-
-      {/* Loading Indicator */}
-      {isLoading && (
-        <View style={[styles.loadingContainer, { backgroundColor: colors.surface }]}>
-          <ActivityIndicator size="small" color={colors.tint} />
-          <ThemedText style={[styles.loadingText, { color: colors.textSecondary }]}>
-            MolDoctor está pensando... 🤔
-          </ThemedText>
-        </View>
-      )}
-
-      {/* Selected Image Preview */}
-      {selectedImage && (
-        <View style={[styles.selectedImageContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Image source={{ uri: selectedImage }} style={styles.selectedImagePreview} />
-          <Pressable 
-            onPress={() => setSelectedImage(null)}
-            style={styles.removeImageButton}
-          >
-            <ThemedText style={{ fontSize: 16 }}>❌</ThemedText>
-          </Pressable>
-        </View>
-      )}
-
-      {/* Input Area */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
         keyboardVerticalOffset={0}
       >
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={renderMessage}
+          contentContainerStyle={styles.chatContainer}
+          showsVerticalScrollIndicator={false}
+          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+        />
+
+        {/* Loading indicator */}
+        {isLoading && (
+          <View style={[styles.loadingContainer, { backgroundColor: colors.glass, borderColor: colors.border }]}>
+            <ActivityIndicator color={IronManColors.arcReactorBlue} />
+            <ThemedText style={[styles.loadingText, { color: IronManColors.holographicCyan }]}>
+              MolDoctor está pensando...
+            </ThemedText>
+          </View>
+        )}
+
+        {/* Selected Image Preview */}
+        {selectedImage && (
+          <View style={[styles.selectedImageContainer, { backgroundColor: colors.glass, borderColor: colors.border }]}>
+            <Image source={{ uri: selectedImage }} style={styles.selectedImagePreview} />
+            <ThemedText style={{ flex: 1, marginLeft: Spacing.sm, color: colors.text }}>
+              Imagen seleccionada
+            </ThemedText>
+            <Pressable onPress={() => setSelectedImage(null)} style={styles.removeImageButton}>
+              <ThemedText style={{ color: IronManColors.warningRed, fontSize: 18 }}>✕</ThemedText>
+            </Pressable>
+          </View>
+        )}
+
+        {/* Input Area */}
         <View
           style={[
             styles.inputContainer,
@@ -484,20 +494,28 @@ export default function MolDoctorScreen() {
           <View style={styles.actionButtons}>
             <Pressable
               onPress={handleCamera}
-              style={[styles.actionButton, { backgroundColor: `${colors.tint}15` }]}
+              style={[styles.actionButton, { backgroundColor: IronManColors.glassBlue, borderWidth: 1, borderColor: IronManColors.borderHoloSubtle }]}
             >
               <ThemedText style={{ fontSize: 20 }}>📷</ThemedText>
             </Pressable>
             <Pressable
               onPress={handleImagePicker}
-              style={[styles.actionButton, { backgroundColor: `${colors.tint}15` }]}
+              style={[styles.actionButton, { backgroundColor: IronManColors.glassBlue, borderWidth: 1, borderColor: IronManColors.borderHoloSubtle }]}
             >
               <ThemedText style={{ fontSize: 20 }}>🖼️</ThemedText>
             </Pressable>
           </View>
 
           {/* Text Input */}
-          <View style={[styles.inputWrapper, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <View
+            style={[
+              styles.inputWrapper,
+              {
+                backgroundColor: colors.glass,
+                borderColor: colors.border,
+              },
+            ]}
+          >
             <TextInput
               style={[styles.textInput, { color: colors.text }]}
               placeholder="Cuéntame tus síntomas..."
@@ -516,7 +534,10 @@ export default function MolDoctorScreen() {
             style={[
               styles.sendButton,
               {
-                backgroundColor: (inputText.trim() || selectedImage) ? colors.tint : `${colors.tint}30`,
+                backgroundColor: (inputText.trim() || selectedImage) ? IronManColors.arcReactorBlue : IronManColors.glassBlue,
+                borderWidth: 1.5,
+                borderColor: (inputText.trim() || selectedImage) ? IronManColors.arcReactorBlue : IronManColors.borderHoloSubtle,
+                ...((inputText.trim() || selectedImage) ? Shadows.glow : {}),
               },
             ]}
           >
@@ -538,28 +559,30 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: Spacing.lg,
     paddingBottom: Spacing.md,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1.5,
   },
   headerContent: {
     flexDirection: "row",
     alignItems: "center",
   },
   doctorAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     justifyContent: "center",
     alignItems: "center",
     marginRight: Spacing.md,
+    borderWidth: 1.5,
   },
   avatarEmoji: {
-    fontSize: 24,
+    fontSize: 26,
   },
   headerText: {
     gap: 2,
   },
   headerSubtitle: {
     fontSize: 13,
+    letterSpacing: 0.3,
   },
   clearButton: {
     padding: Spacing.sm,
@@ -573,7 +596,7 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderRadius: BorderRadius.lg,
     marginBottom: Spacing.md,
-    borderWidth: 1,
+    borderWidth: 1.5,
   },
   userBubble: {
     alignSelf: "flex-end",
@@ -586,26 +609,36 @@ const styles = StyleSheet.create({
   doctorHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: Spacing.xs,
+    marginBottom: Spacing.sm,
+  },
+  doctorAvatarSmall: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: Spacing.xs,
+    borderWidth: 1,
   },
   doctorEmoji: {
-    fontSize: 16,
-    marginRight: 4,
+    fontSize: 14,
   },
   doctorName: {
     fontSize: 13,
     fontWeight: "600",
+    letterSpacing: 0.3,
   },
   triageBadge: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginLeft: Spacing.xs,
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginLeft: Spacing.sm,
   },
   imageContainer: {
     marginBottom: Spacing.sm,
     borderRadius: BorderRadius.md,
     overflow: "hidden",
+    borderWidth: 1,
   },
   messageImage: {
     width: "100%",
@@ -615,15 +648,21 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 15,
     lineHeight: 22,
+    letterSpacing: 0.2,
   },
   linksContainer: {
     marginTop: Spacing.sm,
     paddingTop: Spacing.sm,
     borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.1)",
   },
   linksTitle: {
     fontSize: 12,
+    marginBottom: Spacing.xs,
+    fontWeight: "600",
+  },
+  linksRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     marginBottom: Spacing.xs,
   },
   linkButton: {
@@ -632,7 +671,7 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.sm,
     marginRight: Spacing.xs,
     marginBottom: Spacing.xs,
-    alignSelf: "flex-start",
+    borderWidth: 1,
   },
   linkText: {
     fontSize: 13,
@@ -641,8 +680,8 @@ const styles = StyleSheet.create({
   speakButton: {
     alignSelf: "flex-start",
     marginTop: Spacing.sm,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 4,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 6,
     borderRadius: BorderRadius.sm,
     borderWidth: 1,
   },
@@ -650,6 +689,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     marginTop: Spacing.xs,
     alignSelf: "flex-end",
+    letterSpacing: 0.3,
   },
   loadingContainer: {
     flexDirection: "row",
@@ -659,9 +699,11 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.md,
     borderRadius: BorderRadius.md,
     gap: Spacing.sm,
+    borderWidth: 1,
   },
   loadingText: {
     fontSize: 14,
+    letterSpacing: 0.3,
   },
   selectedImageContainer: {
     flexDirection: "row",
@@ -686,7 +728,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     paddingHorizontal: Spacing.md,
     paddingTop: Spacing.md,
-    borderTopWidth: 1,
+    borderTopWidth: 1.5,
     gap: Spacing.sm,
   },
   actionButtons: {
@@ -694,9 +736,9 @@ const styles = StyleSheet.create({
     gap: Spacing.xs,
   },
   actionButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -705,10 +747,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-end",
     borderRadius: BorderRadius.lg,
-    borderWidth: 1,
+    borderWidth: 1.5,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.sm,
-    minHeight: 44,
+    minHeight: 46,
     maxHeight: 120,
   },
   textInput: {
@@ -716,11 +758,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
     maxHeight: 100,
+    letterSpacing: 0.2,
   },
   sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -201,13 +201,48 @@ const normalizeToolChoice = (
   return toolChoice;
 };
 
-const resolveApiUrl = () =>
-  ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
+// Determine which LLM provider to use
+const getLLMProvider = (): "anthropic" | "forge" => {
+  const provider = ENV.llmProvider.toLowerCase();
+  
+  if (provider === "anthropic" && ENV.anthropicApiKey) {
+    return "anthropic";
+  }
+  
+  if (provider === "forge" && ENV.forgeApiKey) {
+    return "forge";
+  }
+  
+  // Auto-detect: prefer Anthropic if available, fallback to Forge
+  if (provider === "auto") {
+    if (ENV.anthropicApiKey) return "anthropic";
+    if (ENV.forgeApiKey) return "forge";
+  }
+  
+  // Default to forge if nothing else works
+  return "forge";
+};
+
+const resolveApiUrl = () => {
+  const provider = getLLMProvider();
+  
+  if (provider === "anthropic") {
+    return "https://api.anthropic.com/v1/messages";
+  }
+  
+  return ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
     ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
     : "https://forge.manus.im/v1/chat/completions";
+};
 
 const assertApiKey = () => {
-  if (!ENV.forgeApiKey) {
+  const provider = getLLMProvider();
+  
+  if (provider === "anthropic" && !ENV.anthropicApiKey) {
+    throw new Error("ANTHROPIC_API_KEY is not configured");
+  }
+  
+  if (provider === "forge" && !ENV.forgeApiKey) {
     throw new Error("OPENAI_API_KEY is not configured");
   }
 };
@@ -252,9 +287,135 @@ const normalizeResponseFormat = ({
   };
 };
 
-export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
-  assertApiKey();
+// Convert messages to Anthropic format
+const convertToAnthropicFormat = (messages: Message[]) => {
+  let systemPrompt = "";
+  const anthropicMessages: Array<{
+    role: "user" | "assistant";
+    content: string | Array<{ type: string; text?: string; source?: { type: string; media_type: string; data: string } }>;
+  }> = [];
 
+  for (const msg of messages) {
+    const normalized = normalizeMessage(msg);
+    
+    if (normalized.role === "system") {
+      systemPrompt = typeof normalized.content === "string" 
+        ? normalized.content 
+        : (normalized.content as Array<{ type: string; text?: string }>).map(c => c.text || "").join("\n");
+      continue;
+    }
+
+    if (normalized.role === "user" || normalized.role === "assistant") {
+      // Handle multimodal content
+      if (Array.isArray(normalized.content)) {
+        const anthropicContent: Array<{ type: string; text?: string; source?: { type: string; media_type: string; data: string } }> = [];
+        
+        for (const part of normalized.content) {
+          if (part.type === "text") {
+            anthropicContent.push({ type: "text", text: part.text });
+          } else if (part.type === "image_url") {
+            const imageUrl = (part as ImageContent).image_url.url;
+            // Handle base64 images
+            if (imageUrl.startsWith("data:")) {
+              const matches = imageUrl.match(/^data:([^;]+);base64,(.+)$/);
+              if (matches) {
+                anthropicContent.push({
+                  type: "image",
+                  source: {
+                    type: "base64",
+                    media_type: matches[1],
+                    data: matches[2],
+                  },
+                });
+              }
+            }
+          }
+        }
+        
+        anthropicMessages.push({
+          role: normalized.role as "user" | "assistant",
+          content: anthropicContent,
+        });
+      } else {
+        anthropicMessages.push({
+          role: normalized.role as "user" | "assistant",
+          content: normalized.content as string,
+        });
+      }
+    }
+  }
+
+  return { systemPrompt, messages: anthropicMessages };
+};
+
+// Invoke Anthropic Claude API
+async function invokeAnthropic(params: InvokeParams): Promise<InvokeResult> {
+  const { messages } = params;
+  const { systemPrompt, messages: anthropicMessages } = convertToAnthropicFormat(messages);
+
+  const payload: Record<string, unknown> = {
+    model: "claude-sonnet-4-20250514",
+    max_tokens: 8192,
+    messages: anthropicMessages,
+  };
+
+  if (systemPrompt) {
+    payload.system = systemPrompt;
+  }
+
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-api-key": ENV.anthropicApiKey,
+      "anthropic-version": "2023-06-01",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Anthropic API invoke failed: ${response.status} ${response.statusText} – ${errorText}`);
+  }
+
+  const anthropicResult = await response.json() as {
+    id: string;
+    content: Array<{ type: string; text?: string }>;
+    model: string;
+    stop_reason: string;
+    usage: { input_tokens: number; output_tokens: number };
+  };
+
+  // Convert Anthropic response to OpenAI-compatible format
+  const textContent = anthropicResult.content
+    .filter((c: { type: string }) => c.type === "text")
+    .map((c: { text?: string }) => c.text || "")
+    .join("");
+
+  return {
+    id: anthropicResult.id,
+    created: Date.now(),
+    model: anthropicResult.model,
+    choices: [
+      {
+        index: 0,
+        message: {
+          role: "assistant",
+          content: textContent,
+        },
+        finish_reason: anthropicResult.stop_reason,
+      },
+    ],
+    usage: {
+      prompt_tokens: anthropicResult.usage.input_tokens,
+      completion_tokens: anthropicResult.usage.output_tokens,
+      total_tokens: anthropicResult.usage.input_tokens + anthropicResult.usage.output_tokens,
+    },
+  };
+}
+
+// Invoke Forge/OpenAI-compatible API
+async function invokeForge(params: InvokeParams): Promise<InvokeResult> {
   const {
     messages,
     tools,
@@ -296,7 +457,11 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     payload.response_format = normalizedResponseFormat;
   }
 
-  const response = await fetch(resolveApiUrl(), {
+  const apiUrl = ENV.forgeApiUrl && ENV.forgeApiUrl.trim().length > 0
+    ? `${ENV.forgeApiUrl.replace(/\/$/, "")}/v1/chat/completions`
+    : "https://forge.manus.im/v1/chat/completions";
+
+  const response = await fetch(apiUrl, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -311,4 +476,25 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
   }
 
   return (await response.json()) as InvokeResult;
+}
+
+export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
+  assertApiKey();
+  
+  const provider = getLLMProvider();
+  
+  if (provider === "anthropic") {
+    return invokeAnthropic(params);
+  }
+  
+  return invokeForge(params);
+}
+
+// Export provider info for debugging
+export function getLLMProviderInfo(): { provider: string; model: string } {
+  const provider = getLLMProvider();
+  return {
+    provider,
+    model: provider === "anthropic" ? "claude-sonnet-4-20250514" : "gemini-2.5-flash",
+  };
 }

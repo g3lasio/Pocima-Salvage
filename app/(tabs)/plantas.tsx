@@ -6,12 +6,13 @@ import {
   Pressable,
   TextInput,
   View,
+
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
+import { Colors, Spacing, BorderRadius, Shadows, IronManColors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { 
   categoriasPlantas, 
@@ -76,28 +77,36 @@ export default function PlantasScreen() {
       style={({ pressed }) => [
         styles.plantaCard,
         {
-          backgroundColor: colors.surface,
-          borderColor: colors.border,
-          opacity: pressed ? 0.8 : 1,
+          backgroundColor: colors.glass,
+          borderColor: pressed ? IronManColors.arcReactorBlue : colors.border,
+          opacity: pressed ? 0.9 : 1,
+          ...Shadows.small,
         },
       ]}
     >
       <View style={styles.plantaContent}>
-        <View style={[styles.plantaIconSmall, { backgroundColor: `${colors.tint}15` }]}>
+        <View style={[
+          styles.plantaIconSmall, 
+          { 
+            backgroundColor: IronManColors.glassBlue,
+            borderWidth: 1,
+            borderColor: IronManColors.borderHoloSubtle,
+          }
+        ]}>
           <ThemedText style={styles.plantaEmoji}>🌿</ThemedText>
         </View>
         <View style={styles.plantaTextContainer}>
-          <ThemedText type="defaultSemiBold" style={styles.plantaTitle} numberOfLines={1}>
+          <ThemedText type="defaultSemiBold" style={[styles.plantaTitle, { color: colors.text }]} numberOfLines={1}>
             {item.nombre}
           </ThemedText>
-          <ThemedText style={[styles.plantaCientifico, { color: colors.textTertiary }]} numberOfLines={1}>
+          <ThemedText style={[styles.plantaCientifico, { color: IronManColors.holographicCyan }]} numberOfLines={1}>
             {item.nombreCientifico}
           </ThemedText>
           <ThemedText style={[styles.plantaPropiedades, { color: colors.textSecondary }]} numberOfLines={1}>
             {item.propiedades.slice(0, 3).join(" • ")}
           </ThemedText>
         </View>
-        <ThemedText style={{ color: colors.textTertiary, fontSize: 18 }}>›</ThemedText>
+        <ThemedText style={{ color: IronManColors.arcReactorBlue, fontSize: 18 }}>›</ThemedText>
       </View>
     </Pressable>
   ), [colors, handlePlantaPress]);
@@ -108,7 +117,14 @@ export default function PlantasScreen() {
     const icono = categoriaIconos[item.id] || "🌿";
     
     return (
-      <View style={[styles.categoriaCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <View style={[
+        styles.categoriaCard, 
+        { 
+          backgroundColor: colors.glass, 
+          borderColor: isExpanded ? IronManColors.arcReactorBlue : colors.border,
+          ...Shadows.medium,
+        }
+      ]}>
         <Pressable
           onPress={() => toggleCategoria(item.id)}
           style={({ pressed }) => [
@@ -116,24 +132,31 @@ export default function PlantasScreen() {
             { opacity: pressed ? 0.8 : 1 },
           ]}
         >
-          <View style={[styles.categoriaIconContainer, { backgroundColor: `${colors.tint}15` }]}>
+          <View style={[
+            styles.categoriaIconContainer, 
+            { 
+              backgroundColor: IronManColors.glassBlue,
+              borderWidth: 1,
+              borderColor: IronManColors.borderHoloSubtle,
+            }
+          ]}>
             <ThemedText style={styles.categoriaIcon}>{icono}</ThemedText>
           </View>
           <View style={styles.categoriaInfo}>
-            <ThemedText type="defaultSemiBold" style={styles.categoriaNombre}>
+            <ThemedText type="defaultSemiBold" style={[styles.categoriaNombre, { color: colors.text }]}>
               {item.nombre}
             </ThemedText>
-            <ThemedText style={[styles.categoriaCount, { color: colors.textSecondary }]}>
+            <ThemedText style={[styles.categoriaCount, { color: IronManColors.holographicCyan }]}>
               {item.plantas.length} plantas
             </ThemedText>
           </View>
-          <ThemedText style={[styles.expandIcon, { color: colors.tint }]}>
+          <ThemedText style={[styles.expandIcon, { color: IronManColors.arcReactorBlue }]}>
             {isExpanded ? "▼" : "▶"}
           </ThemedText>
         </Pressable>
 
         {plantasToShow.length > 0 && (
-          <View style={styles.plantasPreview}>
+          <View style={[styles.plantasPreview, { borderTopColor: colors.borderSubtle }]}>
             {plantasToShow.map((planta) => (
               <Pressable
                 key={planta.id}
@@ -141,20 +164,20 @@ export default function PlantasScreen() {
                 style={({ pressed }) => [
                   styles.plantaPreviewItem,
                   { 
-                    backgroundColor: pressed ? `${colors.tint}10` : 'transparent',
-                    borderBottomColor: colors.border,
+                    backgroundColor: pressed ? IronManColors.glassBlue : 'transparent',
+                    borderBottomColor: colors.borderSubtle,
                   },
                 ]}
               >
                 <View style={styles.plantaPreviewContent}>
-                  <ThemedText style={styles.plantaPreviewText} numberOfLines={1}>
+                  <ThemedText style={[styles.plantaPreviewText, { color: colors.text }]} numberOfLines={1}>
                     {planta.nombre}
                   </ThemedText>
-                  <ThemedText style={[styles.plantaPreviewCientifico, { color: colors.textTertiary }]} numberOfLines={1}>
+                  <ThemedText style={[styles.plantaPreviewCientifico, { color: IronManColors.holographicTeal }]} numberOfLines={1}>
                     {planta.nombreCientifico}
                   </ThemedText>
                 </View>
-                <ThemedText style={{ color: colors.textTertiary, fontSize: 14 }}>›</ThemedText>
+                <ThemedText style={{ color: IronManColors.holographicCyan, fontSize: 14 }}>›</ThemedText>
               </Pressable>
             ))}
             {!isExpanded && item.plantas.length > 3 && (
@@ -162,7 +185,7 @@ export default function PlantasScreen() {
                 onPress={() => toggleCategoria(item.id)}
                 style={styles.verMasButton}
               >
-                <ThemedText style={[styles.verMasText, { color: colors.tint }]}>
+                <ThemedText style={[styles.verMasText, { color: IronManColors.arcReactorBlue }]}>
                   Ver {item.plantas.length - 3} más...
                 </ThemedText>
               </Pressable>
@@ -187,7 +210,7 @@ export default function PlantasScreen() {
         <ThemedText type="title" style={styles.headerTitle}>
           Plantas Medicinales
         </ThemedText>
-        <ThemedText style={[styles.headerSubtitle, { color: colors.textSecondary }]}>
+        <ThemedText style={[styles.headerSubtitle, { color: IronManColors.holographicCyan }]}>
           {totalPlantas} plantas en {categoriasPlantas.length} categorías
         </ThemedText>
         
@@ -195,12 +218,13 @@ export default function PlantasScreen() {
           style={[
             styles.searchContainer,
             {
-              backgroundColor: colors.surface,
+              backgroundColor: colors.glass,
               borderColor: colors.border,
+              ...Shadows.small,
             },
           ]}
         >
-          <ThemedText style={styles.searchIcon}>🔍</ThemedText>
+          <ThemedText style={[styles.searchIcon, { color: IronManColors.arcReactorBlue }]}>🔍</ThemedText>
           <TextInput
             style={[styles.searchInput, { color: colors.text }]}
             placeholder="Buscar planta o propiedad..."
@@ -212,7 +236,7 @@ export default function PlantasScreen() {
           />
           {searchQuery.length > 0 && (
             <Pressable onPress={() => setSearchQuery("")} style={styles.clearButton}>
-              <ThemedText style={{ color: colors.textTertiary }}>✕</ThemedText>
+              <ThemedText style={{ color: IronManColors.holographicCyan }}>✕</ThemedText>
             </Pressable>
           )}
         </View>
@@ -225,12 +249,12 @@ export default function PlantasScreen() {
           renderItem={renderPlantaItem}
           contentContainerStyle={[
             styles.listContent,
-            { paddingBottom: Math.max(insets.bottom, 20) + 60 },
+            { paddingBottom: Math.max(insets.bottom, 20) + 80 },
           ]}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <ThemedText style={styles.emptyEmoji}>🔍</ThemedText>
+              <ThemedText style={[styles.emptyEmoji, { textShadowColor: IronManColors.arcReactorBlue, textShadowRadius: 10 }]}>🔍</ThemedText>
               <ThemedText style={[styles.emptyText, { color: colors.textSecondary }]}>
                 No se encontraron plantas
               </ThemedText>
@@ -238,7 +262,7 @@ export default function PlantasScreen() {
           }
           ListHeaderComponent={
             searchResults.length > 0 ? (
-              <ThemedText style={[styles.resultCount, { color: colors.textSecondary }]}>
+              <ThemedText style={[styles.resultCount, { color: IronManColors.holographicCyan }]}>
                 {searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}
               </ThemedText>
             ) : null
@@ -251,7 +275,7 @@ export default function PlantasScreen() {
           renderItem={renderCategoriaCard}
           contentContainerStyle={[
             styles.listContent,
-            { paddingBottom: Math.max(insets.bottom, 20) + 60 },
+            { paddingBottom: Math.max(insets.bottom, 20) + 80 },
           ]}
           showsVerticalScrollIndicator={false}
         />
@@ -277,14 +301,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 20,
     marginBottom: Spacing.lg,
+    letterSpacing: 0.5,
   },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     borderRadius: BorderRadius.md,
-    borderWidth: 1,
+    borderWidth: 1.5,
     paddingHorizontal: Spacing.md,
-    height: 48,
+    height: 50,
   },
   searchIcon: {
     fontSize: 16,
@@ -294,6 +319,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     height: "100%",
+    letterSpacing: 0.3,
   },
   clearButton: {
     padding: Spacing.xs,
@@ -305,11 +331,12 @@ const styles = StyleSheet.create({
   resultCount: {
     fontSize: 14,
     marginBottom: Spacing.md,
+    letterSpacing: 0.5,
   },
   // Categoria Card Styles
   categoriaCard: {
-    borderRadius: BorderRadius.md,
-    borderWidth: 1,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1.5,
     marginBottom: Spacing.md,
     overflow: "hidden",
   },
@@ -319,9 +346,9 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
   },
   categoriaIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: BorderRadius.sm,
+    width: 50,
+    height: 50,
+    borderRadius: BorderRadius.md,
     justifyContent: "center",
     alignItems: "center",
     marginRight: Spacing.md,
@@ -340,6 +367,7 @@ const styles = StyleSheet.create({
   categoriaCount: {
     fontSize: 13,
     lineHeight: 16,
+    letterSpacing: 0.3,
   },
   expandIcon: {
     fontSize: 12,
@@ -347,7 +375,6 @@ const styles = StyleSheet.create({
   },
   plantasPreview: {
     borderTopWidth: 1,
-    borderTopColor: "rgba(0,0,0,0.05)",
   },
   plantaPreviewItem: {
     flexDirection: "row",
@@ -374,12 +401,13 @@ const styles = StyleSheet.create({
   },
   verMasText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: "600",
+    letterSpacing: 0.3,
   },
   // Planta Card Styles (for search results)
   plantaCard: {
     borderRadius: BorderRadius.md,
-    borderWidth: 1,
+    borderWidth: 1.5,
     marginBottom: Spacing.sm,
     overflow: "hidden",
   },
@@ -389,9 +417,9 @@ const styles = StyleSheet.create({
     padding: Spacing.lg,
   },
   plantaIconSmall: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     justifyContent: "center",
     alignItems: "center",
     marginRight: Spacing.md,
