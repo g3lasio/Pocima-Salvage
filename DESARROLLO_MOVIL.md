@@ -20,8 +20,11 @@ Este método usa Expo Tunnel para crear una conexión pública que funciona desd
 git pull
 pnpm install
 
-# 2. Iniciar el servidor de desarrollo
+# 2. Para desarrollo WEB (interfaz en navegador de Replit):
 pnpm dev
+
+# 3. Para desarrollo MÓVIL (código QR para Expo Go):
+pnpm dev:mobile
 ```
 
 **Verás algo como:**
