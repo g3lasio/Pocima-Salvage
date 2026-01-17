@@ -26,13 +26,13 @@ args = "Dev Server"
 name = "Dev Server"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "pnpm dev"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "webview"
+waitForPort = 3000
 
 [[workflows.workflow]]
 name = "Build Android"
@@ -77,6 +77,10 @@ externalPort = 80
 [[ports]]
 localPort = 8081
 externalPort = 8081
+
+[[ports]]
+localPort = 8082
+externalPort = 3001
 
 [deployment]
 deploymentTarget = "autoscale"
@@ -146,3 +150,9 @@ requiredFiles = [".replit", "replit.nix", "package.json"]
 [auth]
 pageEnabled = false
 buttonEnabled = false
+
+[userenv]
+
+[userenv.shared]
+OAUTH_SERVER_URL = "https://a91d15b5-8927-499f-9175-cbb9c1e57cd1-00-yp3syr9yi09a.kirk.replit.dev"
+EXPO_PUBLIC_OAUTH_SERVER_URL = "https://a91d15b5-8927-499f-9175-cbb9c1e57cd1-00-yp3syr9yi09a.kirk.replit.dev"
