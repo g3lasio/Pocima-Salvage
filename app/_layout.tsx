@@ -5,7 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "react-native-reanimated";
-import { Platform, View, ActivityIndicator, StyleSheet } from "react-native";
+import { Platform, View, ActivityIndicator, StyleSheet, Text } from "react-native";
 import {
   SafeAreaFrameContext,
   SafeAreaInsetsContext,
@@ -65,25 +65,35 @@ export default function RootLayout() {
 
   const [insets, setInsets] = useState<EdgeInsets>(initialInsets);
   const [frame, setFrame] = useState<Rect>(initialFrame);
+  const [fontError, setFontError] = useState<Error | null>(null);
 
-  // Load Quantico fonts
-  const [fontsLoaded, fontError] = useFonts({
+  // Load Quantico fonts with error handling
+  const [fontsLoaded, fontLoadError] = useFonts({
     "Quantico-Regular": require("../assets/fonts/Quantico-Regular.ttf"),
     "Quantico-Bold": require("../assets/fonts/Quantico-Bold.ttf"),
     "Quantico-Italic": require("../assets/fonts/Quantico-Italic.ttf"),
     "Quantico-BoldItalic": require("../assets/fonts/Quantico-BoldItalic.ttf"),
   });
 
-  // Hide splash screen when fonts are loaded
+  // Handle font loading errors
   useEffect(() => {
-    if (fontsLoaded || fontError) {
+    if (fontLoadError) {
+      console.error("Error loading fonts:", fontLoadError);
+      setFontError(fontLoadError);
+      // Hide splash screen even on error to prevent infinite loading
+      SplashScreen.hideAsync();
+    } else if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
-  }, [fontsLoaded, fontError]);
+  }, [fontsLoaded, fontLoadError]);
 
   // Initialize Manus runtime for cookie injection from parent container
   useEffect(() => {
-    initManusRuntime();
+    try {
+      initManusRuntime();
+    } catch (error) {
+      console.error("Error initializing Manus runtime:", error);
+    }
   }, []);
 
   const handleSafeAreaUpdate = useCallback((metrics: Metrics) => {
@@ -93,8 +103,12 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (Platform.OS !== "web") return;
-    const unsubscribe = subscribeSafeAreaInsets(handleSafeAreaUpdate);
-    return () => unsubscribe();
+    try {
+      const unsubscribe = subscribeSafeAreaInsets(handleSafeAreaUpdate);
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Error subscribing to safe area insets:", error);
+    }
   }, [handleSafeAreaUpdate]);
 
   // Create clients once and reuse them
@@ -121,6 +135,17 @@ export default function RootLayout() {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={IronManColors.arcReactorBlue} />
+        <Text style={styles.loadingText}>Cargando Pócima Salvage...</Text>
+      </View>
+    );
+  }
+
+  // Show error message if fonts failed to load
+  if (fontError) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text style={styles.errorText}>⚠️ Error al cargar fuentes</Text>
+        <Text style={styles.errorSubtext}>La aplicación continuará con fuentes del sistema</Text>
       </View>
     );
   }
@@ -195,5 +220,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: IronManColors.darkBackground,
+  },
+  loadingText: {
+    marginTop: 20,
+    fontSize: 16,
+    color: IronManColors.arcReactorBlue,
+    fontWeight: "600",
+  },
+  errorText: {
+    fontSize: 18,
+    color: "#FF4444",
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  errorSubtext: {
+    fontSize: 14,
+    color: "#E8F4FF",
+    textAlign: "center",
+    paddingHorizontal: 40,
   },
 });
