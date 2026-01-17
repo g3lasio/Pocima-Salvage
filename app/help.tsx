@@ -49,7 +49,7 @@ export default function HelpScreen() {
   };
 
   return (
-    <GlassBackground showGrid={true} showCorners={true}>
+    <GlassBackground showGrid={true} showCorners={true} showScanLine={false}>
       <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
           <ThemedText style={styles.backIcon}>←</ThemedText>

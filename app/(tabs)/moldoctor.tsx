@@ -528,7 +528,7 @@ export default function MolDoctorScreen() {
   };
 
   return (
-    <GlassBackground showGrid={true} showCorners={true}>
+    <GlassBackground showGrid={true} showCorners={true} showScanLine={false}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}

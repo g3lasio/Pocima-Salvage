@@ -161,7 +161,7 @@ export default function PlantasScreen() {
   }, [selectedCategoria, handleCategoriaPress]);
 
   return (
-    <GlassBackground showGrid={true} showCorners={true}>
+    <GlassBackground showGrid={true} showCorners={true} showScanLine={false}>
       {/* Header con safe area */}
       <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
         <ThemedText type="title" style={styles.title}>Plantas Medicinales</ThemedText>

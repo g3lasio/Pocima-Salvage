@@ -6,6 +6,7 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { IronManColors, Shadows } from "@/constants/theme";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
@@ -23,34 +24,24 @@ interface GlassBackgroundProps {
  * GlassBackground - Iron Man / JARVIS style holographic background
  * 
  * Creates a futuristic glass effect with:
- * - Animated scan line
  * - Grid pattern overlay
- * - Corner decorations
+ * - Corner decorations (respecting safe areas)
  * - Hexagonal pattern (optional)
+ * - Subtle ambient glow (replaces scan line)
  */
 export function GlassBackground({
   children,
   showGrid = true,
-  showScanLine = true,
+  showScanLine = false, // Disabled by default - too distracting
   showCorners = true,
   showHexPattern = false,
   intensity = "medium",
 }: GlassBackgroundProps) {
-  const scanLineAnim = useRef(new Animated.Value(0)).current;
+  const insets = useSafeAreaInsets();
   const pulseAnim = useRef(new Animated.Value(0.3)).current;
+  const glowAnim = useRef(new Animated.Value(0.2)).current;
 
   useEffect(() => {
-    // Scan line animation
-    if (showScanLine) {
-      Animated.loop(
-        Animated.timing(scanLineAnim, {
-          toValue: 1,
-          duration: 4000,
-          useNativeDriver: true,
-        })
-      ).start();
-    }
-
     // Pulse animation for grid
     Animated.loop(
       Animated.sequence([
@@ -66,20 +57,36 @@ export function GlassBackground({
         }),
       ])
     ).start();
-  }, [showScanLine, scanLineAnim, pulseAnim]);
 
-  const scanLineTranslateY = scanLineAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [-50, SCREEN_HEIGHT + 50],
-  });
+    // Subtle ambient glow animation (replaces scan line)
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(glowAnim, {
+          toValue: 0.4,
+          duration: 3000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(glowAnim, {
+          toValue: 0.2,
+          duration: 3000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, [pulseAnim, glowAnim]);
 
   const getIntensityOpacity = () => {
     switch (intensity) {
-      case "low": return 0.15;
-      case "high": return 0.4;
-      default: return 0.25;
+      case "low": return 0.1;
+      case "high": return 0.3;
+      default: return 0.15;
     }
   };
+
+  // Calculate safe positions for corners
+  const cornerOffset = 12;
+  const cornerTopOffset = Math.max(insets.top + cornerOffset, cornerOffset + 50); // Respect notch
+  const cornerBottomOffset = Math.max(insets.bottom + cornerOffset, cornerOffset + 30); // Respect home indicator
 
   return (
     <View style={styles.container}>
@@ -89,30 +96,39 @@ export function GlassBackground({
       {/* Gradient overlay */}
       <View style={styles.gradientOverlay} />
 
-      {/* Grid pattern */}
+      {/* Subtle ambient glow at top (replaces scan line) */}
+      <Animated.View
+        style={[
+          styles.ambientGlow,
+          styles.ambientGlowTop,
+          { opacity: glowAnim, top: insets.top },
+        ]}
+      />
+
+      {/* Grid pattern - more subtle */}
       {showGrid && (
         <Animated.View style={[styles.gridContainer, { opacity: pulseAnim }]}>
-          {/* Horizontal lines */}
-          {Array.from({ length: 25 }).map((_, i) => (
+          {/* Horizontal lines - fewer and more subtle */}
+          {Array.from({ length: 12 }).map((_, i) => (
             <View
               key={`h-${i}`}
               style={[
                 styles.gridLineHorizontal,
                 {
-                  top: `${(i + 1) * 4}%`,
+                  top: `${(i + 1) * 8}%`,
                   opacity: getIntensityOpacity(),
                 },
               ]}
             />
           ))}
-          {/* Vertical lines */}
-          {Array.from({ length: 15 }).map((_, i) => (
+          {/* Vertical lines - fewer and more subtle */}
+          {Array.from({ length: 8 }).map((_, i) => (
             <View
               key={`v-${i}`}
               style={[
                 styles.gridLineVertical,
                 {
-                  left: `${(i + 1) * 6.66}%`,
+                  left: `${(i + 1) * 12}%`,
                   opacity: getIntensityOpacity(),
                 },
               ]}
@@ -134,31 +150,19 @@ export function GlassBackground({
         </View>
       )}
 
-      {/* Scan line effect */}
-      {showScanLine && (
-        <Animated.View
-          style={[
-            styles.scanLine,
-            {
-              transform: [{ translateY: scanLineTranslateY }],
-            },
-          ]}
-        />
-      )}
-
-      {/* Corner decorations */}
+      {/* Corner decorations - smaller and respecting safe areas */}
       {showCorners && (
         <>
-          <View style={[styles.corner, styles.cornerTopLeft]} />
-          <View style={[styles.corner, styles.cornerTopRight]} />
-          <View style={[styles.corner, styles.cornerBottomLeft]} />
-          <View style={[styles.corner, styles.cornerBottomRight]} />
+          <View style={[styles.corner, styles.cornerTopLeft, { top: cornerTopOffset, left: cornerOffset }]} />
+          <View style={[styles.corner, styles.cornerTopRight, { top: cornerTopOffset, right: cornerOffset }]} />
+          <View style={[styles.corner, styles.cornerBottomLeft, { bottom: cornerBottomOffset, left: cornerOffset }]} />
+          <View style={[styles.corner, styles.cornerBottomRight, { bottom: cornerBottomOffset, right: cornerOffset }]} />
           
-          {/* Inner corner accents */}
-          <View style={[styles.cornerAccent, styles.cornerAccentTopLeft]} />
-          <View style={[styles.cornerAccent, styles.cornerAccentTopRight]} />
-          <View style={[styles.cornerAccent, styles.cornerAccentBottomLeft]} />
-          <View style={[styles.cornerAccent, styles.cornerAccentBottomRight]} />
+          {/* Inner corner accents - smaller */}
+          <View style={[styles.cornerAccent, { top: cornerTopOffset, left: cornerOffset }]} />
+          <View style={[styles.cornerAccent, { top: cornerTopOffset, right: cornerOffset }]} />
+          <View style={[styles.cornerAccent, { bottom: cornerBottomOffset, left: cornerOffset }]} />
+          <View style={[styles.cornerAccent, { bottom: cornerBottomOffset, right: cornerOffset }]} />
         </>
       )}
 
@@ -308,78 +312,54 @@ const styles = StyleSheet.create({
     borderColor: IronManColors.borderHoloSubtle,
     marginRight: 10,
   },
-  scanLine: {
+  ambientGlow: {
     position: "absolute",
     left: 0,
     right: 0,
-    height: 3,
+    height: 100,
+  },
+  ambientGlowTop: {
     backgroundColor: IronManColors.arcReactorBlue,
-    opacity: 0.6,
+    opacity: 0.1,
     ...Platform.select({
       ios: {
         shadowColor: IronManColors.arcReactorBlue,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 1,
-        shadowRadius: 15,
-      },
-      android: {
-        elevation: 5,
+        shadowOffset: { width: 0, height: 50 },
+        shadowOpacity: 0.3,
+        shadowRadius: 50,
       },
     }),
   },
   corner: {
     position: "absolute",
-    width: 40,
-    height: 40,
+    width: 24,
+    height: 24,
     borderColor: IronManColors.arcReactorBlue,
-    borderWidth: 2,
+    borderWidth: 1.5,
+    opacity: 0.6,
   },
   cornerTopLeft: {
-    top: 8,
-    left: 8,
     borderRightWidth: 0,
     borderBottomWidth: 0,
   },
   cornerTopRight: {
-    top: 8,
-    right: 8,
     borderLeftWidth: 0,
     borderBottomWidth: 0,
   },
   cornerBottomLeft: {
-    bottom: 8,
-    left: 8,
     borderRightWidth: 0,
     borderTopWidth: 0,
   },
   cornerBottomRight: {
-    bottom: 8,
-    right: 8,
     borderLeftWidth: 0,
     borderTopWidth: 0,
   },
   cornerAccent: {
     position: "absolute",
-    width: 8,
-    height: 8,
+    width: 4,
+    height: 4,
     backgroundColor: IronManColors.arcReactorBlue,
-    ...Shadows.glow,
-  },
-  cornerAccentTopLeft: {
-    top: 8,
-    left: 8,
-  },
-  cornerAccentTopRight: {
-    top: 8,
-    right: 8,
-  },
-  cornerAccentBottomLeft: {
-    bottom: 8,
-    left: 8,
-  },
-  cornerAccentBottomRight: {
-    bottom: 8,
-    right: 8,
+    opacity: 0.8,
   },
   content: {
     flex: 1,

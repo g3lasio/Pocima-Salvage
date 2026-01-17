@@ -112,7 +112,7 @@ export default function EnfermedadesScreen() {
   }, [selectedSistema, handleSistemaPress]);
 
   return (
-    <GlassBackground showGrid={true} showCorners={true}>
+    <GlassBackground showGrid={true} showCorners={true} showScanLine={false}>
       {/* Header con safe area */}
       <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
         <ThemedText type="title" style={styles.title}>Enfermedades</ThemedText>
