@@ -10,11 +10,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { ThemedText } from "@/components/themed-text";
-
 import { GlassBackground } from "@/components/ui/glass-background";
-import { HolographicCard } from "@/components/ui/holographic-card";
-import { HolographicIcon } from "@/components/ui/holographic-icons";
-import { Colors, Spacing, IronManColors, Fonts, HolographicStyles } from "@/constants/theme";
+import { Colors, Spacing, IronManColors, Fonts, BorderRadius } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { 
   sistemasCorporales, 
@@ -24,22 +21,26 @@ import {
   totalEnfermedades
 } from "@/data/enfermedades-expandidas";
 
-type ViewMode = "sistemas" | "busqueda";
-
 export default function EnfermedadesScreen() {
   const colorScheme = useColorScheme();
   const colors = Colors[colorScheme ?? "light"];
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedSistema, setExpandedSistema] = useState<string | null>(null);
+  const [selectedSistema, setSelectedSistema] = useState<string | null>(null);
 
-  const viewMode: ViewMode = searchQuery.trim() ? "busqueda" : "sistemas";
-
-  const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return [];
-    return buscarEnfermedadesExpandidas(searchQuery);
-  }, [searchQuery]);
+  // Enfermedades filtradas
+  const displayedEnfermedades = useMemo(() => {
+    if (searchQuery.trim()) {
+      return buscarEnfermedadesExpandidas(searchQuery);
+    }
+    if (selectedSistema) {
+      const sistema = sistemasCorporales.find(s => s.id === selectedSistema);
+      return sistema?.enfermedades || [];
+    }
+    return [];
+  }, [searchQuery, selectedSistema]);
 
   const handleEnfermedadPress = useCallback((enfermedad: EnfermedadExpandida) => {
     router.push({
@@ -48,175 +49,141 @@ export default function EnfermedadesScreen() {
     });
   }, [router]);
 
-  const toggleSistema = useCallback((sistemaId: string) => {
-    setExpandedSistema(prev => prev === sistemaId ? null : sistemaId);
+  const handleSistemaPress = useCallback((sistemaId: string) => {
+    setSelectedSistema(prev => prev === sistemaId ? null : sistemaId);
+    setSearchQuery("");
   }, []);
 
-  const renderEnfermedadItem = useCallback(({ item }: { item: EnfermedadExpandida }) => (
-    <HolographicCard
-      onPress={() => handleEnfermedadPress(item)}
-      variant="subtle"
-      style={styles.enfermedadCard}
-    >
-      <View style={styles.enfermedadContent}>
-        <View style={styles.enfermedadTextContainer}>
-          <ThemedText type="defaultSemiBold" style={styles.enfermedadTitle} numberOfLines={1}>
+  // Renderizar item de enfermedad
+  const renderEnfermedadItem = useCallback(({ item }: { item: EnfermedadExpandida }) => {
+    const sistema = sistemasCorporales.find(s => s.id === item.sistemaId);
+    return (
+      <Pressable
+        onPress={() => handleEnfermedadPress(item)}
+        style={({ pressed }) => [
+          styles.enfermedadItem,
+          { backgroundColor: pressed ? IronManColors.glassBlueMedium : IronManColors.glassBlue },
+        ]}
+      >
+        <View style={styles.enfermedadIcon}>
+          <ThemedText style={styles.enfermedadEmoji}>{sistema?.icono || "🏥"}</ThemedText>
+        </View>
+        <View style={styles.enfermedadInfo}>
+          <ThemedText style={styles.enfermedadNombre} numberOfLines={1}>
             {item.nombre}
           </ThemedText>
           {item.otrosNombres.length > 0 && (
-            <ThemedText style={[styles.otrosNombres, { color: colors.textTertiary }]} numberOfLines={1}>
-              {item.otrosNombres.join(" • ")}
+            <ThemedText style={styles.otrosNombres} numberOfLines={1}>
+              {item.otrosNombres.slice(0, 2).join(" • ")}
             </ThemedText>
           )}
+          <View style={styles.sistemaTag}>
+            <ThemedText style={styles.sistemaTagText}>{sistema?.nombre || "Sistema"}</ThemedText>
+          </View>
         </View>
-        <ThemedText style={styles.arrowIcon}>›</ThemedText>
-      </View>
-    </HolographicCard>
-  ), [colors, handleEnfermedadPress]);
-
-  const renderSistemaCard = useCallback(({ item }: { item: SistemaCorporal }) => {
-    const isExpanded = expandedSistema === item.id;
-    const enfermedadesToShow = isExpanded ? item.enfermedades : item.enfermedades.slice(0, 3);
-    
-    return (
-      <HolographicCard
-        variant={isExpanded ? "elevated" : "default"}
-        style={styles.sistemaCard}
-      >
-        <Pressable
-          onPress={() => toggleSistema(item.id)}
-          style={({ pressed }) => [
-            styles.sistemaHeader,
-            { opacity: pressed ? 0.8 : 1 },
-          ]}
-        >
-          <HolographicIcon 
-            icon={item.icono} 
-            size="medium" 
-            variant={isExpanded ? "glow" : "default"}
-          />
-          <View style={styles.sistemaInfo}>
-            <ThemedText type="defaultSemiBold" style={styles.sistemaNombre}>
-              {item.nombre}
-            </ThemedText>
-            <ThemedText style={styles.sistemaCount}>
-              {item.enfermedades.length} enfermedades
-            </ThemedText>
-          </View>
-          <ThemedText style={styles.expandIcon}>
-            {isExpanded ? "▼" : "▶"}
-          </ThemedText>
-        </Pressable>
-
-        {enfermedadesToShow.length > 0 && (
-          <View style={[styles.enfermedadesPreview, { borderTopColor: colors.borderSubtle }]}>
-            {enfermedadesToShow.map((enf) => (
-              <Pressable
-                key={enf.id}
-                onPress={() => handleEnfermedadPress(enf)}
-                style={({ pressed }) => [
-                  styles.enfermedadPreviewItem,
-                  { 
-                    backgroundColor: pressed ? IronManColors.glassBlue : 'transparent',
-                    borderBottomColor: colors.borderSubtle,
-                  },
-                ]}
-              >
-                <ThemedText style={styles.enfermedadPreviewText} numberOfLines={1}>
-                  {enf.nombre}
-                </ThemedText>
-                <ThemedText style={styles.previewArrow}>›</ThemedText>
-              </Pressable>
-            ))}
-            {!isExpanded && item.enfermedades.length > 3 && (
-              <Pressable
-                onPress={() => toggleSistema(item.id)}
-                style={styles.verMasButton}
-              >
-                <ThemedText style={styles.verMasText}>
-                  Ver {item.enfermedades.length - 3} más...
-                </ThemedText>
-              </Pressable>
-            )}
-          </View>
-        )}
-      </HolographicCard>
+        <ThemedText style={styles.arrow}>›</ThemedText>
+      </Pressable>
     );
-  }, [colors, expandedSistema, toggleSistema, handleEnfermedadPress]);
+  }, [handleEnfermedadPress]);
 
-  return (
-    <GlassBackground showGrid={true} showScanLine={true} showCorners={true}>
-      <View
+  // Renderizar sistema
+  const renderSistemaItem = useCallback(({ item }: { item: SistemaCorporal }) => {
+    const isSelected = selectedSistema === item.id;
+    return (
+      <Pressable
+        onPress={() => handleSistemaPress(item.id)}
         style={[
-          styles.header,
-          {
-            paddingTop: Math.max(insets.top, 20) + 10,
-          },
+          styles.sistemaChip,
+          isSelected && styles.sistemaChipSelected,
         ]}
       >
-        <ThemedText type="title" style={styles.headerTitle}>
-          Enfermedades
+        <ThemedText style={styles.sistemaEmoji}>{item.icono}</ThemedText>
+        <ThemedText style={[
+          styles.sistemaText,
+          isSelected && styles.sistemaTextSelected,
+        ]} numberOfLines={1}>
+          {item.nombre.replace("Sistema ", "")}
         </ThemedText>
-        <ThemedText style={styles.headerSubtitle}>
-          {totalEnfermedades} enfermedades en {sistemasCorporales.length} sistemas
+        <View style={[styles.sistemaCount, isSelected && styles.sistemaCountSelected]}>
+          <ThemedText style={styles.sistemaCountText}>{item.enfermedades.length}</ThemedText>
+        </View>
+      </Pressable>
+    );
+  }, [selectedSistema, handleSistemaPress]);
+
+  return (
+    <GlassBackground showGrid={true} showCorners={true}>
+      {/* Header con safe area */}
+      <View style={[styles.header, { paddingTop: insets.top + Spacing.md }]}>
+        <ThemedText type="title" style={styles.title}>Enfermedades</ThemedText>
+        <ThemedText style={styles.subtitle}>
+          {totalEnfermedades} enfermedades • {sistemasCorporales.length} sistemas
         </ThemedText>
-        
-        <View style={[styles.searchContainer, HolographicStyles.inputField]}>
+
+        {/* Barra de búsqueda */}
+        <View style={styles.searchBar}>
           <ThemedText style={styles.searchIcon}>🔍</ThemedText>
           <TextInput
-            style={[styles.searchInput, { color: colors.text, fontFamily: Fonts.regular }]}
+            style={[styles.searchInput, { color: colors.text }]}
             placeholder="Buscar enfermedad..."
-            placeholderTextColor={colors.textTertiary}
+            placeholderTextColor={IronManColors.textTertiary}
             value={searchQuery}
-            onChangeText={setSearchQuery}
+            onChangeText={(text) => {
+              setSearchQuery(text);
+              if (text) setSelectedSistema(null);
+            }}
             autoCapitalize="none"
             autoCorrect={false}
           />
           {searchQuery.length > 0 && (
-            <Pressable onPress={() => setSearchQuery("")} style={styles.clearButton}>
+            <Pressable onPress={() => setSearchQuery("")} style={styles.clearBtn}>
               <ThemedText style={styles.clearIcon}>✕</ThemedText>
             </Pressable>
           )}
         </View>
       </View>
 
-      {viewMode === "busqueda" ? (
+      {/* Sistemas horizontales */}
+      <View style={styles.sistemasContainer}>
         <FlatList
-          data={searchResults}
+          data={sistemasCorporales}
+          keyExtractor={(item) => item.id}
+          renderItem={renderSistemaItem}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.sistemasContent}
+        />
+      </View>
+
+      {/* Lista de enfermedades o mensaje */}
+      {displayedEnfermedades.length > 0 ? (
+        <FlatList
+          data={displayedEnfermedades}
           keyExtractor={(item) => `${item.sistemaId}-${item.id}`}
           renderItem={renderEnfermedadItem}
           contentContainerStyle={[
             styles.listContent,
-            { paddingBottom: Math.max(insets.bottom, 20) + 80 },
+            { paddingBottom: insets.bottom + 100 },
           ]}
           showsVerticalScrollIndicator={false}
-          ListEmptyComponent={
-            <View style={styles.emptyContainer}>
-              <HolographicIcon icon="🔍" size="xlarge" variant="glow" animated />
-              <ThemedText style={styles.emptyText}>
-                No se encontraron enfermedades
-              </ThemedText>
-            </View>
-          }
           ListHeaderComponent={
-            searchResults.length > 0 ? (
-              <ThemedText style={styles.resultCount}>
-                {searchResults.length} resultado{searchResults.length !== 1 ? "s" : ""}
-              </ThemedText>
-            ) : null
+            <ThemedText style={styles.resultCount}>
+              {displayedEnfermedades.length} {displayedEnfermedades.length === 1 ? "resultado" : "resultados"}
+            </ThemedText>
           }
         />
       ) : (
-        <FlatList
-          data={sistemasCorporales}
-          keyExtractor={(item) => item.id}
-          renderItem={renderSistemaCard}
-          contentContainerStyle={[
-            styles.listContent,
-            { paddingBottom: Math.max(insets.bottom, 20) + 80 },
-          ]}
-          showsVerticalScrollIndicator={false}
-        />
+        <View style={styles.emptyState}>
+          <ThemedText style={styles.emptyEmoji}>🏥</ThemedText>
+          <ThemedText style={styles.emptyTitle}>
+            {searchQuery ? "Sin resultados" : "Selecciona un sistema"}
+          </ThemedText>
+          <ThemedText style={styles.emptySubtitle}>
+            {searchQuery 
+              ? "Intenta con otro término de búsqueda"
+              : "O busca una enfermedad por nombre"}
+          </ThemedText>
+        </View>
       )}
     </GlassBackground>
   );
@@ -227,146 +194,174 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingBottom: Spacing.md,
   },
-  headerTitle: {
+  title: {
+    fontSize: 24,
     marginBottom: 4,
   },
-  headerSubtitle: {
-    fontSize: 14,
+  subtitle: {
+    fontSize: 13,
     color: IronManColors.holographicCyan,
-    marginBottom: Spacing.lg,
-    letterSpacing: 0.5,
+    marginBottom: Spacing.md,
     fontFamily: Fonts.regular,
   },
-  searchContainer: {
+  searchBar: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: IronManColors.glassBlue,
+    borderRadius: BorderRadius.lg,
+    borderWidth: 1,
+    borderColor: IronManColors.borderHoloSubtle,
     paddingHorizontal: Spacing.md,
-    height: 52,
+    height: 48,
   },
   searchIcon: {
-    fontSize: 18,
+    fontSize: 16,
     marginRight: Spacing.sm,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    height: "100%",
-    letterSpacing: 0.3,
+    fontSize: 15,
+    fontFamily: Fonts.regular,
   },
-  clearButton: {
+  clearBtn: {
     padding: Spacing.xs,
   },
   clearIcon: {
-    color: IronManColors.holographicCyan,
-    fontSize: 16,
+    fontSize: 14,
+    color: IronManColors.textTertiary,
+  },
+  sistemasContainer: {
+    marginBottom: Spacing.sm,
+  },
+  sistemasContent: {
+    paddingHorizontal: Spacing.lg,
+    gap: Spacing.sm,
+  },
+  sistemaChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: IronManColors.glassBlue,
+    borderRadius: BorderRadius.full,
+    borderWidth: 1,
+    borderColor: IronManColors.borderHoloSubtle,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    gap: 6,
+    maxWidth: 150,
+  },
+  sistemaChipSelected: {
+    backgroundColor: IronManColors.glassBlueMedium,
+    borderColor: IronManColors.arcReactorBlue,
+  },
+  sistemaEmoji: {
+    fontSize: 14,
+  },
+  sistemaText: {
+    fontSize: 11,
+    fontFamily: Fonts.semiBold,
+    color: IronManColors.textSecondary,
+    flexShrink: 1,
+  },
+  sistemaTextSelected: {
+    color: IronManColors.arcReactorBlue,
+  },
+  sistemaCount: {
+    backgroundColor: IronManColors.glassDarkMedium,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 10,
+  },
+  sistemaCountSelected: {
+    backgroundColor: IronManColors.arcReactorBlue,
+  },
+  sistemaCountText: {
+    fontSize: 10,
+    fontFamily: Fonts.bold,
+    color: IronManColors.textPrimary,
   },
   listContent: {
     paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.sm,
   },
   resultCount: {
-    fontSize: 14,
-    color: IronManColors.holographicCyan,
-    marginBottom: Spacing.md,
-    letterSpacing: 0.5,
+    fontSize: 12,
+    color: IronManColors.textTertiary,
+    marginBottom: Spacing.sm,
     fontFamily: Fonts.regular,
   },
-  // Sistema Card Styles
-  sistemaCard: {
-    marginBottom: Spacing.md,
-    padding: 0,
-  },
-  sistemaHeader: {
+  enfermedadItem: {
     flexDirection: "row",
     alignItems: "center",
-    padding: Spacing.lg,
+    padding: Spacing.md,
+    borderRadius: BorderRadius.md,
+    borderWidth: 1,
+    borderColor: IronManColors.borderHoloSubtle,
+    marginBottom: Spacing.sm,
   },
-  sistemaInfo: {
+  enfermedadIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: IronManColors.glassDarkMedium,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  enfermedadEmoji: {
+    fontSize: 22,
+  },
+  enfermedadInfo: {
     flex: 1,
     marginLeft: Spacing.md,
   },
-  sistemaNombre: {
-    fontSize: 16,
-    lineHeight: 22,
-    marginBottom: 2,
-  },
-  sistemaCount: {
-    fontSize: 13,
-    color: IronManColors.holographicCyan,
-    letterSpacing: 0.3,
-    fontFamily: Fonts.regular,
-  },
-  expandIcon: {
-    fontSize: 12,
-    color: IronManColors.arcReactorBlue,
-    marginLeft: Spacing.sm,
-  },
-  enfermedadesPreview: {
-    borderTopWidth: 1,
-  },
-  enfermedadPreviewItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    borderBottomWidth: 1,
-  },
-  enfermedadPreviewText: {
+  enfermedadNombre: {
     fontSize: 15,
-    flex: 1,
-    fontFamily: Fonts.regular,
-  },
-  previewArrow: {
-    color: IronManColors.holographicCyan,
-    fontSize: 16,
-  },
-  verMasButton: {
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    alignItems: "center",
-  },
-  verMasText: {
-    fontSize: 14,
-    color: IronManColors.arcReactorBlue,
-    fontFamily: Fonts.bold,
-    letterSpacing: 0.3,
-  },
-  // Enfermedad Card Styles (for search results)
-  enfermedadCard: {
-    marginBottom: Spacing.sm,
-    padding: Spacing.lg,
-  },
-  enfermedadContent: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  enfermedadTextContainer: {
-    flex: 1,
-  },
-  enfermedadTitle: {
-    fontSize: 15,
-    lineHeight: 20,
+    fontFamily: Fonts.semiBold,
+    color: IronManColors.textPrimary,
     marginBottom: 2,
   },
   otrosNombres: {
-    fontSize: 13,
-    lineHeight: 16,
+    fontSize: 12,
     fontFamily: Fonts.regular,
+    color: IronManColors.textTertiary,
+    marginBottom: 4,
   },
-  arrowIcon: {
-    color: IronManColors.arcReactorBlue,
+  sistemaTag: {
+    backgroundColor: IronManColors.glassDarkMedium,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+    alignSelf: "flex-start",
+  },
+  sistemaTagText: {
+    fontSize: 10,
+    fontFamily: Fonts.regular,
+    color: IronManColors.holographicCyan,
+  },
+  arrow: {
     fontSize: 20,
+    color: IronManColors.arcReactorBlue,
+    marginLeft: Spacing.sm,
   },
-  emptyContainer: {
-    alignItems: "center",
+  emptyState: {
+    flex: 1,
     justifyContent: "center",
-    paddingVertical: 60,
+    alignItems: "center",
+    paddingHorizontal: Spacing.xl,
   },
-  emptyText: {
-    fontSize: 16,
-    color: IronManColors.textSecondary,
-    marginTop: Spacing.lg,
+  emptyEmoji: {
+    fontSize: 48,
+    marginBottom: Spacing.md,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontFamily: Fonts.semiBold,
+    color: IronManColors.textPrimary,
+    marginBottom: Spacing.xs,
+    textAlign: "center",
+  },
+  emptySubtitle: {
+    fontSize: 14,
     fontFamily: Fonts.regular,
+    color: IronManColors.textTertiary,
+    textAlign: "center",
   },
 });

@@ -18,6 +18,7 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { trpc, createTRPCClient } from "@/lib/trpc";
 import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
 import { IronManColors } from "@/constants/theme";
+import { AppProvider } from "@/contexts/app-context";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };
@@ -106,6 +107,7 @@ export default function RootLayout() {
 
   const content = (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProvider>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider value={colorScheme === "dark" ? IronManDarkTheme : IronManLightTheme}>
@@ -145,11 +147,68 @@ export default function RootLayout() {
                 }} 
               />
               <Stack.Screen name="oauth/callback" options={{ headerShown: false }} />
+              <Stack.Screen 
+                name="about" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
+              <Stack.Screen 
+                name="favorites" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
+              <Stack.Screen 
+                name="history" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
+              <Stack.Screen 
+                name="settings" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
+              <Stack.Screen 
+                name="help" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
+              <Stack.Screen 
+                name="terms" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
+              <Stack.Screen 
+                name="privacy" 
+                options={{ 
+                  presentation: "modal",
+                  headerShown: false,
+                  animation: "slide_from_bottom",
+                }} 
+              />
             </Stack>
             <StatusBar style="light" />
           </ThemeProvider>
         </QueryClientProvider>
       </trpc.Provider>
+      </AppProvider>
     </GestureHandlerRootView>
   );
 

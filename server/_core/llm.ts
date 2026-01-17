@@ -354,7 +354,7 @@ async function invokeAnthropic(params: InvokeParams): Promise<InvokeResult> {
   const { systemPrompt, messages: anthropicMessages } = convertToAnthropicFormat(messages);
 
   // Use claude-3-5-sonnet as it's widely available and stable
-  const model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
+  const model = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-20250514";
 
   const payload: Record<string, unknown> = {
     model,
