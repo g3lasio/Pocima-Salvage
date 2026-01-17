@@ -97,7 +97,7 @@ export default function AboutScreen() {
         </View>
 
         <View style={styles.footer}>
-          <ThemedText style={styles.footerText}>Desarrollado con 💚 por Chyrris</ThemedText>
+          <ThemedText style={styles.footerText}>Desarrollado por Chyrris Technologies</ThemedText>
           <ThemedText style={styles.copyright}>© 2025 Todos los derechos reservados</ThemedText>
         </View>
       </ScrollView>

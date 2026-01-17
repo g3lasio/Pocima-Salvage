@@ -10,10 +10,14 @@ import {
   ActivityIndicator,
   Alert,
   Image,
+  Modal,
+  TouchableWithoutFeedback,
+  Animated,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
 import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -58,6 +62,8 @@ export default function MolDoctorScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showAttachMenu, setShowAttachMenu] = useState(false);
+  const menuAnimation = useRef(new Animated.Value(0)).current;
 
   // tRPC mutation para chat
   const chatMutation = trpc.moldoctor.chat.useMutation();
@@ -73,6 +79,15 @@ export default function MolDoctorScreen() {
       saveChatHistory();
     }
   }, [messages]);
+
+  // Animación del menú
+  useEffect(() => {
+    Animated.spring(menuAnimation, {
+      toValue: showAttachMenu ? 1 : 0,
+      useNativeDriver: true,
+      friction: 8,
+    }).start();
+  }, [showAttachMenu]);
 
   const loadChatHistory = async () => {
     try {
@@ -134,7 +149,7 @@ export default function MolDoctorScreen() {
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       role: "user",
-      content: text.trim() || "Analiza esta imagen:",
+      content: text.trim() || "Por favor analiza esta imagen médica:",
       timestamp: new Date(),
       imageUri,
     };
@@ -154,7 +169,16 @@ export default function MolDoctorScreen() {
           encoding: 'base64',
         });
         imageBase64 = base64;
-        imageMimeType = imageUri.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg';
+        // Detectar tipo de imagen
+        if (imageUri.toLowerCase().endsWith('.png')) {
+          imageMimeType = 'image/png';
+        } else if (imageUri.toLowerCase().endsWith('.gif')) {
+          imageMimeType = 'image/gif';
+        } else if (imageUri.toLowerCase().endsWith('.webp')) {
+          imageMimeType = 'image/webp';
+        } else {
+          imageMimeType = 'image/jpeg';
+        }
       }
 
       // Preparar mensajes para el API
@@ -169,7 +193,7 @@ export default function MolDoctorScreen() {
       // Agregar el mensaje actual
       apiMessages.push({
         role: "user",
-        content: text.trim() || "Analiza esta imagen:",
+        content: text.trim() || "Por favor analiza esta imagen médica. Si contiene texto (como resultados de laboratorio, recetas o documentos médicos), extrae y analiza la información. Si es una foto de síntomas (heridas, manchas, erupciones), describe lo que ves y proporciona orientación.",
       });
 
       const response = await chatMutation.mutateAsync({
@@ -207,6 +231,7 @@ export default function MolDoctorScreen() {
   }, [messages, chatMutation]);
 
   const handleImagePicker = async () => {
+    setShowAttachMenu(false);
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
     
     if (!permissionResult.granted) {
@@ -226,6 +251,7 @@ export default function MolDoctorScreen() {
   };
 
   const handleCamera = async () => {
+    setShowAttachMenu(false);
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     
     if (!permissionResult.granted) {
@@ -240,6 +266,42 @@ export default function MolDoctorScreen() {
 
     if (!result.canceled && result.assets[0]) {
       setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const handleDocumentPicker = async () => {
+    setShowAttachMenu(false);
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/*", "application/pdf"],
+        copyToCacheDirectory: true,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        if (asset.mimeType?.startsWith("image/")) {
+          setSelectedImage(asset.uri);
+        } else if (asset.mimeType === "application/pdf") {
+          // Para PDFs, mostrar alerta de que se procesará
+          Alert.alert(
+            "PDF seleccionado",
+            "El documento será enviado para análisis. MolDoctor extraerá el texto y lo analizará.",
+            [
+              { text: "Cancelar", style: "cancel" },
+              { 
+                text: "Enviar", 
+                onPress: () => {
+                  // Por ahora, informar que PDFs requieren procesamiento especial
+                  setInputText("He adjuntado un documento PDF para análisis.");
+                }
+              }
+            ]
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error picking document:", error);
+      Alert.alert("Error", "No se pudo seleccionar el documento.");
     }
   };
 
@@ -312,58 +374,40 @@ export default function MolDoctorScreen() {
                         : item.triageLevel === "yellow"
                         ? IronManColors.jarvisAmber
                         : IronManColors.warningRed,
-                    shadowColor:
-                      item.triageLevel === "green"
-                        ? "#00E676"
-                        : item.triageLevel === "yellow"
-                        ? IronManColors.jarvisAmber
-                        : IronManColors.warningRed,
-                    shadowOffset: { width: 0, height: 0 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 4,
                   },
                 ]}
               />
             )}
           </View>
         )}
-        
+
         {item.imageUri && (
-          <View style={[styles.imageContainer, { borderColor: IronManColors.borderHoloSubtle }]}>
-            <Image 
-              source={{ uri: item.imageUri }} 
-              style={styles.messageImage}
-              resizeMode="cover"
-            />
+          <View style={[styles.imageContainer, { borderColor: colors.border }]}>
+            <Image source={{ uri: item.imageUri }} style={styles.messageImage} resizeMode="cover" />
           </View>
         )}
 
-        <ThemedText
-          style={[
-            styles.messageText,
-            { color: isUser ? "#FFFFFF" : colors.text },
-          ]}
-        >
+        <ThemedText style={[styles.messageText, { color: colors.text }]}>
           {item.content}
         </ThemedText>
 
         {/* Links a plantas y enfermedades */}
-        {!isUser && (item.plantLinks?.length || item.enfermedadLinks?.length) ? (
-          <View style={[styles.linksContainer, { borderTopColor: colors.borderSubtle }]}>
+        {(item.plantLinks?.length || item.enfermedadLinks?.length) && (
+          <View style={[styles.linksContainer, { borderTopColor: colors.border }]}>
             {item.plantLinks && item.plantLinks.length > 0 && (
               <>
                 <ThemedText style={[styles.linksTitle, { color: IronManColors.holographicCyan }]}>
                   🌿 Plantas mencionadas:
                 </ThemedText>
                 <View style={styles.linksRow}>
-                  {item.plantLinks.map((link, idx) => (
+                  {item.plantLinks.map((planta) => (
                     <Pressable
-                      key={idx}
-                      onPress={() => navigateToPlanta(link.id)}
+                      key={planta.id}
+                      onPress={() => navigateToPlanta(planta.id)}
                       style={[styles.linkButton, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}
                     >
                       <ThemedText style={[styles.linkText, { color: IronManColors.arcReactorBlue }]}>
-                        {link.nombre}
+                        {planta.nombre}
                       </ThemedText>
                     </Pressable>
                   ))}
@@ -372,18 +416,18 @@ export default function MolDoctorScreen() {
             )}
             {item.enfermedadLinks && item.enfermedadLinks.length > 0 && (
               <>
-                <ThemedText style={[styles.linksTitle, { color: IronManColors.holographicCyan }]}>
-                  🏥 Condiciones mencionadas:
+                <ThemedText style={[styles.linksTitle, { color: IronManColors.jarvisAmber }]}>
+                  🏥 Condiciones relacionadas:
                 </ThemedText>
                 <View style={styles.linksRow}>
-                  {item.enfermedadLinks.map((link, idx) => (
+                  {item.enfermedadLinks.map((enfermedad) => (
                     <Pressable
-                      key={idx}
-                      onPress={() => navigateToEnfermedad(link.id)}
+                      key={enfermedad.id}
+                      onPress={() => navigateToEnfermedad(enfermedad.id)}
                       style={[styles.linkButton, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}
                     >
-                      <ThemedText style={[styles.linkText, { color: IronManColors.arcReactorBlue }]}>
-                        {link.nombre}
+                      <ThemedText style={[styles.linkText, { color: IronManColors.jarvisAmber }]}>
+                        {enfermedad.nombre}
                       </ThemedText>
                     </Pressable>
                   ))}
@@ -391,62 +435,135 @@ export default function MolDoctorScreen() {
               </>
             )}
           </View>
-        ) : null}
+        )}
 
-        {/* Botón de escuchar */}
         {!isUser && (
           <Pressable
             onPress={() => speakMessage(item.content)}
-            style={[styles.speakButton, { borderColor: IronManColors.borderHoloSubtle, backgroundColor: IronManColors.glassBlue }]}
+            style={[styles.speakButton, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}
           >
-            <ThemedText style={{ fontSize: 14, color: IronManColors.arcReactorBlue }}>
+            <ThemedText style={{ fontSize: 14, color: IronManColors.holographicCyan }}>
               {isSpeaking ? "⏹️ Detener" : "🔊 Escuchar"}
             </ThemedText>
           </Pressable>
         )}
 
         <ThemedText style={[styles.timestamp, { color: colors.textTertiary }]}>
-          {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          {item.timestamp.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })}
         </ThemedText>
       </View>
     );
   };
 
-  return (
-    <GlassBackground showGrid={true} showScanLine={false} showCorners={true}>
-      {/* Header */}
-      <View
-        style={[
-          styles.header,
-          {
-            paddingTop: Math.max(insets.top, 20),
-            backgroundColor: colors.background,
-            borderBottomColor: colors.border,
-          },
-        ]}
-      >
-        <View style={styles.headerContent}>
-          <View style={[styles.doctorAvatar, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHolo }]}>
-            <ThemedText style={styles.avatarEmoji}>🩺</ThemedText>
-          </View>
-          <View style={styles.headerText}>
-            <ThemedText type="subtitle" style={{ color: IronManColors.arcReactorBlue }}>MolDoctor</ThemedText>
-            <ThemedText style={[styles.headerSubtitle, { color: IronManColors.holographicCyan }]}>
-              Tu médico digital experto en plantas
-            </ThemedText>
-          </View>
-        </View>
-        <Pressable onPress={clearChatHistory} style={styles.clearButton}>
-          <ThemedText style={{ color: IronManColors.holographicCyan, fontSize: 20 }}>🗑️</ThemedText>
-        </Pressable>
-      </View>
+  // Menú flotante de adjuntos
+  const renderAttachMenu = () => {
+    const translateY = menuAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: [100, 0],
+    });
 
-      {/* Chat Messages */}
+    const opacity = menuAnimation.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 1],
+    });
+
+    return (
+      <Modal
+        visible={showAttachMenu}
+        transparent
+        animationType="none"
+        onRequestClose={() => setShowAttachMenu(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setShowAttachMenu(false)}>
+          <View style={styles.attachMenuOverlay}>
+            <TouchableWithoutFeedback>
+              <Animated.View 
+                style={[
+                  styles.attachMenuContainer,
+                  {
+                    transform: [{ translateY }],
+                    opacity,
+                    bottom: 80 + Math.max(insets.bottom, 16),
+                  }
+                ]}
+              >
+                <Pressable
+                  onPress={handleCamera}
+                  style={styles.attachMenuItem}
+                >
+                  <View style={[styles.attachMenuIcon, { backgroundColor: "#4CAF50" }]}>
+                    <ThemedText style={styles.attachMenuEmoji}>📷</ThemedText>
+                  </View>
+                  <ThemedText style={styles.attachMenuLabel}>Cámara</ThemedText>
+                  <ThemedText style={styles.attachMenuDesc}>Tomar foto</ThemedText>
+                </Pressable>
+
+                <Pressable
+                  onPress={handleImagePicker}
+                  style={styles.attachMenuItem}
+                >
+                  <View style={[styles.attachMenuIcon, { backgroundColor: "#2196F3" }]}>
+                    <ThemedText style={styles.attachMenuEmoji}>🖼️</ThemedText>
+                  </View>
+                  <ThemedText style={styles.attachMenuLabel}>Galería</ThemedText>
+                  <ThemedText style={styles.attachMenuDesc}>Seleccionar imagen</ThemedText>
+                </Pressable>
+
+                <Pressable
+                  onPress={handleDocumentPicker}
+                  style={styles.attachMenuItem}
+                >
+                  <View style={[styles.attachMenuIcon, { backgroundColor: "#FF9800" }]}>
+                    <ThemedText style={styles.attachMenuEmoji}>📄</ThemedText>
+                  </View>
+                  <ThemedText style={styles.attachMenuLabel}>Documento</ThemedText>
+                  <ThemedText style={styles.attachMenuDesc}>PDF o imagen</ThemedText>
+                </Pressable>
+              </Animated.View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+    );
+  };
+
+  return (
+    <GlassBackground showGrid={true} showCorners={true}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
+        style={styles.container}
         keyboardVerticalOffset={0}
       >
+        {/* Header */}
+        <View
+          style={[
+            styles.header,
+            {
+              paddingTop: insets.top + Spacing.sm,
+              backgroundColor: colors.background,
+              borderBottomColor: IronManColors.borderHolo,
+            },
+          ]}
+        >
+          <View style={styles.headerContent}>
+            <View style={[styles.doctorAvatar, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.arcReactorBlue }]}>
+              <ThemedText style={styles.avatarEmoji}>🩺</ThemedText>
+            </View>
+            <View style={styles.headerText}>
+              <ThemedText type="subtitle" style={{ color: IronManColors.arcReactorBlue }}>
+                MolDoctor
+              </ThemedText>
+              <ThemedText style={[styles.headerSubtitle, { color: IronManColors.holographicCyan }]}>
+                Tu médico virtual 🌿
+              </ThemedText>
+            </View>
+          </View>
+          <Pressable onPress={clearChatHistory} style={styles.clearButton}>
+            <ThemedText style={{ color: IronManColors.textTertiary, fontSize: 20 }}>🗑️</ThemedText>
+          </Pressable>
+        </View>
+
+        {/* Chat Messages */}
         <FlatList
           ref={flatListRef}
           data={messages}
@@ -462,7 +579,7 @@ export default function MolDoctorScreen() {
           <View style={[styles.loadingContainer, { backgroundColor: colors.glass, borderColor: colors.border }]}>
             <ActivityIndicator color={IronManColors.arcReactorBlue} />
             <ThemedText style={[styles.loadingText, { color: IronManColors.holographicCyan }]}>
-              MolDoctor está pensando...
+              MolDoctor está analizando...
             </ThemedText>
           </View>
         )}
@@ -472,7 +589,7 @@ export default function MolDoctorScreen() {
           <View style={[styles.selectedImageContainer, { backgroundColor: colors.glass, borderColor: colors.border }]}>
             <Image source={{ uri: selectedImage }} style={styles.selectedImagePreview} />
             <ThemedText style={{ flex: 1, marginLeft: Spacing.sm, color: colors.text }}>
-              Imagen seleccionada
+              Imagen lista para enviar
             </ThemedText>
             <Pressable onPress={() => setSelectedImage(null)} style={styles.removeImageButton}>
               <ThemedText style={{ color: IronManColors.warningRed, fontSize: 18 }}>✕</ThemedText>
@@ -491,21 +608,21 @@ export default function MolDoctorScreen() {
             },
           ]}
         >
-          {/* Action Buttons */}
-          <View style={styles.actionButtons}>
-            <Pressable
-              onPress={handleCamera}
-              style={[styles.actionButton, { backgroundColor: IronManColors.glassBlue, borderWidth: 1, borderColor: IronManColors.borderHoloSubtle }]}
-            >
-              <ThemedText style={{ fontSize: 20 }}>📷</ThemedText>
-            </Pressable>
-            <Pressable
-              onPress={handleImagePicker}
-              style={[styles.actionButton, { backgroundColor: IronManColors.glassBlue, borderWidth: 1, borderColor: IronManColors.borderHoloSubtle }]}
-            >
-              <ThemedText style={{ fontSize: 20 }}>🖼️</ThemedText>
-            </Pressable>
-          </View>
+          {/* Botón + para adjuntos */}
+          <Pressable
+            onPress={() => setShowAttachMenu(true)}
+            style={[
+              styles.plusButton,
+              { 
+                backgroundColor: showAttachMenu ? IronManColors.arcReactorBlue : IronManColors.glassBlue,
+                borderColor: IronManColors.borderHoloSubtle,
+              }
+            ]}
+          >
+            <ThemedText style={[styles.plusIcon, { color: showAttachMenu ? "#FFF" : IronManColors.arcReactorBlue }]}>
+              +
+            </ThemedText>
+          </Pressable>
 
           {/* Text Input */}
           <View
@@ -545,6 +662,9 @@ export default function MolDoctorScreen() {
             <ThemedText style={{ fontSize: 20, color: "#FFF" }}>➤</ThemedText>
           </Pressable>
         </View>
+
+        {/* Menú de adjuntos */}
+        {renderAttachMenu()}
       </KeyboardAvoidingView>
     </GlassBackground>
   );
@@ -733,16 +853,18 @@ const styles = StyleSheet.create({
     borderTopWidth: 1.5,
     gap: Spacing.sm,
   },
-  actionButtons: {
-    flexDirection: "row",
-    gap: Spacing.xs,
-  },
-  actionButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+  plusButton: {
+    width: 46,
+    height: 46,
+    borderRadius: 23,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1.5,
+  },
+  plusIcon: {
+    fontSize: 28,
+    fontWeight: "300",
+    lineHeight: 32,
   },
   inputWrapper: {
     flex: 1,
@@ -768,5 +890,48 @@ const styles = StyleSheet.create({
     borderRadius: 23,
     justifyContent: "center",
     alignItems: "center",
+  },
+  // Menú de adjuntos
+  attachMenuOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  attachMenuContainer: {
+    position: "absolute",
+    left: Spacing.md,
+    right: Spacing.md,
+    backgroundColor: IronManColors.darkBackground,
+    borderRadius: BorderRadius.lg,
+    padding: Spacing.md,
+    borderWidth: 1.5,
+    borderColor: IronManColors.borderHolo,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  attachMenuItem: {
+    alignItems: "center",
+    padding: Spacing.sm,
+  },
+  attachMenuIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: Spacing.xs,
+  },
+  attachMenuEmoji: {
+    fontSize: 28,
+  },
+  attachMenuLabel: {
+    fontSize: 13,
+    fontFamily: Fonts.semiBold,
+    color: IronManColors.textPrimary,
+  },
+  attachMenuDesc: {
+    fontSize: 11,
+    fontFamily: Fonts.regular,
+    color: IronManColors.textTertiary,
   },
 });

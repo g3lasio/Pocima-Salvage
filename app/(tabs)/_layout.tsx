@@ -185,7 +185,7 @@ function SidebarModal({
               {/* Footer */}
               <View style={styles.sidebarFooter}>
                 <ThemedText style={styles.version}>v1.0.0</ThemedText>
-                <ThemedText style={styles.copyright}>© 2025 Chyrris</ThemedText>
+                <ThemedText style={styles.copyright}>© 2025 Chyrris Technologies</ThemedText>
               </View>
             </View>
           </TouchableWithoutFeedback>
@@ -208,8 +208,8 @@ export default function TabLayout() {
           headerShown: false,
           tabBarButton: HapticTab,
           tabBarStyle: {
-            paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
-            height: 70 + (insets.bottom > 0 ? insets.bottom : 8),
+            paddingBottom: insets.bottom > 0 ? insets.bottom : 10,
+            height: 80 + (insets.bottom > 0 ? insets.bottom : 10),
             backgroundColor: IronManColors.glassDarkMedium,
             borderTopColor: IronManColors.borderHolo,
             borderTopWidth: 1.5,
@@ -228,15 +228,18 @@ export default function TabLayout() {
           tabBarLabelStyle: {
             fontFamily: Fonts.bold,
             fontSize: 9,
-            letterSpacing: 0.5,
+            letterSpacing: 0.3,
             textTransform: "uppercase",
-            marginTop: 2,
+            marginTop: 6,
+            marginBottom: 2,
           },
           tabBarIconStyle: {
-            marginTop: 4,
+            marginTop: 6,
+            marginBottom: 0,
           },
           tabBarItemStyle: {
-            paddingVertical: 2,
+            paddingVertical: 4,
+            gap: 4,
           },
           tabBarActiveBackgroundColor: "transparent",
         }}
@@ -292,9 +295,9 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   iconContainer: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1.5,
