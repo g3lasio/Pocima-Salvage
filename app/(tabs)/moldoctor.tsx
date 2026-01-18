@@ -22,12 +22,12 @@ import * as Speech from "expo-speech";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { ThemedText } from "@/components/themed-text";
+import { ThemedText } from "../../components/themed-text";
 
-import { GlassBackground } from "@/components/ui/glass-background";
-import { Colors, Spacing, BorderRadius, Shadows, IronManColors, Fonts } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { trpc } from "@/lib/trpc";
+import { GlassBackground } from "../../components/ui/glass-background";
+import { Colors, Spacing, BorderRadius, Shadows, IronManColors, Fonts } from "../../constants/theme";
+import { useColorScheme } from "../../hooks/use-color-scheme";
+import { trpc } from "../../lib/trpc";
 
 // Tipos para los mensajes del chat
 interface ChatMessage {

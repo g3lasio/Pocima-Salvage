@@ -8,15 +8,15 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { ThemedText } from "../components/themed-text";
+import { ThemedView } from "../components/themed-view";
+import { Colors, Spacing, BorderRadius } from "../constants/theme";
+import { useColorScheme } from "../hooks/use-color-scheme";
 import { 
   getEnfermedadExpandidaById, 
   sistemasCorporales,
 } from "@/data/enfermedades-expandidas";
-import { getPlantasParaEnfermedad, getMotivoRecomendacion } from "@/data/cruce-datos";
+import { getPlantasParaEnfermedad, getMotivoRecomendacion } from "../data/cruce-datos";
 
 export default function EnfermedadExpandidaDetailScreen() {
   const { id, sistemaId } = useLocalSearchParams<{ id: string; sistemaId: string }>();

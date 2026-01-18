@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { IronManColors, Shadows } from "@/constants/theme";
+import { IronManColors, Shadows } from "../../constants/theme";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 

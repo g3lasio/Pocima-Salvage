@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ThemedText } from "@/components/themed-text";
-import { GlassBackground } from "@/components/ui/glass-background";
-import { Colors, Spacing, IronManColors, Fonts, BorderRadius } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { ThemedText } from "../../components/themed-text";
+import { GlassBackground } from "../../components/ui/glass-background";
+import { Colors, Spacing, IronManColors, Fonts, BorderRadius } from "../../constants/theme";
+import { useColorScheme } from "../../hooks/use-color-scheme";
 import { 
   sistemasCorporales, 
   buscarEnfermedadesExpandidas, 

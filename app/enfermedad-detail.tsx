@@ -8,12 +8,12 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { Colors, Spacing, BorderRadius } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { getEnfermedadById, getPlantaById } from "@/data/medicinal-data";
-import { useApp } from "@/contexts/app-context";
+import { ThemedText } from "../components/themed-text";
+import { ThemedView } from "../components/themed-view";
+import { Colors, Spacing, BorderRadius } from "../constants/theme";
+import { useColorScheme } from "../hooks/use-color-scheme";
+import { getEnfermedadById, getPlantaById } from "../data/medicinal-data";
+import { useApp } from "../contexts/app-context";
 
 export default function EnfermedadDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

@@ -2,9 +2,9 @@ import { StyleSheet, View, ScrollView, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
-import { ThemedText } from "@/components/themed-text";
-import { GlassBackground } from "@/components/ui/glass-background";
-import { IronManColors, Spacing, Fonts } from "@/constants/theme";
+import { ThemedText } from "../components/themed-text";
+import { GlassBackground } from "../components/ui/glass-background";
+import { IronManColors, Spacing, Fonts } from "../constants/theme";
 
 export default function TermsScreen() {
   const insets = useSafeAreaInsets();

@@ -12,7 +12,7 @@ import {
   Shadows, 
   BorderWidth,
 } from "@/constants/theme";
-import { ThemedText } from "@/components/themed-text";
+import { ThemedText } from "../../components/themed-text";
 
 interface HolographicIconProps {
   icon: string; // Emoji or text icon

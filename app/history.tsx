@@ -4,9 +4,9 @@ import { useRouter } from "expo-router";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { ThemedText } from "@/components/themed-text";
-import { GlassBackground } from "@/components/ui/glass-background";
-import { IronManColors, Spacing, Fonts, BorderRadius } from "@/constants/theme";
+import { ThemedText } from "../components/themed-text";
+import { GlassBackground } from "../components/ui/glass-background";
+import { IronManColors, Spacing, Fonts, BorderRadius } from "../constants/theme";
 
 interface HistoryItem {
   id: string;

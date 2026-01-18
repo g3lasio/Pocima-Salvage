@@ -3,9 +3,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 
-import { ThemedText } from "@/components/themed-text";
-import { GlassBackground } from "@/components/ui/glass-background";
-import { IronManColors, Spacing, Fonts, BorderRadius } from "@/constants/theme";
+import { ThemedText } from "../components/themed-text";
+import { GlassBackground } from "../components/ui/glass-background";
+import { IronManColors, Spacing, Fonts, BorderRadius } from "../constants/theme";
 
 interface FAQItem {
   question: string;

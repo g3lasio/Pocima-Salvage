@@ -4,10 +4,10 @@ import { StyleSheet, Animated, Platform, View, Pressable, Modal, TouchableWithou
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
-import { HapticTab } from "@/components/haptic-tab";
-import { IconSymbol } from "@/components/ui/icon-symbol";
-import { ThemedText } from "@/components/themed-text";
-import { IronManColors, Shadows, Fonts, Spacing, BorderRadius } from "@/constants/theme";
+import { HapticTab } from "../../components/haptic-tab";
+import { IconSymbol } from "../../components/ui/icon-symbol";
+import { ThemedText } from "../../components/themed-text";
+import { IronManColors, Shadows, Fonts, Spacing, BorderRadius } from "../../constants/theme";
 
 /**
  * HolographicTabIcon - Tab icon with animated glass effect and glow

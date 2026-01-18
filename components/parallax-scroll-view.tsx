@@ -8,9 +8,9 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { ThemedView } from "@/components/themed-view";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { useThemeColor } from "@/hooks/use-theme-color";
+import { ThemedView } from "../components/themed-view";
+import { useColorScheme } from "../hooks/use-color-scheme";
+import { useThemeColor } from "../hooks/use-theme-color";
 
 const HEADER_HEIGHT = 250;
 

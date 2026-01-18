@@ -1,7 +1,7 @@
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import * as Api from "@/lib/api";
-import * as Auth from "@/lib/auth";
+import { ThemedText } from "../../components/themed-text";
+import { ThemedView } from "../../components/themed-view";
+import * as Api from "../../lib/api";
+import * as Auth from "../../lib/auth";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";

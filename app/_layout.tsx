@@ -14,11 +14,11 @@ import {
 } from "react-native-safe-area-context";
 import type { EdgeInsets, Metrics, Rect } from "react-native-safe-area-context";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { trpc, createTRPCClient } from "@/lib/trpc";
-import { initManusRuntime, subscribeSafeAreaInsets } from "@/lib/manus-runtime";
-import { IronManColors } from "@/constants/theme";
-import { AppProvider } from "@/contexts/app-context";
+import { useColorScheme } from "../hooks/use-color-scheme";
+import { trpc, createTRPCClient } from "../lib/trpc";
+import { initManusRuntime, subscribeSafeAreaInsets } from "../lib/manus-runtime";
+import { IronManColors } from "../constants/theme";
+import { AppProvider } from "../contexts/app-context";
 
 const DEFAULT_WEB_INSETS: EdgeInsets = { top: 0, right: 0, bottom: 0, left: 0 };
 const DEFAULT_WEB_FRAME: Rect = { x: 0, y: 0, width: 0, height: 0 };

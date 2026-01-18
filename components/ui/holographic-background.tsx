@@ -6,8 +6,8 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import { Colors, IronManColors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Colors, IronManColors } from "../../constants/theme";
+import { useColorScheme } from "../../hooks/use-color-scheme";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 

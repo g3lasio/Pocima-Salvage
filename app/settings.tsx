@@ -2,10 +2,10 @@ import { StyleSheet, View, ScrollView, Pressable, Switch, Linking, Alert } from 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
-import { ThemedText } from "@/components/themed-text";
-import { GlassBackground } from "@/components/ui/glass-background";
-import { IronManColors, Spacing, Fonts, BorderRadius } from "@/constants/theme";
-import { useApp } from "@/contexts/app-context";
+import { ThemedText } from "../components/themed-text";
+import { GlassBackground } from "../components/ui/glass-background";
+import { IronManColors, Spacing, Fonts, BorderRadius } from "../constants/theme";
+import { useApp } from "../contexts/app-context";
 
 export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
