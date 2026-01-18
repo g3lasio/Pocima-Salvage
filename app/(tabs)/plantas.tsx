@@ -20,7 +20,7 @@ import {
   PlantaExpandida,
   CategoriaPlanta,
   totalPlantas
-} from "@/data/plantas-expandidas";
+} from "../../data/plantas-expandidas";
 
 // Iconos para categorías
 const categoriaIconos: Record<string, string> = {

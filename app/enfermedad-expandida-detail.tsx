@@ -15,7 +15,7 @@ import { useColorScheme } from "../hooks/use-color-scheme";
 import { 
   getEnfermedadExpandidaById, 
   sistemasCorporales,
-} from "@/data/enfermedades-expandidas";
+} from "../data/enfermedades-expandidas";
 import { getPlantasParaEnfermedad, getMotivoRecomendacion } from "../data/cruce-datos";
 
 export default function EnfermedadExpandidaDetailScreen() {

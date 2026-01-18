@@ -11,7 +11,7 @@ import {
   BorderRadius, 
   Shadows, 
   BorderWidth,
-} from "@/constants/theme";
+} from "../../constants/theme";
 import { ThemedText } from "../../components/themed-text";
 
 interface HolographicIconProps {

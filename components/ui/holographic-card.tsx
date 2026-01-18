@@ -13,7 +13,7 @@ import {
   Shadows, 
   BorderWidth,
 
-} from "@/constants/theme";
+} from "../../constants/theme";
 
 interface HolographicCardProps {
   children: React.ReactNode;

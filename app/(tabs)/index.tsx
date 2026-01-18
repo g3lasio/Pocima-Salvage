@@ -19,7 +19,7 @@ import {
   EnfermedadExpandida,
   SistemaCorporal,
   totalEnfermedades
-} from "@/data/enfermedades-expandidas";
+} from "../../data/enfermedades-expandidas";
 
 export default function EnfermedadesScreen() {
   const colorScheme = useColorScheme();
