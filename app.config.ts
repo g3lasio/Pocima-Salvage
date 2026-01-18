@@ -41,6 +41,7 @@ const config: ExpoConfig = {
     bundleIdentifier: env.iosBundleId,
     infoPlist: {
       UIBackgroundModes: ["audio"],
+      ITSAppUsesNonExemptEncryption: false
     },
   },
   android: {
