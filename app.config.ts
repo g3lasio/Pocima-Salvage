@@ -31,6 +31,11 @@ const config: ExpoConfig = {
   scheme: env.scheme,
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
+  extra: {
+    eas: {
+      projectId: "5e273ac1-bf33-4086-af67-e6bb672b7a88"
+    }
+  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: env.iosBundleId,
