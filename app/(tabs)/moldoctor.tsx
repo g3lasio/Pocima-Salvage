@@ -27,7 +27,7 @@ import { ThemedText } from "../../components/themed-text";
 import { GlassBackground } from "../../components/ui/glass-background";
 import { Colors, Spacing, BorderRadius, Shadows, IronManColors, Fonts } from "../../constants/theme";
 import { useColorScheme } from "../../hooks/use-color-scheme";
-import { trpc } from "../../lib/trpc";
+import { moldoctorRequest, MOLDOCTOR_API } from "../../constants/api";
 
 // Tipos para los mensajes del chat
 interface ChatMessage {
@@ -65,8 +65,10 @@ export default function MolDoctorScreen() {
   const [showAttachMenu, setShowAttachMenu] = useState(false);
   const menuAnimation = useRef(new Animated.Value(0)).current;
 
-  // tRPC mutation para chat
-  const chatMutation = trpc.moldoctor.chat.useMutation();
+  // API call function
+  const callMolDoctorAPI = async (data: any) => {
+    return await moldoctorRequest(MOLDOCTOR_API.CHAT, data);
+  };
 
   // Cargar historial al iniciar
   useEffect(() => {
@@ -196,7 +198,7 @@ export default function MolDoctorScreen() {
         content: text.trim() || "Por favor analiza esta imagen médica. Si contiene texto (como resultados de laboratorio, recetas o documentos médicos), extrae y analiza la información. Si es una foto de síntomas (heridas, manchas, erupciones), describe lo que ves y proporciona orientación.",
       });
 
-      const response = await chatMutation.mutateAsync({
+      const response = await callMolDoctorAPI({
         messages: apiMessages,
         imageBase64,
         imageMimeType,
