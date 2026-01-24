@@ -230,7 +230,7 @@ export default function MolDoctorScreen() {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, chatMutation]);
+  }, [messages]);
 
   const handleImagePicker = async () => {
     setShowAttachMenu(false);
