@@ -3,7 +3,7 @@
 
 **Fecha:** 24 de enero de 2026  
 **Versión:** 1.0.0  
-**Estado:** LISTO PARA BUILD (después de desplegar backend)
+**Estado:** ✅ **LISTO PARA BUILD EN MAC**
 
 ---
 
@@ -17,95 +17,33 @@
 - [x] Configuración de Android completa (build.gradle, manifest)
 - [x] Assets completos (iconos, splash, fuentes)
 
-### 2. URLs Requeridas para Tiendas
-- [x] **Privacy Policy:** https://chyrris.com/pocima-salvaje/privacy
-- [x] **Terms of Service:** https://chyrris.com/pocima-salvaje/terms
-- [x] **Support URL:** https://chyrris.com/pocima-salvaje/support
-- [x] **Marketing URL:** https://chyrris.com (página principal de Chyrris)
+### 2. Backend y API
+- [x] **Backend desplegado en chyrris.com** (Replit)
+- [x] **Endpoints funcionando:**
+  - `POST https://chyrris.com/api/moldoctor/chat`
+  - `POST https://chyrris.com/api/moldoctor/analyze-lab`
+  - `GET https://chyrris.com/api/health`
+- [x] **App móvil apuntando a chyrris.com**
+- [x] **API key configurada en Replit Secrets**
 
-### 3. Documentación
+### 3. URLs Requeridas para Tiendas
+- [x] **Marketing URL:** https://chyrris.com/pocima-salvaje ✅
+- [x] **Privacy Policy:** https://chyrris.com/pocima-salvaje/privacy ✅
+- [x] **Terms of Service:** https://chyrris.com/pocima-salvaje/terms ✅
+- [x] **Support URL:** https://chyrris.com/pocima-salvaje/support ✅
+- [x] **Support Email:** info@chyrris.com ✅
+
+### 4. Documentación
 - [x] Reporte de revisión completo (REPORTE_REVISION_BUILD.md)
 - [x] Arquitectura de backend documentada (BACKEND_ARCHITECTURE.md)
 - [x] Guía de build para Mac (GUIA_BUILD_MAC.md)
-- [x] Estado del proyecto en JSON (build-status.json)
+- [x] URLs para tiendas (POCIMA_SALVAJE_URLS.md)
 
-### 4. Repositorios
+### 5. Repositorios
 - [x] Cambios commiteados en Pocima-Salvage
-- [x] Cambios commiteados en chyrris (landing page)
+- [x] Cambios commiteados en chyrris
 - [x] Ambos repos pusheados a GitHub
-
----
-
-## ⚠️ PENDIENTE ANTES DE BUILD EN MAC
-
-### 1. Backend (CRÍTICO para MolDoctor)
-
-**Opción A: Desplegar en Railway (RECOMENDADO)**
-
-```bash
-# 1. Crear cuenta en railway.app
-# 2. Conectar repositorio GitHub: g3lasio/Pocima-Salvage
-# 3. Railway detectará automáticamente el proyecto Node.js
-# 4. Configurar variables de entorno:
-ANTHROPIC_API_KEY=sk-ant-***
-NODE_ENV=production
-PORT=3000
-
-# 5. Railway te dará una URL como:
-# https://pocima-salvage-production.up.railway.app
-```
-
-**Actualizar URL en la app:**
-```typescript
-// Editar: constants/oauth.ts línea 40
-if (ReactNative.Platform.OS !== "web") {
-  return "https://pocima-salvage-production.up.railway.app";
-}
-```
-
-**Opción B: Usar backend de Manus temporalmente**
-- URL actual: `https://3000-i6bjqff548tmliorgm2j9-2b5dd600.us2.manus.computer`
-- ⚠️ Solo para testing, no para producción
-- El servidor se apaga cuando no hay actividad
-
-**Opción C: Deshabilitar MolDoctor**
-- Comentar tab de MolDoctor en `app/(tabs)/_layout.tsx`
-- La app funcionará solo con datos locales (plantas y enfermedades)
-
-### 2. Keystore de Android (REQUERIDO para Google Play)
-
-```bash
-# Generar keystore de producción
-keytool -genkeypair -v -storetype PKCS12 \
-  -keystore pocima-salvage-release.keystore \
-  -alias pocima-salvage \
-  -keyalg RSA -keysize 2048 -validity 10000
-
-# Guardar en: android/app/pocima-salvage-release.keystore
-# Guardar contraseñas en lugar seguro
-```
-
-**Configurar en `android/gradle.properties`:**
-```properties
-MYAPP_RELEASE_STORE_FILE=pocima-salvage-release.keystore
-MYAPP_RELEASE_KEY_ALIAS=pocima-salvaje
-MYAPP_RELEASE_STORE_PASSWORD=***
-MYAPP_RELEASE_KEY_PASSWORD=***
-```
-
-**Actualizar `android/app/build.gradle`:**
-```gradle
-signingConfigs {
-    release {
-        if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-            storeFile file(MYAPP_RELEASE_STORE_FILE)
-            storePassword MYAPP_RELEASE_STORE_PASSWORD
-            keyAlias MYAPP_RELEASE_KEY_ALIAS
-            keyPassword MYAPP_RELEASE_KEY_PASSWORD
-        }
-    }
-}
-```
+- [x] Backend desplegado en Replit
 
 ---
 
@@ -114,10 +52,14 @@ signingConfigs {
 ### Paso 1: Preparación
 
 ```bash
-# Clonar repositorio
+# Clonar repositorio (o pull si ya lo tienes)
 cd ~/Documents
 git clone https://github.com/g3lasio/Pocima-Salvage.git
 cd Pocima-Salvage
+
+# O si ya lo tienes clonado:
+cd ~/Documents/Pocima-Salvage
+git pull origin main
 
 # Instalar dependencias
 npm install
@@ -154,7 +96,19 @@ open ios/PcimaSalvaje.xcworkspace
 2. Conectar tu iPhone o seleccionar simulador
 3. Presionar ⌘+R para compilar y ejecutar
 
-### Paso 5: Build de Producción iOS
+### Paso 5: Probar MolDoctor
+
+1. Abre la app en el simulador/dispositivo
+2. Ve a la pestaña "MolDoctor"
+3. Envía un mensaje de prueba: "Hola, tengo dolor de cabeza"
+4. Verifica que responde correctamente
+
+**Si no responde:**
+- Verifica que chyrris.com está corriendo en Replit
+- Verifica que la API key está configurada en Replit Secrets
+- Revisa los logs en Replit Console
+
+### Paso 6: Build de Producción iOS
 
 **En Xcode:**
 1. Product > Archive
@@ -162,10 +116,19 @@ open ios/PcimaSalvaje.xcworkspace
 3. Distribute App > App Store Connect
 4. Seguir el asistente para subir a App Store
 
-### Paso 6: Build de Producción Android
+### Paso 7: Build de Producción Android
 
 ```bash
-# Asegurarse de tener el keystore configurado
+# Generar keystore si no lo tienes
+keytool -genkeypair -v -storetype PKCS12 \
+  -keystore android/app/pocima-salvage-release.keystore \
+  -alias pocima-salvaje \
+  -keyalg RSA -keysize 2048 -validity 10000
+
+# Configurar en android/gradle.properties
+# (Ver sección de Keystore abajo)
+
+# Compilar AAB
 cd android
 ./gradlew bundleRelease
 
@@ -185,11 +148,12 @@ cd android
 - **Category:** Health & Fitness / Medical
 - **Content Rating:** 12+ (medical content)
 
-### URLs Requeridas
+### URLs Requeridas ✅
 - **Privacy Policy:** https://chyrris.com/pocima-salvaje/privacy
-- **Terms of Use:** https://chyrris.com/pocima-salvaje/terms
+- **Terms of Use:** https://chyrris.com/pocima-salvaje/terms (opcional)
 - **Support URL:** https://chyrris.com/pocima-salvaje/support
-- **Marketing URL:** https://chyrris.com
+- **Marketing URL:** https://chyrris.com/pocima-salvaje
+- **Support Email:** info@chyrris.com
 
 ### Descripción Corta (80 caracteres)
 ```
@@ -239,7 +203,7 @@ plantas medicinales,remedios naturales,medicina natural,herbolaria,salud,wellnes
 ### Screenshots Requeridos
 - **iPhone 6.7":** 1290 x 2796 px (mínimo 3, máximo 10)
 - **iPhone 6.5":** 1242 x 2688 px (mínimo 3, máximo 10)
-- **iPad Pro 12.9":** 2048 x 2732 px (mínimo 3, máximo 10)
+- **iPad Pro 12.9":** 2048 x 2732 px (opcional)
 
 ---
 
@@ -253,18 +217,18 @@ plantas medicinales,remedios naturales,medicina natural,herbolaria,salud,wellnes
 - **Category:** Health & Fitness
 - **Content Rating:** PEGI 12 / ESRB Everyone 10+
 
-### URLs Requeridas (OBLIGATORIAS)
-- **Privacy Policy:** https://chyrris.com/pocima-salvaje/privacy ✅
-- **Terms of Service:** https://chyrris.com/pocima-salvaje/terms ✅
+### URLs Requeridas ✅
+- **Website:** https://chyrris.com/pocima-salvaje
+- **Privacy Policy:** https://chyrris.com/pocima-salvaje/privacy
+- **Terms of Service:** https://chyrris.com/pocima-salvaje/terms
 - **Support Email:** info@chyrris.com
-- **Website:** https://chyrris.com
 
 ### Descripción Corta (80 caracteres)
 ```
 Guía de plantas medicinales y remedios naturales con asistente IA
 ```
 
-### Descripción Larga (4000 caracteres máximo)
+### Descripción Larga
 ```
 Pócima Salvaje es tu compañero definitivo para explorar el mundo de la medicina natural y las plantas medicinales.
 
@@ -318,7 +282,7 @@ SOBRE CHYRRIS TECHNOLOGIES:
 Desarrollamos aplicaciones innovadoras que combinan tecnología de vanguardia con conocimiento tradicional para mejorar tu bienestar y calidad de vida.
 
 Contacto: info@chyrris.com
-Sitio web: https://chyrris.com
+Sitio web: https://chyrris.com/pocima-salvaje
 ```
 
 ### Screenshots Requeridos
@@ -333,46 +297,58 @@ Sitio web: https://chyrris.com
 
 ---
 
-## 🎨 ASSETS PARA TIENDAS
+## 🔐 Configuración de Keystore para Android
 
-### Iconos
-- [x] App Icon: 1024x1024 px (ya existe en `assets/images/icon.png`)
-- [x] Adaptive Icon Android (ya existe)
+### Generar Keystore
 
-### Screenshots (PENDIENTE)
-Necesitas capturar screenshots de:
-1. Pantalla principal (lista de enfermedades)
-2. Detalle de enfermedad con plantas relacionadas
-3. Lista de plantas medicinales
-4. Detalle de planta con información completa
-5. MolDoctor en acción (chat con IA)
-6. Búsqueda y filtros
+```bash
+keytool -genkeypair -v -storetype PKCS12 \
+  -keystore android/app/pocima-salvage-release.keystore \
+  -alias pocima-salvaje \
+  -keyalg RSA -keysize 2048 -validity 10000
+```
 
-**Herramientas:**
-- Simulador de iOS (Xcode)
-- Emulador de Android (Android Studio)
-- Figma/Sketch para composición
+**Información requerida:**
+- Nombre: Gelasio Sanchez Gomez
+- Organización: Chyrris Technologies
+- Ciudad: (tu ciudad)
+- Estado: (tu estado)
+- País: (código de 2 letras, ej: US, MX)
 
----
+**⚠️ IMPORTANTE:** Guarda las contraseñas en un lugar seguro. Si las pierdes, no podrás actualizar la app.
 
-## 💰 COSTOS ESTIMADOS
+### Configurar en `android/gradle.properties`
 
-### Desarrollo y Publicación
-- **Apple Developer Program:** $99/año (requerido)
-- **Google Play Developer:** $25 una vez (requerido)
+```properties
+MYAPP_RELEASE_STORE_FILE=pocima-salvage-release.keystore
+MYAPP_RELEASE_KEY_ALIAS=pocima-salvaje
+MYAPP_RELEASE_STORE_PASSWORD=tu_contraseña_aquí
+MYAPP_RELEASE_KEY_PASSWORD=tu_contraseña_aquí
+```
 
-### Backend (Railway)
-- **Plan Hobby:** $5/mes
-- **Incluye:** 500 horas de ejecución, $5 de crédito gratis
+### Actualizar `android/app/build.gradle`
 
-### API de Anthropic
-- **Claude Sonnet 4:** ~$3 por millón de tokens
-- **Estimado:** $10-20/mes para uso moderado
-
-### Total Primer Año
-- **Setup:** $124 (Apple $99 + Google $25)
-- **Mensual:** $15-25/mes (backend + API)
-- **Anual:** $304-424
+```gradle
+android {
+    ...
+    signingConfigs {
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+    buildTypes {
+        release {
+            ...
+            signingConfig signingConfigs.release
+        }
+    }
+}
+```
 
 ---
 
@@ -388,11 +364,13 @@ Necesitas capturar screenshots de:
 - [ ] Entrada por voz
 - [ ] Salida por voz
 
-### Tests de Rendimiento
-- [ ] Tiempo de carga inicial
-- [ ] Búsqueda rápida (< 1 segundo)
-- [ ] Scroll suave en listas largas
-- [ ] Transiciones fluidas
+### Tests de MolDoctor
+- [ ] Enviar mensaje de texto
+- [ ] Subir foto de síntoma
+- [ ] Subir foto de documento médico
+- [ ] Verificar que responde correctamente
+- [ ] Verificar que sugiere plantas
+- [ ] Verificar enlaces a plantas y enfermedades
 
 ### Tests de Dispositivos
 - [ ] iPhone 12/13/14/15 (varios tamaños)
@@ -408,57 +386,32 @@ Necesitas capturar screenshots de:
 
 ---
 
-## 📝 NOTAS FINALES
+## 💰 COSTOS ESTIMADOS
 
-### Antes de Enviar a Revisión
+### Desarrollo y Publicación
+- **Apple Developer Program:** $99/año (requerido)
+- **Google Play Developer:** $25 una vez (requerido)
 
-1. **Probar exhaustivamente** en dispositivos reales
-2. **Capturar screenshots** de alta calidad
-3. **Preparar video preview** (opcional pero recomendado)
-4. **Revisar metadata** (descripción, keywords)
-5. **Verificar URLs** (privacy, terms, support)
-6. **Confirmar backend** está funcionando
-7. **Revisar precios** (gratis en este caso)
+### Backend (chyrris.com en Replit)
+- **Replit:** $0-20/mes (dependiendo del plan)
+- **Incluye:** Hosting del servidor + landing page
 
-### Tiempos de Revisión Estimados
+### API de Anthropic
+- **Claude Sonnet 4:** ~$3 por millón de tokens
+- **Estimado:** $10-20/mes para uso moderado
 
-- **App Store:** 1-3 días
-- **Google Play:** 1-7 días (primera vez puede ser más)
-
-### Después de la Aprobación
-
-- [ ] Anunciar en redes sociales
-- [ ] Actualizar landing page (chyrris.com)
-- [ ] Preparar materiales de marketing
-- [ ] Monitorear reviews y feedback
-- [ ] Responder a usuarios
-- [ ] Planear actualizaciones futuras
-
----
-
-## 🆘 SOPORTE
-
-Si encuentras problemas:
-
-1. **Revisa documentación:**
-   - REPORTE_REVISION_BUILD.md
-   - BACKEND_ARCHITECTURE.md
-   - GUIA_BUILD_MAC.md
-
-2. **Errores comunes:**
-   - Ver sección de troubleshooting en REPORTE_REVISION_BUILD.md
-
-3. **Contacto:**
-   - Email: info@chyrris.com
-   - GitHub Issues: https://github.com/g3lasio/Pocima-Salvage/issues
+### Total Primer Año
+- **Setup:** $124 (Apple $99 + Google $25)
+- **Mensual:** $10-40/mes (Replit + API)
+- **Anual:** $244-604
 
 ---
 
 ## ✅ CHECKLIST FINAL
 
 ### Antes de Build
-- [ ] Backend desplegado en Railway
-- [ ] URL actualizada en `constants/oauth.ts`
+- [x] Backend desplegado en chyrris.com ✅
+- [x] App apuntando a chyrris.com ✅
 - [ ] Keystore de Android generado y configurado
 - [ ] Certificados de iOS configurados en Xcode
 
@@ -472,7 +425,7 @@ Si encuentras problemas:
 - [ ] Metadata completo (App Store Connect)
 - [ ] Metadata completo (Google Play Console)
 - [ ] Screenshots subidos
-- [ ] URLs verificadas
+- [ ] URLs verificadas ✅
 - [ ] Descripción revisada
 
 ### Después de Publicar
@@ -482,8 +435,20 @@ Si encuentras problemas:
 
 ---
 
+## 📞 URLs Importantes
+
+- **Backend API:** https://chyrris.com/api/moldoctor/*
+- **Landing Page:** https://chyrris.com/pocima-salvaje
+- **Privacy Policy:** https://chyrris.com/pocima-salvaje/privacy
+- **Terms of Service:** https://chyrris.com/pocima-salvaje/terms
+- **Support:** https://chyrris.com/pocima-salvaje/support
+- **Email:** info@chyrris.com
+
+---
+
 **¡Éxito con el lanzamiento de Pócima Salvaje!** 🚀🌿
 
 **Creado por:** Manus AI  
 **Fecha:** 24 de enero de 2026  
-**Versión:** 1.0.0
+**Versión:** 1.0.0  
+**Estado:** ✅ Listo para Build
