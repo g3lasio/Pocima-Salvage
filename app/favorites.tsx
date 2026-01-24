@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   itemNombre: {
     fontSize: 15,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     marginBottom: 2,
   },
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     marginBottom: Spacing.xs,
     textAlign: "center",

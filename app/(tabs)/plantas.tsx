@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
   },
   categoriaText: {
     fontSize: 12,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textSecondary,
   },
   categoriaTextSelected: {
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   },
   plantaNombre: {
     fontSize: 15,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     marginBottom: 2,
   },
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     marginBottom: Spacing.xs,
     textAlign: "center",

@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   },
   faqQuestion: {
     fontSize: 14,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     flex: 1,
     paddingRight: Spacing.md,
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   contactTitle: {
     fontSize: 15,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     marginBottom: 2,
   },

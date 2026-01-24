@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
   },
   featureTitle: {
     fontSize: 15,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
     marginBottom: 4,
   },
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontSize: 15,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.arcReactorBlue,
   },
   footer: {

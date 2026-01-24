@@ -926,7 +926,7 @@ const styles = StyleSheet.create({
   },
   attachMenuLabel: {
     fontSize: 13,
-    fontFamily: Fonts.semiBold,
+    fontFamily: Fonts.bold,
     color: IronManColors.textPrimary,
   },
   attachMenuDesc: {
