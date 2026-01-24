@@ -307,25 +307,18 @@ export default function MolDoctorScreen() {
     }
   };
 
-  const speakMessage = async (text: string) => {
+  const speakMessage = (text: string) => {
     if (isSpeaking) {
       Speech.stop();
       setIsSpeaking(false);
-      return;
+    } else {
+      setIsSpeaking(true);
+      Speech.speak(text, {
+        language: "es-MX",
+        onDone: () => setIsSpeaking(false),
+        onError: () => setIsSpeaking(false),
+      });
     }
-
-    setIsSpeaking(true);
-    
-    // Limpiar el texto de emojis para mejor pronunciación
-    const cleanText = text.replace(/[\u{1F600}-\u{1F64F}]|[\u{1F300}-\u{1F5FF}]|[\u{1F680}-\u{1F6FF}]|[\u{1F1E0}-\u{1F1FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/gu, '');
-    
-    Speech.speak(cleanText, {
-      language: "es-MX",
-      pitch: 0.95,
-      rate: 0.9,
-      onDone: () => setIsSpeaking(false),
-      onError: () => setIsSpeaking(false),
-    });
   };
 
   const navigateToPlanta = (plantaId: string) => {
@@ -356,8 +349,7 @@ export default function MolDoctorScreen() {
             ...(isUser ? {} : Shadows.small),
           },
         ]}
-      >
-        {!isUser && (
+      >{!isUser && (
           <View style={styles.doctorHeader}>
             <View style={[styles.doctorAvatarSmall, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}>
               <ThemedText style={styles.doctorEmoji}>🩺</ThemedText>
@@ -381,23 +373,15 @@ export default function MolDoctorScreen() {
               />
             )}
           </View>
-        )}
-
-        {item.imageUri && (
+        )}{item.imageUri && (
           <View style={[styles.imageContainer, { borderColor: colors.border }]}>
             <Image source={{ uri: item.imageUri }} style={styles.messageImage} resizeMode="cover" />
           </View>
-        )}
-
-        <ThemedText style={[styles.messageText, { color: colors.text }]}>
+        )}<ThemedText style={[styles.messageText, { color: colors.text }]}>
           {item.content}
-        </ThemedText>
-
-        {/* Links a plantas y enfermedades */}
-        {(item.plantLinks?.length || item.enfermedadLinks?.length) && (
-          <View style={[styles.linksContainer, { borderTopColor: colors.border }]}>
-            {item.plantLinks && item.plantLinks.length > 0 && (
-              <>
+        </ThemedText>{(item.plantLinks?.length || item.enfermedadLinks?.length) && (
+          <View style={[styles.linksContainer, { borderTopColor: colors.border }]}>{item.plantLinks && item.plantLinks.length > 0 && (
+              <View>
                 <ThemedText style={[styles.linksTitle, { color: IronManColors.holographicCyan }]}>
                   🌿 Plantas mencionadas:
                 </ThemedText>
@@ -414,10 +398,9 @@ export default function MolDoctorScreen() {
                     </Pressable>
                   ))}
                 </View>
-              </>
-            )}
-            {item.enfermedadLinks && item.enfermedadLinks.length > 0 && (
-              <>
+              </View>
+            )}{item.enfermedadLinks && item.enfermedadLinks.length > 0 && (
+              <View>
                 <ThemedText style={[styles.linksTitle, { color: IronManColors.jarvisAmber }]}>
                   🏥 Condiciones relacionadas:
                 </ThemedText>
@@ -434,12 +417,9 @@ export default function MolDoctorScreen() {
                     </Pressable>
                   ))}
                 </View>
-              </>
-            )}
-          </View>
-        )}
-
-        {!isUser && (
+              </View>
+            )}</View>
+        )}{!isUser && (
           <Pressable
             onPress={() => speakMessage(item.content)}
             style={[styles.speakButton, { backgroundColor: IronManColors.glassBlue, borderColor: IronManColors.borderHoloSubtle }]}
@@ -448,45 +428,33 @@ export default function MolDoctorScreen() {
               {isSpeaking ? "⏹️ Detener" : "🔊 Escuchar"}
             </ThemedText>
           </Pressable>
-        )}
-
-        <ThemedText style={[styles.timestamp, { color: colors.textTertiary }]}>
-          {item.timestamp.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" })}
-        </ThemedText>
-      </View>
+        )}</View>
     );
   };
 
-  // Menú flotante de adjuntos
   const renderAttachMenu = () => {
     const translateY = menuAnimation.interpolate({
       inputRange: [0, 1],
-      outputRange: [100, 0],
-    });
-
-    const opacity = menuAnimation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1],
+      outputRange: [300, 0],
     });
 
     return (
       <Modal
         visible={showAttachMenu}
-        transparent
-        animationType="none"
+        transparent={true}
+        animationType="fade"
         onRequestClose={() => setShowAttachMenu(false)}
       >
         <TouchableWithoutFeedback onPress={() => setShowAttachMenu(false)}>
           <View style={styles.attachMenuOverlay}>
             <TouchableWithoutFeedback>
-              <Animated.View 
+              <Animated.View
                 style={[
                   styles.attachMenuContainer,
                   {
                     transform: [{ translateY }],
-                    opacity,
-                    bottom: 80 + Math.max(insets.bottom, 16),
-                  }
+                    paddingBottom: Math.max(insets.bottom, 20),
+                  },
                 ]}
               >
                 <Pressable
@@ -494,7 +462,7 @@ export default function MolDoctorScreen() {
                   style={styles.attachMenuItem}
                 >
                   <View style={[styles.attachMenuIcon, { backgroundColor: "#4CAF50" }]}>
-                    <ThemedText style={styles.attachMenuEmoji}>📷</ThemedText>
+                    <ThemedText style={styles.attachMenuEmoji}>📸</ThemedText>
                   </View>
                   <ThemedText style={styles.attachMenuLabel}>Cámara</ThemedText>
                   <ThemedText style={styles.attachMenuDesc}>Tomar foto</ThemedText>
