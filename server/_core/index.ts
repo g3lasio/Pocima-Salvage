@@ -60,6 +60,11 @@ async function startServer() {
     res.json({ ok: true, timestamp: Date.now() });
   });
 
+  // Root route to provide a clear status message and avoid "Cannot GET /"
+  app.get("/", (_req, res) => {
+    res.send("Pocima Salvage API is running. Use /api/trpc for API requests.");
+  });
+
   app.use(
     "/api/trpc",
     createExpressMiddleware({
